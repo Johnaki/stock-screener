@@ -25,4 +25,5 @@ jobs:
       - name: 运行筛选
         env:
           SEVER_CHAN_KEY: ${{ secrets.SEVER_CHAN_KEY }}
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
         run: python screener.py
