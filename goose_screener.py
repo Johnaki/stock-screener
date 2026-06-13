@@ -20,22 +20,20 @@ def send_wechat(title, content):
 
 def is_valid_code(ts_code):
     code = ts_code.split('.')[0]
-    if code.startswith(('688', '689', '83', '87', '43', '40', '92', '93')):
+    if code.startswith(('688','689','83','87','43','40','92','93')):
         return False
     return ts_code.endswith('.SZ') or ts_code.endswith('.SH')
 
 def safe_call(func, retries=3, wait=65, **kwargs):
     for attempt in range(retries):
         try:
-            result = func(**kwargs)
-            return result
+            return func(**kwargs)
         except Exception as e:
             msg = str(e)
             if '频率超限' in msg:
                 print(f"频率超限，等待{wait}秒... ({attempt+1}/{retries})")
                 time.sleep(wait)
             else:
-                print(f"错误: {e}")
                 time.sleep(5)
     return None
 
@@ -53,11 +51,10 @@ def get_last_trade_date(pro):
     return (datetime.now() - timedelta(days=3)).strftime('%Y%m%d')
 
 def collect_market_data(pro, last_date, days=65):
-    """批量获取近65个交易日全市场行情，一次拉一天所有股票"""
-    print(f"批量收集近{days}个交易日数据...")
+    print(f"批量收集近{days}个交易日全市场数据...")
     all_frames = []
-    collected = 0
-    current = datetime.strptime(last_date, '%Y%m%d')
+    collected  = 0
+    current    = datetime.strptime(last_date, '%Y%m%d')
 
     for i in range(days + 45):
         if collected >= days:
@@ -65,7 +62,7 @@ def collect_market_data(pro, last_date, days=65):
         date_str = (current - timedelta(days=i)).strftime('%Y%m%d')
         data = safe_call(pro.daily, trade_date=date_str, wait=65)
         if data is not None and len(data) > 0:
-            all_frames.append(data[['ts_code', 'trade_date', 'close', 'vol']])
+            all_frames.append(data[['ts_code','trade_date','open','high','low','close','vol']])
             collected += 1
             if collected % 10 == 0:
                 print(f"  已收集 {collected}/{days} 天")
@@ -73,19 +70,23 @@ def collect_market_data(pro, last_date, days=65):
 
     if not all_frames:
         return None
-
     df = pd.concat(all_frames, ignore_index=True)
     print(f"数据收集完成：{collected}个交易日，{len(df)}条记录")
     return df
 
 def detect_goose_patterns(market_df):
-    """对全市场计算均线，批量检测鹅张嘴形态"""
-    print("开始计算均线并检测鹅张嘴...")
+    """
+    鹅张嘴三要素：
+    1. 均线长期粘合（底部区域，20天以上MAs压缩）
+    2. 今日一阳穿多线（收盘价突破MA5/10/20/30）
+    3. 成交量明显放大（≥1.5倍均量）
+    """
+    print("开始检测鹅张嘴（均线粘合底部突破）...")
 
     market_df = market_df[market_df['ts_code'].apply(is_valid_code)].copy()
-    market_df['close'] = pd.to_numeric(market_df['close'], errors='coerce')
-    market_df['vol']   = pd.to_numeric(market_df['vol'],   errors='coerce')
-    market_df = market_df.dropna(subset=['close', 'vol'])
+    for col in ['open','high','low','close','vol']:
+        market_df[col] = pd.to_numeric(market_df[col], errors='coerce')
+    market_df = market_df.dropna(subset=['close','vol'])
 
     results = []
     grouped = market_df.groupby('ts_code')
@@ -102,70 +103,102 @@ def detect_goose_patterns(market_df):
         close = g['close']
         vol   = g['vol']
 
+        # ── 计算均线 ──
         ma5  = close.rolling(5).mean()
         ma10 = close.rolling(10).mean()
         ma20 = close.rolling(20).mean()
         ma30 = close.rolling(30).mean()
         ma60 = close.rolling(60).mean()
 
+        c      = close.iloc[-1]   # 今日收盘
         c_ma5  = ma5.iloc[-1]
         c_ma10 = ma10.iloc[-1]
         c_ma20 = ma20.iloc[-1]
         c_ma30 = ma30.iloc[-1]
         c_ma60 = ma60.iloc[-1]
-        c_close = close.iloc[-1]
 
         if any(pd.isna([c_ma5, c_ma10, c_ma20, c_ma30, c_ma60])):
             continue
 
-        # ── 条件1：均线粘合（5线极差/均值 < 5%）──
-        ma_vals     = [c_ma5, c_ma10, c_ma20, c_ma30, c_ma60]
-        ma_range    = max(ma_vals) - min(ma_vals)
-        ma_mean     = np.mean(ma_vals)
-        compression = ma_range / ma_mean if ma_mean > 0 else 1.0
-        if compression > 0.05:
+        # ══ 条件1：今日一阳穿多线 ══
+        # 收盘价需同时突破MA5/MA10/MA20/MA30
+        if not (c > c_ma5 and c > c_ma10 and c > c_ma20 and c > c_ma30):
             continue
 
-        # ── 条件2：MA5率先上翘（比3天前高）──
-        if len(ma5) < 5 or pd.isna(ma5.iloc[-4]):
-            continue
-        ma5_3ago   = ma5.iloc[-4]
-        ma5_rising = c_ma5 > ma5_3ago
-        if not ma5_rising:
+        # 今日涨幅 > 2%（有力度）
+        prev_close = close.iloc[-2] if len(close) > 1 else c
+        pct_chg = (c - prev_close) / prev_close * 100
+        if pct_chg < 2.0:
             continue
 
-        # ── 条件3：MA5是5线中最高的（已率先脱离粘合）──
-        if c_ma5 < max(c_ma10, c_ma20, c_ma30, c_ma60):
+        # ══ 条件2：前期均线长期粘合（过去20天内MAs曾高度压缩）══
+        # 检查过去5~25天内，是否存在至少15天均线粘合（极差/均值<4%）
+        compression_days = 0
+        for k in range(5, min(26, len(g))):
+            idx_k = -(k+1)
+            try:
+                mk5  = ma5.iloc[idx_k]
+                mk10 = ma10.iloc[idx_k]
+                mk20 = ma20.iloc[idx_k]
+                mk30 = ma30.iloc[idx_k]
+                mk60 = ma60.iloc[idx_k]
+                if any(pd.isna([mk5, mk10, mk20, mk30, mk60])):
+                    continue
+                mk_vals   = [mk5, mk10, mk20, mk30, mk60]
+                mk_range  = max(mk_vals) - min(mk_vals)
+                mk_mean   = np.mean(mk_vals)
+                if mk_mean > 0 and mk_range / mk_mean < 0.04:
+                    compression_days += 1
+            except:
+                continue
+
+        if compression_days < 10:   # 至少10天粘合才算"长期压缩"
             continue
 
-        # ── 条件4：成交量温和放大（1.1x ~ 5x）──
-        vol_5  = vol.iloc[-5:].mean()
-        vol_20 = vol.iloc[-21:-1].mean()
-        vol_ratio = vol_5 / vol_20 if vol_20 > 0 else 0
-        if not (1.1 < vol_ratio < 5.0):
+        # ══ 条件3：底部区域（股价在近1年低位）══
+        year_low  = close.iloc[-min(250, len(close)):].min()
+        year_high = close.iloc[-min(250, len(close)):].max()
+        price_pos = (c - year_low) / (year_high - year_low) if year_high > year_low else 1.0
+        if price_pos > 0.45:        # 只要价格在年内低位45%以内
             continue
 
-        # ── 条件5：股价在均线附近（不追高）──
-        if abs(c_close - c_ma20) / c_ma20 > 0.08:
+        # ══ 条件4：成交量放大（今日量 > 近20日均量1.5倍）══
+        vol_today = vol.iloc[-1]
+        vol_ma20  = vol.iloc[-21:-1].mean()
+        vol_ratio = vol_today / vol_ma20 if vol_ma20 > 0 else 0
+        if vol_ratio < 1.5:
             continue
+
+        # ── 粘合度（取突破前最紧的一天）──
+        best_compression = 999
+        for k in range(5, min(26, len(g))):
+            idx_k = -(k+1)
+            try:
+                mk_vals  = [ma5.iloc[idx_k], ma10.iloc[idx_k],
+                            ma20.iloc[idx_k], ma30.iloc[idx_k], ma60.iloc[idx_k]]
+                if any(pd.isna(mk_vals)):
+                    continue
+                comp = (max(mk_vals) - min(mk_vals)) / np.mean(mk_vals)
+                best_compression = min(best_compression, comp)
+            except:
+                continue
 
         # ── 综合评分 ──
-        compression_score = (1 - compression / 0.05) * 40
-        vol_score         = min((vol_ratio - 1) * 20, 30)
-        ma5_angle         = (c_ma5 - ma5_3ago) / ma5_3ago * 100
-        angle_score       = min(ma5_angle * 15, 30)
-        total_score       = round(compression_score + vol_score + angle_score, 1)
-
-        price_pct = round((close.iloc[-60:] < c_close).sum() / min(len(close), 60) * 100, 1)
+        comp_score  = max(0, (1 - best_compression / 0.04)) * 35
+        vol_score   = min((vol_ratio - 1.5) * 10, 25)
+        pct_score   = min(pct_chg * 3, 20)
+        pos_score   = (1 - price_pos) * 20   # 越低位分越高
+        total_score = round(comp_score + vol_score + pct_score + pos_score, 1)
 
         results.append({
-            'code':        ts_code,
-            'price':       round(float(c_close), 2),
-            'compression': round(compression * 100, 2),
-            'vol_ratio':   round(vol_ratio, 2),
-            'ma5_angle':   round(ma5_angle, 3),
-            'price_pct':   price_pct,
-            'score':       total_score,
+            'code':          ts_code,
+            'price':         round(float(c), 2),
+            'pct_chg':       round(pct_chg, 2),
+            'compression':   round(best_compression * 100, 2),
+            'compress_days': compression_days,
+            'vol_ratio':     round(vol_ratio, 2),
+            'price_pos':     round(price_pos * 100, 1),
+            'score':         total_score,
         })
 
     results.sort(key=lambda x: x['score'], reverse=True)
@@ -179,27 +212,27 @@ def format_message(results, last_date):
     if not results:
         return (
             f"🦢 鹅张嘴扫描 {today} | 暂无信号",
-            f"数据日期：{date_str}\n\n今日未发现均线粘合启动信号。"
+            f"数据日期：{date_str}\n\n今日未发现均线粘合底部突破信号。"
         )
 
     lines = [f"## 🦢 千金难买鹅张嘴 {today}（数据：{date_str}）\n"]
-    lines.append(f"> 共发现 **{len(results)}** 支 | 均线粘合后MA5率先上翘，量能温和配合\n")
+    lines.append(f"> 共发现 **{len(results)}** 支 | 均线长期粘合后今日一阳穿多线，底部启动！\n")
     lines.append("\n### TOP 15 鹅张嘴信号\n")
-    lines.append("| 代码 | 现价 | 粘合度 | 量比 | 价格分位 | 评分 |")
-    lines.append("|------|------|--------|------|----------|------|")
+    lines.append("| 代码 | 现价 | 今日涨幅 | 粘合度 | 粘合天数 | 量比 | 价格分位 | 评分 |")
+    lines.append("|------|------|----------|--------|----------|------|----------|------|")
 
     for r in results[:15]:
         lines.append(
-            f"| {r['code']} | {r['price']} | "
-            f"{r['compression']}% | {r['vol_ratio']}x | "
-            f"{r['price_pct']}% | {r['score']} |"
+            f"| {r['code']} | {r['price']} | +{r['pct_chg']}% | "
+            f"{r['compression']}% | {r['compress_days']}天 | "
+            f"{r['vol_ratio']}x | {r['price_pos']}% | {r['score']} |"
         )
 
     lines.append("\n---")
-    lines.append("**粘合度**：越小均线越紧 | **量比**：近5日量/近20日均量")
+    lines.append("**粘合度**：越小均线越紧 | **粘合天数**：压缩持续时长 | **价格分位**：越低越在底部")
     lines.append("\n⚠️ 量化技术筛选，不构成投资建议，请结合基本面自行判断。")
 
-    return f"🦢 鹅张嘴预警 {today} | 发现{len(results)}支", "\n".join(lines)
+    return f"🦢 鹅张嘴预警 {today} | 发现{len(results)}支底部启动", "\n".join(lines)
 
 def main():
     print(f"===== 🦢 鹅张嘴扫描开始 {datetime.now()} =====")
@@ -211,10 +244,10 @@ def main():
 
     market_df = collect_market_data(pro, last_date, days=65)
     if market_df is None:
-        send_wechat("🦢 鹅张嘴扫描失败", "数据获取失败，请检查Token")
+        send_wechat("🦢 鹅张嘴扫描失败", "数据获取失败")
         return
 
-    results   = detect_goose_patterns(market_df)
+    results        = detect_goose_patterns(market_df)
     title, content = format_message(results, last_date)
     send_wechat(title, content)
     print("===== 完成 =====")
