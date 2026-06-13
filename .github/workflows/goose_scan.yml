@@ -1,0 +1,29 @@
+name: A股鹅张嘴每日扫描
+
+on:
+  schedule:
+    - cron: '35 7 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  goose_scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖
+        run: pip install tushare pandas numpy requests
+
+      - name: 运行鹅张嘴扫描
+        env:
+          SEVER_CHAN_KEY: ${{ secrets.SEVER_CHAN_KEY }}
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+        run: python goose_screener.py
