@@ -18,15 +18,19 @@ def send_wechat(title, content):
         print(f"推送失败: {e}")
 
 def get_last_trade_date(pro):
-    cal = pro.trade_cal(
-        exchange='SSE',
-        start_date=(datetime.now() - timedelta(days=10)).strftime('%Y%m%d'),
-        end_date=datetime.now().strftime('%Y%m%d'),
-        is_open='1'
-    )
-    if cal is not None and len(cal) > 0:
-        return cal['cal_date'].iloc[-1]
-    return datetime.now().strftime('%Y%m%d')
+    """用平安银行探测最近交易日，不依赖trade_cal"""
+    for i in range(7):
+        date = (datetime.now() - timedelta(days=i)).strftime('%Y%m%d')
+        try:
+            test = pro.daily(ts_code='000001.SZ', start_date=date, end_date=date)
+            if test is not None and len(test) > 0:
+                print(f"最近交易日: {date}")
+                return date
+            time.sleep(1)
+        except Exception as e:
+            time.sleep(2)
+            continue
+    return (datetime.now() - timedelta(days=3)).strftime('%Y%m%d')
 
 def screen_stocks(pro):
     print("获取股票列表...")
