@@ -1,100 +1,170 @@
-name: AKI 星星量每日扫描
-
-on:
-  schedule:
-    - cron: "10 10 * * 1-5"
-  workflow_dispatch:
-
-jobs:
-  scan:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-
-    steps:
-      - name: 安装 Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: 安装依赖
-        run: |
-          python -m pip install --upgrade pip
-          pip install akshare pandas numpy requests
-
-      - name: 运行 AKI 星星量筛选
-        env:
-          AKI_SERVER_CHAN_SENDKEY: ${{ secrets.AKI_SERVER_CHAN_SENDKEY }}
-        run: |
-          python - <<'PY'
-          import concurrent.futures
-          import datetime as dt
-          import os
-          import time
-
-          import akshare as ak
-          import numpy as np
-          import pandas as pd
-          import requests
+                          "close": float(row["close"]),
+                          "low": float(recent12["low"].min()),
+                          "vol5_20": float(row["vol5"] / max(row["vol20"], 1)),
+                          "tight12": float(tight12),
+                          "position": float(price_position),
+                          "score": float(score),
+                      })
+              return points
 
 
-          SENDKEY = os.environ.get("AKI_SERVER_CHAN_SENDKEY")
-          MAX_STOCKS = 4200
-          MAX_WORKERS = 6
-
-
-          def push(title, content):
-              if not SENDKEY:
-                  raise RuntimeError("没有设置 AKI_SERVER_CHAN_SENDKEY")
-              url = f"https://sctapi.ftqq.com/{SENDKEY}.send"
-              r = requests.post(url, data={"title": title, "desp": content}, timeout=30)
-              print(r.text)
-              r.raise_for_status()
-
-
-          def get_codes():
+          def check_stock(item):
+              code = str(item["code"]).zfill(6)
+              name = str(item["name"])
               try:
-                  df = ak.stock_zh_a_spot_em()
-                  df = df.rename(columns={
-                      "代码": "code",
-                      "名称": "name",
-                      "最新价": "price",
-                      "总市值": "market_cap",
-                  })
-                  df["code"] = df["code"].astype(str).str.zfill(6)
-                  df["name"] = df["name"].astype(str)
-                  df = df[~df["name"].str.contains("ST", case=False, na=False)]
-                  df = df[~df["code"].str.startswith(("8", "4", "9"))]
-                  df["price"] = pd.to_numeric(df.get("price"), errors="coerce")
-                  df["market_cap_yi"] = pd.to_numeric(df.get("market_cap"), errors="coerce") / 100000000
-                  df = df[(df["price"] >= 2.5) & (df["price"] <= 120)]
-                  df = df[(df["market_cap_yi"].isna()) | ((df["market_cap_yi"] >= 10) & (df["market_cap_yi"] <= 1500))]
-                  return df[["code", "name", "market_cap_yi"]].dropna(subset=["code", "name"]).to_dict("records")
+                  raw = fetch_history(code)
+                  df = add_indicators(raw)
               except Exception as e:
-                  print("东方财富股票列表失败，改用沪深交易所股票列表：", e)
+                  print(f"{code} {name} 历史行情失败，跳过：{e}")
+                  return None
 
-              frames = []
-              for label, getter, kwargs, code_col, name_col in [
-                  ("沪市主板", ak.stock_info_sh_name_code, {"symbol": "主板A股"}, "证券代码", "证券简称"),
-                  ("科创板", ak.stock_info_sh_name_code, {"symbol": "科创板"}, "证券代码", "证券简称"),
-                  ("深市A股", ak.stock_info_sz_name_code, {"symbol": "A股列表"}, "A股代码", "A股简称"),
-              ]:
+              if len(df) < 130:
+                  return None
+
+              points = find_star_points(df)
+              if not points:
+                  return None
+
+              last = df.iloc[-1]
+              pct5 = last["close"] / max(df["close"].iloc[-6], 0.01) - 1 if len(df) >= 6 else 0
+              pct20 = last["close"] / max(df["close"].iloc[-21], 0.01) - 1 if len(df) >= 21 else 0
+              vol_now = last["vol5"] / max(last["vol20"], 1)
+
+              best = None
+              for p in points:
+                  star_idx = p["idx"]
+                  after = df.iloc[star_idx + 1:]
+                  if len(after) < 2:
+                      continue
+
+                  setup_low = min(p["low"], after["low"].min())
+                  gain_from_star_low = last["close"] / max(setup_low, 0.01) - 1
+                  gain_after_star = last["close"] / max(p["close"], 0.01) - 1
+                  days_after = len(df) - 1 - star_idx
+                  crossed_ma = last["close"] >= min(last["ma35"], last["ma55"])
+                  macd_repair = last["macd"] >= df["macd"].iloc[-2]
+
+                  # 已暴涨验证组：过去出现过星星量，后面已经放量或明显上涨。
+                  exploded = (
+                      days_after <= 80
+                      and gain_from_star_low >= 0.18
+                      and (
+                          gain_after_star >= 0.12
+                          or pct5 >= 0.08
+                          or vol_now >= 1.20
+                          or crossed_ma
+                      )
+                  )
+
+                  # 有暴涨趋势组：最近仍处于星星量附近，涨幅还不大，但均线/MACD正在修复。
+                  ready = (
+                      days_after <= 25
+                      and gain_from_star_low < 0.18
+                      and pct20 <= 0.18
+                      and last["close"] >= last["ma13"] * 0.92
+                      and macd_repair
+                  )
+
+                  if exploded:
+                      score = 70 + p["score"] + gain_from_star_low * 90 + min(vol_now, 3) * 8
+                      group = "已暴涨验证组"
+                  elif ready:
+                      score = 65 + p["score"] + max(0, 0.18 - pct20) * 50 + (8 if macd_repair else 0)
+                      group = "有暴涨趋势组"
+                  else:
+                      continue
+
+                  candidate = {
+                      "group": group,
+                      "code": code,
+                      "name": name,
+                      "close": float(last["close"]),
+                      "score": float(score),
+                      "star_date": p["date"],
+                      "star_close": p["close"],
+                      "gain": float(gain_from_star_low),
+                      "pct5": float(pct5),
+                      "pct20": float(pct20),
+                      "vol_now": float(vol_now),
+                      "star_vol_ratio": p["vol5_20"],
+                      "tight12": p["tight12"],
+                      "position": p["position"],
+                  }
+                  if best is None or candidate["score"] > best["score"]:
+                      best = candidate
+
+              return best
+
+
+          def format_item(x, i):
+              return (
+                  f"{i}. {x['name']}({x['code']}) 收{x['close']:.2f}，评分{x['score']:.1f}\n"
+                  f"   星星量日：{x['star_date']}，星星量后涨幅：{x['gain']:.1%}，"
+                  f"5日：{x['pct5']:.1%}，20日：{x['pct20']:.1%}\n"
+                  f"   星星量特征：量比{x['star_vol_ratio']:.2f}，12日振幅{x['tight12']:.1%}，低位位置{x['position']:.1%}，当前量比{x['vol_now']:.2f}"
+              )
+
+
+          codes = get_codes()
+          codes = codes[:MAX_STOCKS]
+          print(f"准备扫描 {len(codes)} 只股票")
+
+          results = []
+          errors = 0
+
+          with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+              futures = {executor.submit(check_stock, item): item for item in codes}
+              for i, future in enumerate(concurrent.futures.as_completed(futures), 1):
                   try:
-                      tmp = getter(**kwargs).rename(columns={code_col: "code", name_col: "name"})
-                      frames.append(tmp[["code", "name"]])
+                      result = future.result()
+                      if result:
+                          results.append(result)
                   except Exception as e:
-                      print(f"{label}列表失败：{e}")
+                      errors += 1
+                      print("单只股票扫描失败：", e)
+                  if i % 200 == 0:
+                      print(f"已扫描 {i}/{len(codes)}，命中 {len(results)}")
 
-              if not frames:
-                  raise RuntimeError("所有股票列表接口都失败了")
+          exploded = sorted(
+              [x for x in results if x["group"] == "已暴涨验证组"],
+              key=lambda x: x["score"],
+              reverse=True,
+          )[:40]
 
-              df = pd.concat(frames, ignore_index=True)
-              df["code"] = df["code"].astype(str).str.split(".", expand=True).iloc[:, 0].str.zfill(6)
-              df["name"] = df["name"].astype(str)
-              df = df[~df["name"].str.contains("ST", case=False, na=False)]
-              df = df[~df["code"].str.startswith(("8", "4", "9"))]
-              df["market_cap_yi"] = np.nan
-              return df.drop_duplicates("code")[["code", "name", "market_cap_yi"]].to_dict("records")
+          ready = sorted(
+              [x for x in results if x["group"] == "有暴涨趋势组"],
+              key=lambda x: x["score"],
+              reverse=True,
+          )[:40]
 
+          today = dt.datetime.now().strftime("%Y-%m-%d %H:%M")
+          title = f"AKI星星量股票筛选 {today}"
 
-          def normalize_history(df):
-              if "日期" not in df.columns and "date" not in df.columns:
+          lines = []
+          lines.append(f"# {title}")
+          lines.append("")
+          lines.append("说明：按“过去出现低位星星量，随后放量上涨/正在修复”筛选，只作技术形态观察，不是买卖建议。")
+          lines.append("")
+          lines.append(f"## 已暴涨验证组（{len(exploded)}只）")
+          if not exploded:
+              lines.append("今天没有命中。")
+          else:
+              for i, x in enumerate(exploded, 1):
+                  lines.append(format_item(x, i))
+
+          lines.append("")
+          lines.append(f"## 有暴涨趋势组（{len(ready)}只）")
+          if not ready:
+              lines.append("今天没有命中。")
+          else:
+              for i, x in enumerate(ready, 1):
+                  lines.append(format_item(x, i))
+
+          if errors:
+              lines.append("")
+              lines.append(f"数据提醒：有 {errors} 次单股扫描失败，通常是行情源临时波动，已跳过。")
+
+          content = "\n".join(lines)
+          print(content)
+          push(title, content)
+          PY
