@@ -57,6 +57,24 @@ jobs:
                   return ak.stock_zh_a_hist(symbol=code, period="daily", start_date=start, end_date=end, adjust="qfq", timeout=15)
 
           def stock_list():
+              def generated_candidates():
+                  pools = []
+                  pools.append([f"{i:06d}" for i in range(1, 2000)])
+                  pools.append([f"{i:06d}" for i in range(2001, 4000)])
+                  pools.append([f"{i:06d}" for i in range(300001, 302000)])
+                  pools.append([f"{i:06d}" for i in range(600000, 604000)])
+                  pools.append([f"{i:06d}" for i in range(605000, 606000)])
+                  pools.append([f"{i:06d}" for i in range(688001, 689000)])
+                  rows = []
+                  for offset in range(max(len(x) for x in pools)):
+                      for pool in pools:
+                          if offset < len(pool):
+                              code = pool[offset]
+                              rows.append({"code": code, "name": code})
+                              if len(rows) >= MAX_STOCKS:
+                                  return rows
+                  return rows
+
               try:
                   d = ak.stock_zh_a_spot_em()
                   d = d.rename(columns={"代码": "code", "名称": "name", "最新价": "price", "总市值": "cap"})
@@ -83,7 +101,8 @@ jobs:
                   except Exception as e:
                       print("备用列表部分失败：", e)
               if not frames:
-                  raise RuntimeError("无法获取股票列表")
+                  print("所有股票列表接口都失败，改用代码段候选池继续扫描")
+                  return generated_candidates()
               d = pd.concat(frames, ignore_index=True)
               d["code"] = d["code"].astype(str).str.split(".", expand=True).iloc[:, 0].str.zfill(6)
               d["name"] = d["name"].astype(str)
