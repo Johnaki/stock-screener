@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-星星量筛选器 v3 —— 盯盘清单版
-==============================
-目标：抓"巨量(星星量)已经出现、但价格还没启动"的蓄势票。
+星星量筛选器 v4 —— 盯盘清单 + 已暴涨累积档案
+===========================================
+每天推送：
+  🌱 蓄势待发：巨量已现、价格还没动（重点）
+  ⭐ 今日新加盯盘：今天刚放巨量、记进清单的票（会列出是哪几只）
+  🎯 今日新命中：盯盘里的票启动了（我们提前蹲到的，打⭐）
+  ✅ 已暴涨档案：累积记录，命中的标⭐，方便长期观察战绩
 
-机制：
-  1) 每天扫今日活跃股，发现"在底部突然放巨量"的票 -> 当天记进盯盘清单
-     （巨量当天这只票本来就活跃，抓得到）。
-  2) 每天复查清单里已有的票：
-     🌱 蓄势待发：巨量已过去几天、价格还趴着没动、今天也安静 -> 推给你（重点）
-     🚀 已启动 ：盯盘中的票开始涨了 -> 推一下做验证，然后移出清单
-     ✖ 失效  ：放量后反而跌下去（疑似出货）或太久没动 -> 移出清单
-  3) 清单存成 watchlist.json，提交回仓库，第二天接着用。
+两个记忆文件（提交回仓库）：
+  watchlist.json —— 蓄势盯盘清单
+  archive.json   —— 已暴涨累积档案（来源 hit=我们预判 / market=全市场扫到）
 
 数据源：东方财富。推送：Server酱(SERVERCHAN_SENDKEY)。
-说明：机械筛选，命中≠买入建议。"量在前价在后"本就不确定，假信号偏多，请自行复核。
+说明：机械筛选，命中≠买入建议。"量在前价在后"不确定性高，请自行复核。
 """
 
 import os
@@ -28,7 +27,7 @@ import akshare as ak
 
 
 CONFIG = {
-    # 候选池（用于发现"今日新放巨量"）
+    # 候选池
     "pool_turnover_min": 5.0,
     "max_candidates": 800,
     "price_min": 2.0,
@@ -36,31 +35,35 @@ CONFIG = {
     "mktcap_min_yi": 20.0,
     "exclude_kechuang_beijing": True,
 
-    # 形态/巨量
+    # 巨量/底部
     "hist_days": 150,
-    "baseline_window": 60,     # 巨量日之前多少日的均量做基准
-    "vol_mult": 2.5,           # 巨量倍数：巨量日量 / 基准均量
-    "low_lookback": 60,        # 阶段低点统计窗口
-    "low_recent_days": 25,     # 低点须出现在最近多少日内（确认在底部）
-    "flag_rise_max": 18.0,     # 加入盯盘时，离底涨幅上限（还在底部，没涨上去）
+    "baseline_window": 60,
+    "vol_mult": 2.5,
+    "surge_window": 3,
+    "low_lookback": 60,
+    "low_recent_days": 25,
+    "flag_rise_max": 18.0,      # 加入盯盘时离底涨幅上限
 
-    # 🌱 蓄势待发（复查条件）
-    "watch_min_age": 1,        # 巨量至少几个交易日前（>=1 即不含今天）
-    "watch_max_age": 12,       # 巨量最多几个交易日前（超过=作废）
-    "today_calm_max": 4.0,     # 今日涨跌幅绝对值上限（还很安静）
-    "flat_rise_max": 12.0,     # 离底涨幅上限（还没拉起来）
-    "post_spike_band": 8.0,    # 相对巨量日收盘的偏离上限（横住，没大涨大跌）
-    "collapse_drop": 10.0,     # 相对巨量日跌超此值=疑似出货，剔除
-    "quiet_vol_mult": 2.0,     # 今日量须 <= 基准均量 * 此值（确认缩量、安静）
+    # 蓄势待发
+    "watch_min_age": 1,
+    "watch_max_age": 12,
+    "today_calm_max": 4.0,
+    "flat_rise_max": 12.0,
+    "post_spike_band": 8.0,
+    "collapse_drop": 10.0,
+    "quiet_vol_mult": 2.0,
 
-    # 🚀 已启动（毕业）
-    "launched_rise": 20.0,     # 离底涨幅超此=已启动
+    # 命中 / 已暴涨
+    "launched_rise": 20.0,     # 盯盘票离底涨到此=启动/命中
+    "surged_rise_min": 35.0,   # 全市场已暴涨门槛（离底涨幅）
 
     # 运行
     "request_sleep": 0.2,
     "retries": 3,
     "max_push_each": 30,
+    "max_archive_push": 40,
     "watchlist_file": "watchlist.json",
+    "archive_file": "archive.json",
 }
 
 SENDKEY = os.environ.get("SERVERCHAN_SENDKEY", "").strip()
@@ -110,8 +113,7 @@ def server_chan_push(title, desp):
         print("推送失败：", e)
 
 
-def load_watchlist():
-    path = CONFIG["watchlist_file"]
+def load_json(path):
     if os.path.exists(path):
         try:
             with open(path, "r", encoding="utf-8") as f:
@@ -121,12 +123,12 @@ def load_watchlist():
     return {}
 
 
-def save_watchlist(wl):
+def save_json(path, obj):
     try:
-        with open(CONFIG["watchlist_file"], "w", encoding="utf-8") as f:
-            json.dump(wl, f, ensure_ascii=False, indent=1)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(obj, f, ensure_ascii=False, indent=1)
     except Exception as e:
-        print("保存清单失败：", e)
+        print("保存失败：", path, e)
 
 
 # ---------------- 取数 ----------------
@@ -178,7 +180,6 @@ def get_candidate_pool():
             break
         pn += 1
         time.sleep(0.2)
-
     df = pd.DataFrame(rows)
     if df.empty:
         return df
@@ -221,24 +222,40 @@ def near_bottom(close):
     return low_pos <= CONFIG["low_recent_days"], seg.min()
 
 
-# ---------------- 主流程 ----------------
-def recheck_watchlist(wl, today):
-    """复查清单：返回 (蓄势列表, 已启动列表, 新清单)"""
-    sprout, launched, new_wl = [], [], {}
+def upsert_archive(archive, code, name, rise, close, today, source, flagged_date=None):
+    if code in archive:
+        a = archive[code]
+        a["peak_rise_from_low"] = max(a.get("peak_rise_from_low", 0), round(rise, 1))
+        a["last_close"] = round(close, 2)
+        a["last_update"] = today
+        if source == "hit" and a.get("source") != "hit":
+            a["source"] = "hit"
+            a["flagged_date"] = flagged_date
+    else:
+        archive[code] = {"name": name, "first_date": today, "source": source,
+                         "flagged_date": flagged_date,
+                         "first_rise_from_low": round(rise, 1),
+                         "peak_rise_from_low": round(rise, 1),
+                         "last_close": round(close, 2), "last_update": today}
+
+
+# ---------------- 复查盯盘清单 ----------------
+def recheck_watchlist(wl, archive, today):
+    sprout, hits, new_wl = [], [], {}
     for code, info in wl.items():
         k = get_kline(code)
         time.sleep(CONFIG["request_sleep"])
         if k is None:
-            new_wl[code] = info  # 临时拉不到，先留着
+            new_wl[code] = info
             continue
         dates = k["date"].astype(str).tolist()
         sd = info.get("spike_date")
         if sd not in dates:
-            continue  # 巨量日已不在窗口内，作废
+            continue
         idx = dates.index(sd)
         age = (len(k) - 1) - idx
         if age > CONFIG["watch_max_age"]:
-            continue  # 太久没动，作废
+            continue
         close = k["close"]
         today_close = float(close.iloc[-1])
         spike_close = float(close.iloc[idx])
@@ -251,57 +268,72 @@ def recheck_watchlist(wl, today):
         today_vol = float(k["vol"].iloc[-1])
         row = {"code": code, "name": info.get("name", ""), "close": round(today_close, 2),
                "pct": round(today_pct, 1), "rise_from_low": round(rise_from_low, 1),
-               "age": age, "ratio": round(spike_ratio, 2)}
+               "age": age, "ratio": round(spike_ratio, 2),
+               "flagged": info.get("spike_date")}
 
         if rise_from_low >= CONFIG["launched_rise"]:
-            launched.append(row)              # 毕业：开始涨了
+            upsert_archive(archive, code, info.get("name", ""), rise_from_low,
+                           today_close, today, "hit", info.get("spike_date"))
+            hits.append(row)
             continue
         if post_spike <= -CONFIG["collapse_drop"]:
-            continue                           # 放量后跌穿，疑似出货，剔除
-        new_wl[code] = info                    # 仍在窗口，继续盯
+            continue
+        new_wl[code] = info
         if (age >= CONFIG["watch_min_age"]
                 and abs(today_pct) <= CONFIG["today_calm_max"]
                 and rise_from_low <= CONFIG["flat_rise_max"]
                 and abs(post_spike) <= CONFIG["post_spike_band"]
                 and today_vol <= base * CONFIG["quiet_vol_mult"]):
-            sprout.append(row)                 # 蓄势待发
-    return sprout, launched, new_wl
+            sprout.append(row)
+    return sprout, hits, new_wl
 
 
-def scan_new_spikes(wl, today):
-    """扫今日活跃股，发现新巨量，加入清单。返回新增数。"""
-    try:
-        pool = get_candidate_pool()
-    except Exception as e:
-        raise e
+# ---------------- 扫今日：新巨量 + 已暴涨 ----------------
+def scan_pool(wl, archive, today):
+    pool = get_candidate_pool()
     print(f"今日候选池：{len(pool)} 只")
-    added = 0
+    new_watch, surged = [], []
+    sw = CONFIG["surge_window"]
     for _, r in pool.head(CONFIG["max_candidates"]).iterrows():
         code = str(r["code"])
-        if code in wl:
-            continue
         k = get_kline(code)
         time.sleep(CONFIG["request_sleep"])
         if k is None:
             continue
-        idx = len(k) - 1
-        base = baseline_before(k["vol"], idx)
+        close, vol = k["close"], k["vol"]
+        today_close = float(close.iloc[-1])
+        today_pct = float(k["pct"].iloc[-1]) if "pct" in k else 0.0
+        at_bottom, stage_low = near_bottom(close)
+        rise_from_low = (today_close / stage_low - 1) * 100
+
+        # 已暴涨：离底大 + 近期有巨量 + 站上MA20
+        base_em = baseline_before(vol, len(vol) - sw) or 1
+        ratio_em = vol.iloc[-sw:].max() / base_em
+        ma20 = close.rolling(20).mean().iloc[-1]
+        if (rise_from_low >= CONFIG["surged_rise_min"] and ratio_em >= CONFIG["vol_mult"]
+                and not pd.isna(ma20) and today_close > ma20):
+            src = archive.get(code, {}).get("source", "market")
+            upsert_archive(archive, code, r.get("name", ""), rise_from_low,
+                           today_close, today, src)
+            surged.append({"code": code, "name": r.get("name", ""),
+                           "rise_from_low": round(rise_from_low, 1)})
+
+        # 新巨量加盯盘（今天放巨量、在底部、还没涨上去；且未在清单/档案）
+        if code in wl or code in archive:
+            continue
+        base = baseline_before(vol, len(vol) - 1)
         if not base or base <= 0:
             continue
-        if k["vol"].iloc[idx] / base < CONFIG["vol_mult"]:
-            continue                            # 今日不是巨量
-        at_bottom, stage_low = near_bottom(k["close"])
-        if not at_bottom:
-            continue
-        rise_from_low = (float(k["close"].iloc[-1]) / stage_low - 1) * 100
-        if rise_from_low > CONFIG["flag_rise_max"]:
-            continue                            # 已经涨上去了，不是底部新放量
-        wl[code] = {"name": r.get("name", ""),
-                    "added": today,
-                    "spike_date": str(k["date"].iloc[-1]),
-                    "spike_close": round(float(k["close"].iloc[-1]), 2)}
-        added += 1
-    return added
+        if (vol.iloc[-1] / base >= CONFIG["vol_mult"] and at_bottom
+                and rise_from_low <= CONFIG["flag_rise_max"]):
+            wl[code] = {"name": r.get("name", ""), "added": today,
+                        "spike_date": str(k["date"].iloc[-1]),
+                        "spike_close": round(today_close, 2)}
+            new_watch.append({"code": code, "name": r.get("name", ""),
+                              "close": round(today_close, 2), "pct": round(today_pct, 1),
+                              "rise_from_low": round(rise_from_low, 1),
+                              "ratio": round(vol.iloc[-1] / base, 2)})
+    return new_watch, surged
 
 
 def make_table(items, head, cols):
@@ -312,33 +344,34 @@ def make_table(items, head, cols):
     return "\n".join(lines)
 
 
+# ---------------- 主流程 ----------------
 def main():
     today = dt.date.today().strftime("%Y-%m-%d")
-    print(f"=== 星星量 v3 {today} ===")
+    print(f"=== 星星量 v4 {today} ===")
 
-    wl = load_watchlist()
-    print(f"载入盯盘清单：{len(wl)} 只")
+    wl = load_json(CONFIG["watchlist_file"])
+    archive = load_json(CONFIG["archive_file"])
+    print(f"载入：盯盘 {len(wl)} 只，档案 {len(archive)} 只")
 
-    # 先复查（不依赖榜单接口）
-    sprout, launched, wl = recheck_watchlist(wl, today)
+    sprout, hits, wl = recheck_watchlist(wl, archive, today)
 
-    # 再扫今日新巨量加入清单
-    added = 0
-    pool_err = None
+    new_watch, surged, pool_err = [], [], None
     try:
-        added = scan_new_spikes(wl, today)
+        new_watch, surged = scan_pool(wl, archive, today)
     except Exception as e:
         pool_err = str(e)
 
-    save_watchlist(wl)
+    save_json(CONFIG["watchlist_file"], wl)
+    save_json(CONFIG["archive_file"], archive)
 
-    # 组织推送
     parts = []
+
+    # 🌱 蓄势待发
     if sprout:
         sprout.sort(key=lambda x: x["ratio"], reverse=True)
         parts.append(make_table(
             sprout[: CONFIG["max_push_each"]],
-            f"#### 🌱 蓄势待发（巨量已现、价格还没动）— {len(sprout)}只\n",
+            f"#### 🌱 蓄势待发（巨量已现、还没动）— {len(sprout)}只\n",
             [("代码", lambda h: h["code"]), ("名称", lambda h: h["name"]),
              ("现价", lambda h: h["close"]), ("今日", lambda h: f"{h['pct']}%"),
              ("离底", lambda h: f"{h['rise_from_low']}%"),
@@ -347,23 +380,58 @@ def main():
     else:
         parts.append("#### 🌱 蓄势待发 — 今日 0 只")
 
-    if launched:
-        launched.sort(key=lambda x: x["rise_from_low"], reverse=True)
+    # ⭐ 今日新加盯盘（哪几只）
+    if new_watch:
+        new_watch.sort(key=lambda x: x["ratio"], reverse=True)
         parts.append(make_table(
-            launched[: CONFIG["max_push_each"]],
-            f"\n#### 🚀 已启动（盯盘中转涨，验证用）— {len(launched)}只\n",
+            new_watch[: CONFIG["max_push_each"]],
+            f"\n#### ⭐ 今日新加盯盘（刚放巨量、记入清单）— {len(new_watch)}只\n",
             [("代码", lambda h: h["code"]), ("名称", lambda h: h["name"]),
-             ("现价", lambda h: h["close"]), ("离底", lambda h: f"{h['rise_from_low']}%")]))
+             ("现价", lambda h: h["close"]), ("今日", lambda h: f"{h['pct']}%"),
+             ("离底", lambda h: f"{h['rise_from_low']}%"),
+             ("巨量倍数", lambda h: f"{h['ratio']}x")]))
 
-    foot = f"\n> 盯盘池 {len(wl)} 只，今日新增 {added} 只。"
+    # 🎯 今日新命中
+    if hits:
+        hits.sort(key=lambda x: x["rise_from_low"], reverse=True)
+        parts.append(make_table(
+            hits[: CONFIG["max_push_each"]],
+            f"\n#### 🎯 今日新命中（提前蹲到的票启动了）— {len(hits)}只\n",
+            [("代码", lambda h: h["code"]), ("名称", lambda h: h["name"]),
+             ("现价", lambda h: h["close"]), ("离底", lambda h: f"{h['rise_from_low']}%"),
+             ("巨量在", lambda h: f"{h['age']}天前发现")]))
+
+    # ✅ 已暴涨档案（累积，命中标⭐）
+    hit_cnt = sum(1 for a in archive.values() if a.get("source") == "hit")
+    if archive:
+        items = sorted(archive.items(),
+                       key=lambda kv: (kv[1].get("source") != "hit",
+                                       -kv[1].get("peak_rise_from_low", 0)))
+        rows = [{"code": c, "name": a.get("name", ""),
+                 "peak": a.get("peak_rise_from_low", 0),
+                 "mark": "⭐命中" if a.get("source") == "hit" else "普通",
+                 "first": a.get("first_date", "")}
+                for c, a in items[: CONFIG["max_archive_push"]]]
+        parts.append(make_table(
+            rows,
+            f"\n#### ✅ 已暴涨档案 — 累计{len(archive)}只（其中⭐命中{hit_cnt}只，今日新进{len(surged)}）\n",
+            [("代码", lambda h: h["code"]), ("名称", lambda h: h["name"]),
+             ("最高离底", lambda h: f"{h['peak']}%"),
+             ("来源", lambda h: h["mark"]), ("首记", lambda h: h["first"])]))
+    else:
+        parts.append("\n#### ✅ 已暴涨档案 — 暂无")
+
+    foot = f"\n> 盯盘池 {len(wl)} 只。"
     if pool_err:
-        foot += f"（榜单接口异常：{pool_err}，今日未新增）"
+        foot += f"（榜单接口异常：{pool_err}，今日未扫新增）"
     foot += "\n> 机械筛选，非投资建议。量在前价在后不确定性高，请自行复核。"
     parts.append(foot)
 
-    title = f"🌱星星量 {today}：蓄势{len(sprout)} / 启动{len(launched)}"
+    title = (f"🌱星星量 {today}：蓄势{len(sprout)}/命中{len(hits)}/"
+             f"已涨累计{len(archive)}")
     server_chan_push(title, "\n".join(parts))
-    print(f"完成。蓄势{len(sprout)} 启动{len(launched)} 新增{added} 清单{len(wl)}")
+    print(f"完成。蓄势{len(sprout)} 命中{len(hits)} 新盯盘{len(new_watch)} "
+          f"已暴涨今日{len(surged)} 档案{len(archive)}")
 
 
 if __name__ == "__main__":
