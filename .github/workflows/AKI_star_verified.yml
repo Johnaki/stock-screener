@@ -1,0 +1,273 @@
+name: AKI 星星量验证筛选
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "10 10 * * 1-5"
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install akshare pandas requests
+
+      - name: 验证样本并筛选全市场
+        env:
+          AKI_SERVER_CHAN_SENDKEY: ${{ secrets.AKI_SERVER_CHAN_SENDKEY }}
+        run: |
+          cat > aki_star_verified.py <<'PY'
+          import concurrent.futures
+          import datetime as dt
+          import os
+          import time
+
+          import akshare as ak
+          import pandas as pd
+          import requests
+
+          KEY = os.getenv("AKI_SERVER_CHAN_SENDKEY")
+          MAX_STOCKS = 1800
+          MAX_WORKERS = 6
+
+          SAMPLES = [
+              ("001696", "宗申动力"),
+              ("002141", "贤丰控股"),
+              ("301303", "真兰仪表"),
+              ("000032", "深桑达A"),
+              ("603011", "合锻智能"),
+              ("300481", "濮阳惠成"),
+              ("300401", "花园生物"),
+          ]
+          SAMPLE_CODES = {code for code, _ in SAMPLES}
+
+          def push(title, text):
+              if not KEY:
+                  raise RuntimeError("没有设置 AKI_SERVER_CHAN_SENDKEY")
+              url = f"https://sctapi.ftqq.com/{KEY}.send"
+              r = requests.post(url, data={"title": title, "desp": text}, timeout=30)
+              print(r.text)
+              r.raise_for_status()
+
+          def stock_list():
+              try:
+                  d = ak.stock_zh_a_spot_em()
+                  d = d.rename(columns={"代码": "code", "名称": "name", "最新价": "price", "总市值": "cap"})
+                  d["code"] = d["code"].astype(str).str.zfill(6)
+                  d["name"] = d["name"].astype(str)
+                  d["price"] = pd.to_numeric(d["price"], errors="coerce")
+                  d["cap_yi"] = pd.to_numeric(d["cap"], errors="coerce") / 100000000
+                  d = d[~d["name"].str.contains("ST", case=False, na=False)]
+                  d = d[~d["code"].str.startswith(("8", "4", "9"))]
+                  d = d[(d["price"] >= 2.5) & (d["price"] <= 180)]
+                  d = d[(d["cap_yi"].isna()) | ((d["cap_yi"] >= 8) & (d["cap_yi"] <= 3000))]
+                  rows = d[["code", "name"]].drop_duplicates("code").to_dict("records")
+                  return rows[:MAX_STOCKS]
+              except Exception as e:
+                  print("东方财富列表失败，改用交易所列表：", e)
+
+              frames = []
+              for fn, kwargs, code_col, name_col in [
+                  (ak.stock_info_sh_name_code, {"symbol": "主板A股"}, "证券代码", "证券简称"),
+                  (ak.stock_info_sh_name_code, {"symbol": "科创板"}, "证券代码", "证券简称"),
+                  (ak.stock_info_sz_name_code, {"symbol": "A股列表"}, "A股代码", "A股简称"),
+              ]:
+                  try:
+                      x = fn(**kwargs).rename(columns={code_col: "code", name_col: "name"})
+                      frames.append(x[["code", "name"]])
+                  except Exception as e:
+                      print("备用列表部分失败：", e)
+
+              if not frames:
+                  raise RuntimeError("无法获取股票列表")
+
+              d = pd.concat(frames, ignore_index=True)
+              d["code"] = d["code"].astype(str).str.split(".", expand=True).iloc[:, 0].str.zfill(6)
+              d["name"] = d["name"].astype(str)
+              d = d[~d["name"].str.contains("ST", case=False, na=False)]
+              d = d[~d["code"].str.startswith(("8", "4", "9"))]
+              return d.drop_duplicates("code")[["code", "name"]].head(MAX_STOCKS).to_dict("records")
+
+          def history(code):
+              end = dt.date.today().strftime("%Y%m%d")
+              start = (dt.date.today() - dt.timedelta(days=540)).strftime("%Y%m%d")
+              prefix = "sh" if code.startswith("6") else "sz"
+              try:
+                  return ak.stock_zh_a_daily(symbol=f"{prefix}{code}", start_date=start, end_date=end, adjust="qfq")
+              except Exception:
+                  return ak.stock_zh_a_hist(symbol=code, period="daily", start_date=start, end_date=end, adjust="qfq", timeout=15)
+
+          def prep(df):
+              if "日期" in df.columns:
+                  df = df.rename(columns={
+                      "日期": "date", "开盘": "open", "收盘": "close",
+                      "最高": "high", "最低": "low", "成交量": "volume", "成交额": "amount"
+                  })
+              if "date" not in df.columns:
+                  df = df.reset_index().rename(columns={"index": "date"})
+              for c in ["open", "close", "high", "low", "volume"]:
+                  df[c] = pd.to_numeric(df[c], errors="coerce")
+              if "amount" in df.columns:
+                  df["amount"] = pd.to_numeric(df["amount"], errors="coerce")
+              else:
+                  df["amount"] = df["volume"] * df["close"]
+              df["date"] = pd.to_datetime(df["date"], errors="coerce")
+              df = df.dropna(subset=["date", "open", "close", "high", "low", "volume", "amount"])
+              df = df.sort_values("date").reset_index(drop=True)
+              df["a5"] = df.amount.rolling(5).mean()
+              df["a10"] = df.amount.rolling(10).mean()
+              df["a20"] = df.amount.rolling(20).mean()
+              df["a60"] = df.amount.rolling(60).mean()
+              df["v5"] = df.volume.rolling(5).mean()
+              df["v20"] = df.volume.rolling(20).mean()
+              df["ma13"] = df.close.rolling(13).mean()
+              df["ma35"] = df.close.rolling(35).mean()
+              df["ma55"] = df.close.rolling(55).mean()
+              e12 = df.close.ewm(span=12, adjust=False).mean()
+              e26 = df.close.ewm(span=26, adjust=False).mean()
+              diff = e12 - e26
+              df["macd"] = (diff - diff.ewm(span=9, adjust=False).mean()) * 2
+              return df
+
+          def scan_one(code, name):
+              try:
+                  df = prep(history(code))
+              except Exception as e:
+                  print(code, name, "行情失败", e)
+                  return None
+              if len(df) < 150:
+                  return None
+
+              last = df.iloc[-1]
+              best = None
+              for end_i in range(max(90, len(df) - 125), len(df) - 2):
+                  row = df.iloc[end_i]
+                  star = df.iloc[max(0, end_i - 11):end_i + 1]
+                  base = df.iloc[max(0, end_i - 119):end_i + 1]
+                  if len(star) < 8 or len(base) < 70:
+                      continue
+
+                  low_pos = (row.close - base.low.min()) / max(base.high.max() - base.low.min(), 0.01)
+                  tight = (star.high.max() - star.low.min()) / max(star.low.min(), 0.01)
+                  amount_ratio = row.a5 / max(row.a20, 1)
+                  amount_ratio60 = row.a5 / max(row.a60, 1)
+                  star_amount_low = star.amount.median() <= base.amount.quantile(0.45)
+                  not_started = row.close / max(df.close.iloc[max(0, end_i - 20)], 0.01) - 1 <= 0.35
+
+                  star_zone = (
+                      low_pos <= 0.70
+                      and tight <= 0.34
+                      and not_started
+                      and (
+                          amount_ratio <= 1.00
+                          or amount_ratio60 <= 0.85
+                          or star_amount_low
+                      )
+                  )
+                  if not star_zone:
+                      continue
+
+                  after = df.iloc[end_i + 1:]
+                  star_low = min(star.low.min(), after.low.min())
+                  gain = last.close / max(star_low, 0.01) - 1
+                  gain_after = last.close / max(row.close, 0.01) - 1
+                  pct5 = last.close / max(df.close.iloc[-6], 0.01) - 1
+                  pct20 = last.close / max(df.close.iloc[-21], 0.01) - 1
+                  now_amount = last.a5 / max(last.a20, 1)
+                  days = len(df) - 1 - end_i
+
+                  # 已暴涨：星星量之后已经明显放量上涨。
+                  exploded = (
+                      days <= 95
+                      and gain >= 0.16
+                      and (
+                          gain_after >= 0.10
+                          or pct5 >= 0.07
+                          or now_amount >= 1.35
+                      )
+                  )
+                  # 趋势组：星星量还近，涨幅不大，但开始修复。
+                  ready = (
+                      days <= 28
+                      and gain < 0.20
+                      and pct20 <= 0.20
+                      and now_amount >= 0.90
+                      and (last.close >= last.ma13 * 0.93 or last.macd >= df.macd.iloc[-2])
+                  )
+                  if not exploded and not ready:
+                      continue
+
+                  score = 50 + gain * 100
+                  score += max(0, 1.00 - min(amount_ratio, 1.00)) * 35
+                  score += max(0, 0.34 - min(tight, 0.34)) * 60
+                  score += max(0, 95 - days) * 0.7
+                  group = "已暴涨验证组" if exploded else "有暴涨趋势组"
+                  item = {
+                      "group": group, "score": float(score), "name": name, "code": code,
+                      "close": float(last.close), "day": row.date.strftime("%Y-%m-%d"),
+                      "gain": float(gain), "pct5": float(pct5), "pct20": float(pct20),
+                      "ar": float(amount_ratio), "tight": float(tight), "pos": float(low_pos),
+                      "now_amount": float(now_amount)
+                  }
+                  if best is None or item["score"] > best["score"]:
+                      best = item
+              return best
+
+          def fmt(x, i):
+              return (
+                  f"{i}. {x['name']}({x['code']}) 收{x['close']:.2f}，评分{x['score']:.1f}\n"
+                  f"   星星量日：{x['day']}，星星量后涨幅：{x['gain']:.1%}，5日：{x['pct5']:.1%}，20日：{x['pct20']:.1%}\n"
+                  f"   特征：当时成交额比{x['ar']:.2f}，12日振幅{x['tight']:.1%}，低位位置{x['pos']:.1%}，当前成交额比{x['now_amount']:.2f}"
+              )
+
+          # 1. 样本验证：只验证规则，不混进正式结果。
+          sample_results = []
+          for code, name in SAMPLES:
+              r = scan_one(code, name)
+              sample_results.append((code, name, r))
+              time.sleep(0.05)
+
+          # 2. 全市场正式筛选：排除样本股，避免把你给的股票还给你。
+          items = [x for x in stock_list() if x["code"] not in SAMPLE_CODES]
+          results = []
+          errors = 0
+          print("准备正式扫描", len(items), "只股票")
+          with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
+              futures = [ex.submit(scan_one, item["code"], item["name"]) for item in items]
+              for i, f in enumerate(concurrent.futures.as_completed(futures), 1):
+                  try:
+                      r = f.result()
+                      if r:
+                          results.append(r)
+                  except Exception as e:
+                      errors += 1
+                      print("单股扫描失败：", e)
+                  if i % 200 == 0:
+                      print(f"已扫描 {i}/{len(items)}，命中 {len(results)}")
+
+          exploded = sorted([x for x in results if x["group"] == "已暴涨验证组"], key=lambda x: x["score"], reverse=True)[:35]
+          ready = sorted([x for x in results if x["group"] == "有暴涨趋势组"], key=lambda x: x["score"], reverse=True)[:35]
+
+          title = "AKI星星量验证筛选 " + dt.datetime.now().strftime("%Y-%m-%d %H:%M")
+          lines = [f"# {title}", "", "说明：样本只用于校准；正式筛选已排除你给过的样本股。不是买卖建议。", ""]
+          lines.append("## 样本验证")
+          for code, name, r in sample_results:
+              if r:
+                  lines.append(f"- {name}({code})：命中，{r['group']}，星星量日 {r['day']}，后涨幅 {r['gain']:.1%}")
+              else:
+                  lines.append(f"- {name}({code})：未命中")
+          lines.append("")
+          for group, arr in [("已暴涨验证组", exploded), ("有暴涨趋势组", ready)]:
+              lines.append(f"## 正式筛选：{group}（{len(arr)}只）")
+              lines += ["今天没有命中。"] if not arr else [fmt(x, i) for i, x in enumerate(arr, 1)]
+              lines.append("")
+          lines.append(f"正式扫描 {len(items)} 只，命中 {len(results)} 只，失败 {errors} 次。")
+
+          text = "\n".join(lines)
+          print(text)
+          push(title, text)
+          PY
+          python aki_star_verified.py
