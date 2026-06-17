@@ -2,10 +2,11 @@ name: star-volume-scan
 
 on:
   schedule:
-    # GitHub Actions 用的是 UTC 时间。
-    # 09:00 UTC = 北京时间 17:00（A股 15:00 收盘后，数据已结算）
-    - cron: '0 9 * * 1-5'
-  workflow_dispatch:   # 允许在网页上手动点一下就跑
+    - cron: '0 9 * * 1-5'   # 北京时间约17:00（收盘后）
+  workflow_dispatch:
+
+permissions:
+  contents: write            # 允许把 watchlist.json 提交回仓库
 
 jobs:
   scan:
@@ -29,3 +30,11 @@ jobs:
         env:
           SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
         run: python star_volume_screener.py
+
+      - name: Commit watchlist
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add watchlist.json archive.json
+          git commit -m "update data $(date +%F)" || echo "no changes"
+          git push || echo "push skipped"
