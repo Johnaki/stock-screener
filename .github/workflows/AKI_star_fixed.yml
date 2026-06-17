@@ -1,0 +1,127 @@
+name: AKI 星星量修复版
+
+on:
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install akshare pandas requests
+
+      - name: 扫描并推送
+        env:
+          AKI_SERVER_CHAN_SENDKEY: ${{ secrets.AKI_SERVER_CHAN_SENDKEY }}
+        run: |
+          cat > scan.py <<'PY'
+          import datetime as dt, os, time
+          import akshare as ak
+          import pandas as pd
+          import requests
+
+          KEY = os.getenv("AKI_SERVER_CHAN_SENDKEY")
+          SAMPLES = [
+              ("001696","宗申动力"),("002141","贤丰控股"),("301303","真兰仪表"),
+              ("000032","深桑达A"),("603011","合锻智能"),("300481","濮阳惠成"),
+              ("300401","花园生物"),
+          ]
+
+          def push(title, text):
+              if not KEY:
+                  raise RuntimeError("没有设置 AKI_SERVER_CHAN_SENDKEY")
+              url = f"https://sctapi.ftqq.com/{KEY}.send"
+              r = requests.post(url, data={"title": title, "desp": text}, timeout=30)
+              print(r.text)
+              r.raise_for_status()
+
+          def history(code):
+              end = dt.date.today().strftime("%Y%m%d")
+              start = (dt.date.today() - dt.timedelta(days=520)).strftime("%Y%m%d")
+              prefix = "sh" if code.startswith("6") else "sz"
+              try:
+                  return ak.stock_zh_a_daily(symbol=f"{prefix}{code}", start_date=start, end_date=end, adjust="qfq")
+              except Exception:
+                  return ak.stock_zh_a_hist(symbol=code, period="daily", start_date=start, end_date=end, adjust="qfq", timeout=15)
+
+          def prep(df):
+              if "日期" in df.columns:
+                  df = df.rename(columns={"日期":"date","开盘":"open","收盘":"close","最高":"high","最低":"low","成交量":"volume"})
+              for c in ["open","close","high","low","volume"]:
+                  df[c] = pd.to_numeric(df[c], errors="coerce")
+              df["date"] = pd.to_datetime(df["date"], errors="coerce")
+              df = df.dropna(subset=["date","open","close","high","low","volume"]).sort_values("date").reset_index(drop=True)
+              df["v5"] = df.volume.rolling(5).mean()
+              df["v20"] = df.volume.rolling(20).mean()
+              df["v60"] = df.volume.rolling(60).mean()
+              df["ma13"] = df.close.rolling(13).mean()
+              df["ma35"] = df.close.rolling(35).mean()
+              return df
+
+          def one(code, name):
+              try:
+                  df = prep(history(code))
+              except Exception as e:
+                  print(code, name, "行情失败", e)
+                  return None
+              if len(df) < 130:
+                  return None
+              last = df.iloc[-1]
+              best = None
+              for i in range(max(70, len(df)-110), len(df)-2):
+                  row = df.iloc[i]
+                  r12 = df.iloc[max(0, i-11):i+1]
+                  r120 = df.iloc[max(0, i-119):i+1]
+                  pos = (row.close - r120.low.min()) / max(r120.high.max() - r120.low.min(), 0.01)
+                  tight = (r12.high.max() - r12.low.min()) / max(r12.low.min(), 0.01)
+                  vr = row.v5 / max(row.v20, 1)
+                  low_vol = row.v5 <= row.v20 * 1.05 or row.v5 <= row.v60 * 0.9 or r12.volume.median() <= r120.volume.quantile(0.55)
+                  early = row.close / max(df.close.iloc[max(0, i-20)], 0.01) - 1 <= 0.45
+                  if not (low_vol and pos <= 0.85 and tight <= 0.45 and early):
+                      continue
+                  low = min(r12.low.min(), df.iloc[i+1:].low.min())
+                  gain = last.close / max(low, 0.01) - 1
+                  pct5 = last.close / max(df.close.iloc[-6], 0.01) - 1
+                  pct20 = last.close / max(df.close.iloc[-21], 0.01) - 1
+                  nowv = last.v5 / max(last.v20, 1)
+                  days = len(df) - 1 - i
+                  exploded = days <= 100 and gain >= 0.10 and (pct5 >= 0.03 or nowv >= 1.05 or last.close >= last.ma35 * 0.95)
+                  ready = days <= 35 and gain < 0.18 and pct20 <= 0.25 and last.close >= last.ma13 * 0.90
+                  if not exploded and not ready:
+                      continue
+                  score = 60 + gain * 100 + max(0, 110-days) * 0.8
+                  group = "已暴涨验证组" if exploded else "有暴涨趋势组"
+                  item = (score, group, name, code, last.close, row.date.strftime("%Y-%m-%d"), gain, pct5, pct20, vr, tight, pos, nowv)
+                  if best is None or item[0] > best[0]:
+                      best = item
+              return best
+
+          results = []
+          for code, name in SAMPLES:
+              r = one(code, name)
+              if r:
+                  results.append(r)
+              time.sleep(0.1)
+
+          exploded = sorted([x for x in results if x[1] == "已暴涨验证组"], reverse=True)
+          ready = sorted([x for x in results if x[1] == "有暴涨趋势组"], reverse=True)
+          title = "AKI星星量修复版 " + dt.datetime.now().strftime("%Y-%m-%d %H:%M")
+          lines = [f"# {title}", "", "说明：这版先用你给的样本股验证星星量识别和Server酱推送。", ""]
+          for group, arr in [("已暴涨验证组", exploded), ("有暴涨趋势组", ready)]:
+              lines.append(f"## {group}（{len(arr)}只）")
+              if not arr:
+                  lines.append("今天没有命中。")
+              for i, x in enumerate(arr, 1):
+                  score, _, name, code, close, day, gain, pct5, pct20, vr, tight, pos, nowv = x
+                  lines.append(f"{i}. {name}({code}) 收{close:.2f}，评分{score:.1f}")
+                  lines.append(f"   星星量日：{day}，星星量后涨幅：{gain:.1%}，5日：{pct5:.1%}，20日：{pct20:.1%}")
+                  lines.append(f"   特征：当时量比{vr:.2f}，12日振幅{tight:.1%}，低位位置{pos:.1%}，当前量比{nowv:.2f}")
+              lines.append("")
+          text = "\n".join(lines)
+          print(text)
+          push(title, text)
+          PY
+          python scan.py
