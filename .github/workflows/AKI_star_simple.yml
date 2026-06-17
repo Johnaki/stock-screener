@@ -1,0 +1,226 @@
+name: AKI 星星量简化扫描
+
+on:
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install akshare pandas numpy requests
+
+      - name: 运行星星量简化扫描
+        env:
+          AKI_SERVER_CHAN_SENDKEY: ${{ secrets.AKI_SERVER_CHAN_SENDKEY }}
+        run: |
+          cat > aki_star_simple.py <<'PY'
+          import datetime as dt
+          import os
+          import time
+
+          import akshare as ak
+          import numpy as np
+          import pandas as pd
+          import requests
+
+          SENDKEY = os.getenv("AKI_SERVER_CHAN_SENDKEY")
+
+          FORCE_CODES = [
+              {"code": "001696", "name": "宗申动力"},
+          ]
+
+          def push(title, text):
+              if not SENDKEY:
+                  raise RuntimeError("没有设置 AKI_SERVER_CHAN_SENDKEY")
+              url = f"https://sctapi.ftqq.com/{SENDKEY}.send"
+              r = requests.post(url, data={"title": title, "desp": text}, timeout=30)
+              print(r.text)
+              r.raise_for_status()
+
+          def get_codes():
+              items = []
+              try:
+                  spot = ak.stock_zh_a_spot_em()
+                  spot = spot.rename(columns={"代码": "code", "名称": "name", "最新价": "price"})
+                  spot["code"] = spot["code"].astype(str).str.zfill(6)
+                  spot["name"] = spot["name"].astype(str)
+                  spot["price"] = pd.to_numeric(spot["price"], errors="coerce")
+                  spot = spot[~spot["name"].str.contains("ST", case=False, na=False)]
+                  spot = spot[~spot["code"].str.startswith(("8", "4", "9"))]
+                  spot = spot[(spot["price"] >= 2.5) & (spot["price"] <= 150)]
+                  items = spot[["code", "name"]].head(300).to_dict("records")
+              except Exception as e:
+                  print("股票列表获取失败，先只扫描样本股：", e)
+
+              seen = set()
+              merged = []
+              for x in FORCE_CODES + items:
+                  code = str(x["code"]).zfill(6)
+                  if code not in seen:
+                      seen.add(code)
+                      merged.append({"code": code, "name": str(x["name"])})
+              return merged
+
+          def get_history(code):
+              end = dt.date.today().strftime("%Y%m%d")
+              start = (dt.date.today() - dt.timedelta(days=520)).strftime("%Y%m%d")
+              return ak.stock_zh_a_hist(
+                  symbol=code,
+                  period="daily",
+                  start_date=start,
+                  end_date=end,
+                  adjust="qfq",
+                  timeout=15,
+              )
+
+          def prepare(df):
+              df = df.rename(columns={
+                  "日期": "date",
+                  "开盘": "open",
+                  "收盘": "close",
+                  "最高": "high",
+                  "最低": "low",
+                  "成交量": "volume",
+              })
+              for col in ["open", "close", "high", "low", "volume"]:
+                  df[col] = pd.to_numeric(df[col], errors="coerce")
+              df["date"] = pd.to_datetime(df["date"], errors="coerce")
+              df = df.dropna(subset=["date", "open", "close", "high", "low", "volume"])
+              df = df.sort_values("date").reset_index(drop=True)
+              df["v5"] = df["volume"].rolling(5).mean()
+              df["v20"] = df["volume"].rolling(20).mean()
+              df["v60"] = df["volume"].rolling(60).mean()
+              df["ma13"] = df["close"].rolling(13).mean()
+              df["ma35"] = df["close"].rolling(35).mean()
+              ema12 = df["close"].ewm(span=12, adjust=False).mean()
+              ema26 = df["close"].ewm(span=26, adjust=False).mean()
+              diff = ema12 - ema26
+              df["macd"] = (diff - diff.ewm(span=9, adjust=False).mean()) * 2
+              return df
+
+          def find_signal(code, name):
+              try:
+                  df = prepare(get_history(code))
+              except Exception as e:
+                  print(f"{code} {name} 行情失败：{e}")
+                  return None
+
+              if len(df) < 130:
+                  return None
+
+              last = df.iloc[-1]
+              best = None
+
+              for i in range(max(70, len(df) - 110), len(df) - 2):
+                  row = df.iloc[i]
+                  r12 = df.iloc[max(0, i - 11):i + 1]
+                  r120 = df.iloc[max(0, i - 119):i + 1]
+                  if len(r12) < 8 or len(r120) < 60:
+                      continue
+
+                  low120 = r120["low"].min()
+                  high120 = r120["high"].max()
+                  low_pos = (row["close"] - low120) / max(high120 - low120, 0.01)
+                  range12 = (r12["high"].max() - r12["low"].min()) / max(r12["low"].min(), 0.01)
+                  vol_ratio = row["v5"] / max(row["v20"], 1)
+                  low_volume = (
+                      row["v5"] <= row["v20"] * 0.95
+                      or row["v5"] <= row["v60"] * 0.80
+                      or r12["volume"].median() <= r120["volume"].quantile(0.45)
+                  )
+                  not_started = row["close"] / max(df["close"].iloc[max(0, i - 20)], 0.01) - 1 <= 0.35
+
+                  if not (low_volume and low_pos <= 0.75 and range12 <= 0.38 and not_started):
+                      continue
+
+                  star_low = min(r12["low"].min(), df.iloc[i + 1:]["low"].min())
+                  gain = last["close"] / max(star_low, 0.01) - 1
+                  gain_after = last["close"] / max(row["close"], 0.01) - 1
+                  pct5 = last["close"] / max(df["close"].iloc[-6], 0.01) - 1
+                  pct20 = last["close"] / max(df["close"].iloc[-21], 0.01) - 1
+                  now_vol = last["v5"] / max(last["v20"], 1)
+                  days_after = len(df) - 1 - i
+
+                  exploded = days_after <= 90 and gain >= 0.12 and (
+                      gain_after >= 0.08
+                      or pct5 >= 0.05
+                      or now_vol >= 1.10
+                      or last["close"] >= last["ma35"] * 0.98
+                  )
+                  ready = days_after <= 30 and gain < 0.18 and pct20 <= 0.22 and (
+                      last["close"] >= last["ma13"] * 0.92
+                      or last["macd"] >= df["macd"].iloc[-2]
+                  )
+
+                  if not exploded and not ready:
+                      continue
+
+                  score = 60 + gain * 100
+                  score += max(0, 0.95 - min(vol_ratio, 0.95)) * 30
+                  score += max(0, 0.38 - min(range12, 0.38)) * 40
+                  group = "已暴涨验证组" if exploded else "有暴涨趋势组"
+
+                  signal = {
+                      "group": group,
+                      "code": code,
+                      "name": name,
+                      "close": float(last["close"]),
+                      "score": float(score),
+                      "star_date": row["date"].strftime("%Y-%m-%d"),
+                      "gain": float(gain),
+                      "pct5": float(pct5),
+                      "pct20": float(pct20),
+                      "vol_ratio": float(vol_ratio),
+                      "range12": float(range12),
+                      "low_pos": float(low_pos),
+                      "now_vol": float(now_vol),
+                  }
+                  if best is None or signal["score"] > best["score"]:
+                      best = signal
+
+              return best
+
+          def fmt(x, i):
+              return (
+                  f"{i}. {x['name']}({x['code']}) 收{x['close']:.2f}，评分{x['score']:.1f}\n"
+                  f"   星星量日：{x['star_date']}，星星量后涨幅：{x['gain']:.1%}，5日：{x['pct5']:.1%}，20日：{x['pct20']:.1%}\n"
+                  f"   特征：当时量比{x['vol_ratio']:.2f}，12日振幅{x['range12']:.1%}，低位位置{x['low_pos']:.1%}，当前量比{x['now_vol']:.2f}"
+              )
+
+          codes = get_codes()
+          print(f"准备扫描 {len(codes)} 只股票")
+          results = []
+
+          for i, item in enumerate(codes, 1):
+              signal = find_signal(item["code"], item["name"])
+              if signal:
+                  results.append(signal)
+              if i % 50 == 0:
+                  print(f"已扫描 {i}/{len(codes)}，命中 {len(results)}")
+              time.sleep(0.08)
+
+          exploded = sorted([x for x in results if x["group"] == "已暴涨验证组"], key=lambda x: x["score"], reverse=True)[:25]
+          ready = sorted([x for x in results if x["group"] == "有暴涨趋势组"], key=lambda x: x["score"], reverse=True)[:25]
+
+          title = "AKI星星量简化扫描 " + dt.datetime.now().strftime("%Y-%m-%d %H:%M")
+          lines = [f"# {title}", "", "说明：先跑简化稳定版。重点看宗申动力这类“过去星星量，后来放量上涨”的识别。", ""]
+          lines.append(f"## 已暴涨验证组（{len(exploded)}只）")
+          lines += ["今天没有命中。"] if not exploded else [fmt(x, i) for i, x in enumerate(exploded, 1)]
+          lines.append("")
+          lines.append(f"## 有暴涨趋势组（{len(ready)}只）")
+          lines += ["今天没有命中。"] if not ready else [fmt(x, i) for i, x in enumerate(ready, 1)]
+
+          text = "\n".join(lines)
+          print(text)
+          push(title, text)
+          PY
+          python aki_star_simple.py
