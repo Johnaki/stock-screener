@@ -1,0 +1,192 @@
+name: AKI 星星量每日扫描
+
+on:
+  schedule:
+    - cron: "10 10 * * 1-5"
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install akshare pandas numpy requests
+
+      - name: 运行 AKI 星星量筛选
+        env:
+          AKI_SERVER_CHAN_SENDKEY: ${{ secrets.AKI_SERVER_CHAN_SENDKEY }}
+        run: |
+          python - <<'PY'
+          import datetime as dt
+          import os
+          import time
+          import requests
+          import pandas as pd
+          import numpy as np
+          import akshare as ak
+
+          SENDKEY = os.environ.get("AKI_SERVER_CHAN_SENDKEY")
+
+          def push(title, content):
+              if not SENDKEY:
+                  raise RuntimeError("没有设置 AKI_SERVER_CHAN_SENDKEY")
+              url = f"https://sctapi.ftqq.com/{SENDKEY}.send"
+              r = requests.post(url, data={"title": title, "desp": content}, timeout=30)
+              print(r.text)
+              r.raise_for_status()
+
+          def get_codes():
+              df = ak.stock_zh_a_spot_em()
+              df = df.rename(columns={
+                  "代码": "code",
+                  "名称": "name",
+                  "最新价": "price",
+                  "总市值": "market_cap",
+              })
+              df = df[~df["name"].astype(str).str.contains("ST", case=False, na=False)]
+              df = df[~df["code"].astype(str).str.startswith(("8", "4", "9"))]
+              df["price"] = pd.to_numeric(df["price"], errors="coerce")
+              df["market_cap_yi"] = pd.to_numeric(df["market_cap"], errors="coerce") / 100000000
+              df = df[(df["price"] >= 3) & (df["price"] <= 80)]
+              df = df[(df["market_cap_yi"] >= 20) & (df["market_cap_yi"] <= 800)]
+              return df[["code", "name", "market_cap_yi"]].dropna().to_dict("records")
+
+          def add_indicators(df):
+              df = df.rename(columns={
+                  "日期": "date",
+                  "开盘": "open",
+                  "收盘": "close",
+                  "最高": "high",
+                  "最低": "low",
+                  "成交量": "volume",
+                  "换手率": "turnover",
+              })
+              for c in ["open", "close", "high", "low", "volume", "turnover"]:
+                  df[c] = pd.to_numeric(df[c], errors="coerce")
+              df["date"] = pd.to_datetime(df["date"])
+              df = df.dropna().sort_values("date").reset_index(drop=True)
+
+              df["ma13"] = df["close"].rolling(13).mean()
+              df["ma35"] = df["close"].rolling(35).mean()
+              df["ma55"] = df["close"].rolling(55).mean()
+              df["vol5"] = df["volume"].rolling(5).mean()
+              df["vol20"] = df["volume"].rolling(20).mean()
+
+              ema12 = df["close"].ewm(span=12, adjust=False).mean()
+              ema26 = df["close"].ewm(span=26, adjust=False).mean()
+              df["diff"] = ema12 - ema26
+              df["dea"] = df["diff"].ewm(span=9, adjust=False).mean()
+              df["macd"] = (df["diff"] - df["dea"]) * 2
+              return df
+
+          def check_stock(item):
+              code = str(item["code"]).zfill(6)
+              name = item["name"]
+              end = dt.date.today().strftime("%Y%m%d")
+              start = (dt.date.today() - dt.timedelta(days=420)).strftime("%Y%m%d")
+
+              try:
+                  df = ak.stock_zh_a_hist(
+                      symbol=code,
+                      period="daily",
+                      start_date=start,
+                      end_date=end,
+                      adjust="qfq",
+                  )
+                  time.sleep(0.12)
+              except Exception:
+                  return None
+
+              if len(df) < 130:
+                  return None
+
+              df = add_indicators(df)
+              if len(df) < 130:
+                  return None
+
+              last = df.iloc[-1]
+              recent = df.tail(12)
+              low120 = df["low"].tail(120).min()
+              high120 = df["high"].tail(120).max()
+
+              shrink = last["vol5"] <= last["vol20"] * 0.55
+              tight = (recent["high"].max() - recent["low"].min()) / recent["low"].min() <= 0.16
+              near_low = (last["close"] - low120) / max(high120 - low120, 0.01) <= 0.30
+              repair = last["close"] >= last["ma13"] * 0.96 and last["macd"] >= df["macd"].iloc[-2]
+
+              pct5 = last["close"] / df["close"].iloc[-6] - 1
+              pct20 = last["close"] / df["close"].iloc[-21] - 1
+              low20 = df["low"].tail(20).min()
+              gain_from_low20 = last["close"] / low20 - 1
+              vol_ratio = last["vol5"] / max(last["vol20"], 1)
+
+              if shrink and tight and near_low and repair and pct20 <= 0.22:
+                  return {
+                      "group": "有暴涨趋势组",
+                      "name": name,
+                      "code": code,
+                      "close": last["close"],
+                      "score": 80 + vol_ratio * 10,
+                      "reason": f"低位缩量，12日波动收窄，MACD修复，20日涨幅{pct20:.1%}",
+                  }
+
+              if gain_from_low20 >= 0.25 and pct5 >= 0.12 and vol_ratio >= 1.5:
+                  return {
+                      "group": "已暴涨验证组",
+                      "name": name,
+                      "code": code,
+                      "close": last["close"],
+                      "score": 70 + gain_from_low20 * 100,
+                      "reason": f"20日低点以来上涨{gain_from_low20:.1%}，5日上涨{pct5:.1%}，量比{vol_ratio:.2f}",
+                  }
+
+              return None
+
+          codes = get_codes()
+          results = []
+
+          for i, item in enumerate(codes[:1200], 1):
+              r = check_stock(item)
+              if r:
+                  results.append(r)
+              if i % 100 == 0:
+                  print(f"已扫描 {i} 只，命中 {len(results)} 只")
+
+          up = sorted([x for x in results if x["group"] == "已暴涨验证组"], key=lambda x: x["score"], reverse=True)[:20]
+          ready = sorted([x for x in results if x["group"] == "有暴涨趋势组"], key=lambda x: x["score"], reverse=True)[:20]
+
+          today = dt.datetime.now().strftime("%Y-%m-%d %H:%M")
+          title = f"AKI星星量股票筛选 {today}"
+
+          lines = []
+          lines.append(f"# {title}")
+          lines.append("")
+          lines.append("说明：这是技术形态观察，不是买卖建议。")
+          lines.append("")
+          lines.append(f"## 已暴涨验证组（{len(up)}只）")
+          if not up:
+              lines.append("今天没有命中。")
+          for i, x in enumerate(up, 1):
+              lines.append(f"{i}. {x['name']}({x['code']}) 收{x['close']:.2f}，评分{x['score']:.1f}")
+              lines.append(f"   理由：{x['reason']}")
+          lines.append("")
+          lines.append(f"## 有暴涨趋势组（{len(ready)}只）")
+          if not ready:
+              lines.append("今天没有命中。")
+          for i, x in enumerate(ready, 1):
+              lines.append(f"{i}. {x['name']}({x['code']}) 收{x['close']:.2f}，评分{x['score']:.1f}")
+              lines.append(f"   理由：{x['reason']}")
+
+          content = "\n".join(lines)
+          print(content)
+          push(title, content)
+          PY
