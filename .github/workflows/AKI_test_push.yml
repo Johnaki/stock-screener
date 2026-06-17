@@ -1,0 +1,22 @@
+name: AKI 测试推送
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test_push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 测试 Server酱推送
+        env:
+          AKI_SERVER_CHAN_SENDKEY: ${{ secrets.AKI_SERVER_CHAN_SENDKEY }}
+        run: |
+          if [ -z "$AKI_SERVER_CHAN_SENDKEY" ]; then
+            echo "没有设置 AKI_SERVER_CHAN_SENDKEY"
+            exit 1
+          fi
+
+          curl -sS -X POST "https://sctapi.ftqq.com/${AKI_SERVER_CHAN_SENDKEY}.send" \
+            --data-urlencode "title=AKI测试推送" \
+            --data-urlencode "desp=如果你收到这条消息，说明 GitHub 和 Server酱已经连通。"
