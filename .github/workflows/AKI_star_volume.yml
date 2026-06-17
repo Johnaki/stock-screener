@@ -26,15 +26,21 @@ jobs:
           AKI_SERVER_CHAN_SENDKEY: ${{ secrets.AKI_SERVER_CHAN_SENDKEY }}
         run: |
           python - <<'PY'
+          import concurrent.futures
           import datetime as dt
           import os
           import time
-          import requests
-          import pandas as pd
-          import numpy as np
+
           import akshare as ak
+          import numpy as np
+          import pandas as pd
+          import requests
+
 
           SENDKEY = os.environ.get("AKI_SERVER_CHAN_SENDKEY")
+          MAX_STOCKS = 4200
+          MAX_WORKERS = 6
+
 
           def push(title, content):
               if not SENDKEY:
@@ -43,6 +49,7 @@ jobs:
               r = requests.post(url, data={"title": title, "desp": content}, timeout=30)
               print(r.text)
               r.raise_for_status()
+
 
           def get_codes():
               try:
@@ -53,188 +60,41 @@ jobs:
                       "最新价": "price",
                       "总市值": "market_cap",
                   })
-                  df = df[~df["name"].astype(str).str.contains("ST", case=False, na=False)]
-                  df = df[~df["code"].astype(str).str.startswith(("8", "4", "9"))]
-                  df["price"] = pd.to_numeric(df["price"], errors="coerce")
-                  df["market_cap_yi"] = pd.to_numeric(df["market_cap"], errors="coerce") / 100000000
-                  df = df[(df["price"] >= 3) & (df["price"] <= 80)]
-                  df = df[(df["market_cap_yi"] >= 20) & (df["market_cap_yi"] <= 800)]
-                  return df[["code", "name", "market_cap_yi"]].dropna().to_dict("records")
+                  df["code"] = df["code"].astype(str).str.zfill(6)
+                  df["name"] = df["name"].astype(str)
+                  df = df[~df["name"].str.contains("ST", case=False, na=False)]
+                  df = df[~df["code"].str.startswith(("8", "4", "9"))]
+                  df["price"] = pd.to_numeric(df.get("price"), errors="coerce")
+                  df["market_cap_yi"] = pd.to_numeric(df.get("market_cap"), errors="coerce") / 100000000
+                  df = df[(df["price"] >= 2.5) & (df["price"] <= 120)]
+                  df = df[(df["market_cap_yi"].isna()) | ((df["market_cap_yi"] >= 10) & (df["market_cap_yi"] <= 1500))]
+                  return df[["code", "name", "market_cap_yi"]].dropna(subset=["code", "name"]).to_dict("records")
               except Exception as e:
                   print("东方财富股票列表失败，改用沪深交易所股票列表：", e)
 
               frames = []
-
-              try:
-                  sh_main = ak.stock_info_sh_name_code(symbol="主板A股")
-                  sh_main = sh_main.rename(columns={"证券代码": "code", "证券简称": "name"})
-                  frames.append(sh_main[["code", "name"]])
-              except Exception as e:
-                  print("沪市主板列表失败：", e)
-
-              try:
-                  sh_kc = ak.stock_info_sh_name_code(symbol="科创板")
-                  sh_kc = sh_kc.rename(columns={"证券代码": "code", "证券简称": "name"})
-                  frames.append(sh_kc[["code", "name"]])
-              except Exception as e:
-                  print("科创板列表失败：", e)
-
-              try:
-                  sz = ak.stock_info_sz_name_code(symbol="A股列表")
-                  sz = sz.rename(columns={"A股代码": "code", "A股简称": "name"})
-                  frames.append(sz[["code", "name"]])
-              except Exception as e:
-                  print("深市列表失败：", e)
+              for label, getter, kwargs, code_col, name_col in [
+                  ("沪市主板", ak.stock_info_sh_name_code, {"symbol": "主板A股"}, "证券代码", "证券简称"),
+                  ("科创板", ak.stock_info_sh_name_code, {"symbol": "科创板"}, "证券代码", "证券简称"),
+                  ("深市A股", ak.stock_info_sz_name_code, {"symbol": "A股列表"}, "A股代码", "A股简称"),
+              ]:
+                  try:
+                      tmp = getter(**kwargs).rename(columns={code_col: "code", name_col: "name"})
+                      frames.append(tmp[["code", "name"]])
+                  except Exception as e:
+                      print(f"{label}列表失败：{e}")
 
               if not frames:
                   raise RuntimeError("所有股票列表接口都失败了")
 
               df = pd.concat(frames, ignore_index=True)
-              df["code"] = df["code"].astype(str).str.zfill(6)
-              df = df[~df["name"].astype(str).str.contains("ST", case=False, na=False)]
-              df = df[~df["code"].astype(str).str.startswith(("8", "4", "9"))]
+              df["code"] = df["code"].astype(str).str.split(".", expand=True).iloc[:, 0].str.zfill(6)
+              df["name"] = df["name"].astype(str)
+              df = df[~df["name"].str.contains("ST", case=False, na=False)]
+              df = df[~df["code"].str.startswith(("8", "4", "9"))]
               df["market_cap_yi"] = np.nan
-              return df[["code", "name", "market_cap_yi"]].dropna(subset=["code", "name"]).to_dict("records")
+              return df.drop_duplicates("code")[["code", "name", "market_cap_yi"]].to_dict("records")
 
-          def add_indicators(df):
-              df = df.rename(columns={
-                  "日期": "date",
-                  "开盘": "open",
-                  "收盘": "close",
-                  "最高": "high",
-                  "最低": "low",
-                  "成交量": "volume",
-                  "换手率": "turnover",
-              })
-              for c in ["open", "close", "high", "low", "volume", "turnover"]:
-                  if c in df.columns:
-                      df[c] = pd.to_numeric(df[c], errors="coerce")
-              df["date"] = pd.to_datetime(df["date"])
-              df = df.dropna(subset=["date", "open", "close", "high", "low", "volume"]).sort_values("date").reset_index(drop=True)
 
-              df["ma13"] = df["close"].rolling(13).mean()
-              df["ma35"] = df["close"].rolling(35).mean()
-              df["ma55"] = df["close"].rolling(55).mean()
-              df["vol5"] = df["volume"].rolling(5).mean()
-              df["vol20"] = df["volume"].rolling(20).mean()
-
-              ema12 = df["close"].ewm(span=12, adjust=False).mean()
-              ema26 = df["close"].ewm(span=26, adjust=False).mean()
-              df["diff"] = ema12 - ema26
-              df["dea"] = df["diff"].ewm(span=9, adjust=False).mean()
-              df["macd"] = (df["diff"] - df["dea"]) * 2
-              return df
-
-          def check_stock(item):
-              code = str(item["code"]).zfill(6)
-              name = item["name"]
-              end = dt.date.today().strftime("%Y%m%d")
-              start = (dt.date.today() - dt.timedelta(days=420)).strftime("%Y%m%d")
-
-              try:
-                  df = ak.stock_zh_a_hist(
-                      symbol=code,
-                      period="daily",
-                      start_date=start,
-                      end_date=end,
-                      adjust="qfq",
-                  )
-                  time.sleep(0.12)
-              except Exception as e:
-                  print(f"{code} {name} 历史行情失败，跳过：{e}")
-                  return None
-
-              if len(df) < 130:
-                  return None
-
-              df = add_indicators(df)
-              if len(df) < 130:
-                  return None
-
-              last = df.iloc[-1]
-              recent = df.tail(12)
-              low120 = df["low"].tail(120).min()
-              high120 = df["high"].tail(120).max()
-
-              shrink = last["vol5"] <= last["vol20"] * 0.55
-              tight = (recent["high"].max() - recent["low"].min()) / recent["low"].min() <= 0.16
-              near_low = (last["close"] - low120) / max(high120 - low120, 0.01) <= 0.30
-              repair = last["close"] >= last["ma13"] * 0.96 and last["macd"] >= df["macd"].iloc[-2]
-
-              pct5 = last["close"] / df["close"].iloc[-6] - 1
-              pct20 = last["close"] / df["close"].iloc[-21] - 1
-              low20 = df["low"].tail(20).min()
-              gain_from_low20 = last["close"] / low20 - 1
-              vol_ratio = last["vol5"] / max(last["vol20"], 1)
-
-              if shrink and tight and near_low and repair and pct20 <= 0.22:
-                  return {
-                      "group": "有暴涨趋势组",
-                      "name": name,
-                      "code": code,
-                      "close": last["close"],
-                      "score": 80 + vol_ratio * 10,
-                      "reason": f"低位缩量，12日波动收窄，MACD修复，20日涨幅{pct20:.1%}",
-                  }
-
-              if gain_from_low20 >= 0.25 and pct5 >= 0.12 and vol_ratio >= 1.5:
-                  return {
-                      "group": "已暴涨验证组",
-                      "name": name,
-                      "code": code,
-                      "close": last["close"],
-                      "score": 70 + gain_from_low20 * 100,
-                      "reason": f"20日低点以来上涨{gain_from_low20:.1%}，5日上涨{pct5:.1%}，量比{vol_ratio:.2f}",
-                  }
-
-              return None
-
-          codes = get_codes()
-          results = []
-
-          for i, item in enumerate(codes[:1200], 1):
-              r = check_stock(item)
-              if r:
-                  results.append(r)
-              if i % 100 == 0:
-                  print(f"已扫描 {i} 只，命中 {len(results)} 只")
-
-          up = sorted(
-              [x for x in results if x["group"] == "已暴涨验证组"],
-              key=lambda x: x["score"],
-              reverse=True,
-          )[:20]
-
-          ready = sorted(
-              [x for x in results if x["group"] == "有暴涨趋势组"],
-              key=lambda x: x["score"],
-              reverse=True,
-          )[:20]
-
-          today = dt.datetime.now().strftime("%Y-%m-%d %H:%M")
-          title = f"AKI星星量股票筛选 {today}"
-
-          lines = []
-          lines.append(f"# {title}")
-          lines.append("")
-          lines.append("说明：这是技术形态观察，不是买卖建议。")
-          lines.append("")
-          lines.append(f"## 已暴涨验证组（{len(up)}只）")
-          if not up:
-              lines.append("今天没有命中。")
-          for i, x in enumerate(up, 1):
-              lines.append(f"{i}. {x['name']}({x['code']}) 收{x['close']:.2f}，评分{x['score']:.1f}")
-              lines.append(f"   理由：{x['reason']}")
-
-          lines.append("")
-          lines.append(f"## 有暴涨趋势组（{len(ready)}只）")
-          if not ready:
-              lines.append("今天没有命中。")
-          for i, x in enumerate(ready, 1):
-              lines.append(f"{i}. {x['name']}({x['code']}) 收{x['close']:.2f}，评分{x['score']:.1f}")
-              lines.append(f"   理由：{x['reason']}")
-
-          content = "\n".join(lines)
-          print(content)
-          push(title, content)
-          PY
+          def normalize_history(df):
+              if "日期" not in df.columns and "date" not in df.columns:
