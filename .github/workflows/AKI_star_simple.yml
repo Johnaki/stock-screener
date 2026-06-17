@@ -2,11 +2,14 @@ name: AKI 星星量简化扫描
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "10 10 * * 1-5"
 
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
+
     steps:
       - name: 安装 Python
         uses: actions/setup-python@v5
@@ -19,20 +22,13 @@ jobs:
           pip install akshare pandas numpy requests
 
       - name: 运行星星量简化扫描
-        env:
-          AKI_SERVER_CHAN_SENDKEY: ${{ secrets.AKI_SERVER_CHAN_SENDKEY }}
         run: |
           cat > aki_star_simple.py <<'PY'
           import datetime as dt
-          import os
           import time
 
           import akshare as ak
-          import numpy as np
           import pandas as pd
-          import requests
-
-          SENDKEY = os.getenv("AKI_SERVER_CHAN_SENDKEY")
 
           FORCE_CODES = [
               {"code": "001696", "name": "宗申动力"},
@@ -43,14 +39,6 @@ jobs:
               {"code": "300481", "name": "濮阳惠成"},
               {"code": "300401", "name": "花园生物"},
           ]
-
-          def push(title, text):
-              if not SENDKEY:
-                  raise RuntimeError("没有设置 AKI_SERVER_CHAN_SENDKEY")
-              url = f"https://sctapi.ftqq.com/{SENDKEY}.send"
-              r = requests.post(url, data={"title": title, "desp": text}, timeout=30)
-              print(r.text)
-              r.raise_for_status()
 
           def get_codes():
               items = []
@@ -63,9 +51,9 @@ jobs:
                   spot = spot[~spot["name"].str.contains("ST", case=False, na=False)]
                   spot = spot[~spot["code"].str.startswith(("8", "4", "9"))]
                   spot = spot[(spot["price"] >= 2.5) & (spot["price"] <= 150)]
-                  items = spot[["code", "name"]].head(300).to_dict("records")
+                  items = spot[["code", "name"]].head(1000).to_dict("records")
               except Exception as e:
-                  print("股票列表获取失败，先只扫描样本股：", e)
+                  print("股票列表获取失败，先扫描样本股：", e)
 
               seen = set()
               merged = []
@@ -97,3 +85,16 @@ jobs:
                       end_date=end,
                       adjust="qfq",
                   )
+
+          def prepare(df):
+              if "日期" not in df.columns and "date" not in df.columns:
+                  df = df.reset_index()
+              df = df.rename(columns={
+                  "日期": "date",
+                  "开盘": "open",
+                  "收盘": "close",
+                  "最高": "high",
+                  "最低": "low",
+                  "成交量": "volume",
+              })
+              for col in ["open", "close", "high", "low", "volume"]:
