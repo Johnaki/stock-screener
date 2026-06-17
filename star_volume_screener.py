@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-星星量筛选器 v4.1 —— 盯盘清单 + 已暴涨累积档案
+星星量筛选器 v4.2 —— 盯盘清单 + 已暴涨累积档案
 ===========================================
 每天推送：
   🌱 蓄势待发：巨量已现、价格还没动（重点）
@@ -38,12 +38,15 @@ CONFIG = {
     # 巨量/底部
     "hist_days": 150,
     "baseline_window": 60,
-    "vol_mult": 2.5,
+    "vol_mult": 4.0,            # 星星量巨量倍数：今日量/前60日均量，要够夸张
+    "vol_recent_mult": 2.0,     # 今日量须 ≥ 放量前安静段最大量的此倍数（确保是突兀单根尖峰）
+    "recent_win": 10,           # "近期最大量"的窗口
+    "surge_vol_mult": 2.5,      # 已暴涨判定用的较松巨量倍数
     "surge_window": 3,
     "low_lookback": 60,
     "low_recent_days": 25,
     "flag_rise_max": 18.0,      # 加入盯盘时离底涨幅上限
-    "flag_up_min": 2.0,         # 巨量日当天最低涨幅(%)，挡掉放量暴跌
+    "flag_up_min": -2.0,        # 巨量日涨幅下限(%)：跌超此值才剔除，挡放量大跌，但放量微涨/收平要保留
 
     # 蓄势待发
     "watch_min_age": 1,
@@ -311,7 +314,7 @@ def scan_pool(wl, archive, today):
         base_em = baseline_before(vol, len(vol) - sw) or 1
         ratio_em = vol.iloc[-sw:].max() / base_em
         ma20 = close.rolling(20).mean().iloc[-1]
-        if (rise_from_low >= CONFIG["surged_rise_min"] and ratio_em >= CONFIG["vol_mult"]
+        if (rise_from_low >= CONFIG["surged_rise_min"] and ratio_em >= CONFIG["surge_vol_mult"]
                 and not pd.isna(ma20) and today_close > ma20):
             src = archive.get(code, {}).get("source", "market")
             upsert_archive(archive, code, r.get("name", ""), rise_from_low,
@@ -325,9 +328,13 @@ def scan_pool(wl, archive, today):
         base = baseline_before(vol, len(vol) - 1)
         if not base or base <= 0:
             continue
+        rw2 = CONFIG["recent_win"]
+        recent_max = vol.iloc[-(rw2 + 2):-2].max() if len(vol) > rw2 + 2 else base
         if (vol.iloc[-1] / base >= CONFIG["vol_mult"] and at_bottom
                 and rise_from_low <= CONFIG["flag_rise_max"]
-                and today_pct >= CONFIG["flag_up_min"]):
+                and today_pct >= CONFIG["flag_up_min"]
+                and recent_max > 0
+                and vol.iloc[-1] / recent_max >= CONFIG["vol_recent_mult"]):
             wl[code] = {"name": r.get("name", ""), "added": today,
                         "spike_date": str(k["date"].iloc[-1]),
                         "spike_close": round(today_close, 2)}
