@@ -22,7 +22,7 @@ SAMPLES = [
 ]
 SAMPLE_CODES = {x["code"] for x in SAMPLES}
 
-MAX_STOCKS = int(os.getenv("AKI_MAX_STOCKS", "2600"))
+MAX_STOCKS = int(os.getenv("AKI_MAX_STOCKS", "900"))
 MAX_WORKERS = int(os.getenv("AKI_MAX_WORKERS", "5"))
 
 # 星星量不是几天的小缩量，而是一段较长的“成交额贴地、均量线平躺”。
@@ -369,6 +369,7 @@ def build_templates():
 
 
 def get_stock_list():
+    errors = []
     try:
         d = ak.stock_zh_a_spot_em()
         d = d.rename(columns={"代码": "code", "名称": "name", "最新价": "price", "总市值": "cap"})
@@ -382,17 +383,21 @@ def get_stock_list():
         d = d[(d["cap_yi"].isna()) | ((d["cap_yi"] >= 8) & (d["cap_yi"] <= 3000))]
         return d[["code", "name"]].drop_duplicates("code").head(MAX_STOCKS).to_dict("records")
     except Exception as exc:
-        print("股票列表失败，使用样本外代码段候选池：", exc)
+        errors.append(f"东方财富实时列表失败：{exc}")
 
-    rows = []
-    ranges = [(1, 3500), (300001, 302300), (600000, 604300), (605000, 606999), (688001, 689000)]
-    for start, end in ranges:
-        for num in range(start, end):
-            code = f"{num:06d}"
-            rows.append({"code": code, "name": code})
-            if len(rows) >= MAX_STOCKS:
-                return rows
-    return rows
+    try:
+        d = ak.stock_info_a_code_name()
+        d = d.rename(columns={"code": "code", "name": "name", "代码": "code", "名称": "name"})
+        d["code"] = d["code"].astype(str).str.zfill(6)
+        d["name"] = d["name"].astype(str)
+        d = d[~d["name"].str.contains("ST|退", case=False, na=False)]
+        d = d[~d["code"].str.startswith(("8", "4", "9"))]
+        return d[["code", "name"]].drop_duplicates("code").head(MAX_STOCKS).to_dict("records")
+    except Exception as exc:
+        errors.append(f"A股代码名称列表失败：{exc}")
+
+    # 不再用 000001、000002 这种硬凑代码段。那会扫到大量不存在的股票，跑两小时也没意义。
+    raise RuntimeError("无法获取真实股票列表，已停止扫描；原因：" + "；".join(errors))
 
 
 def scan_item(item, templates):
