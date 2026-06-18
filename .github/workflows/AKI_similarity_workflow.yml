@@ -21,6 +21,6 @@ jobs:
       - name: 运行相似度筛选
         env:
           AKI_SERVER_CHAN_SENDKEY: ${{ secrets.AKI_SERVER_CHAN_SENDKEY }}
-          AKI_MAX_STOCKS: "2200"
+          AKI_MAX_STOCKS: "900"
           AKI_MAX_WORKERS: "6"
         run: python aki_similarity_scanner.py
