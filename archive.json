@@ -1,1 +1,292 @@
-{}
+{
+ "002354": {
+  "name": "天娱数科",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 42.9,
+  "peak_rise_from_low": 42.9,
+  "last_close": 7.73,
+  "last_update": "2026-06-18"
+ },
+ "300522": {
+  "name": "世名科技",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 81.4,
+  "peak_rise_from_low": 81.4,
+  "last_close": 19.21,
+  "last_update": "2026-06-18"
+ },
+ "300584": {
+  "name": "海辰药业",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 35.3,
+  "peak_rise_from_low": 35.3,
+  "last_close": 40.97,
+  "last_update": "2026-06-18"
+ },
+ "002585": {
+  "name": "双星新材",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 128.0,
+  "peak_rise_from_low": 128.0,
+  "last_close": 14.84,
+  "last_update": "2026-06-18"
+ },
+ "300351": {
+  "name": "永贵电器",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 35.8,
+  "peak_rise_from_low": 35.8,
+  "last_close": 19.96,
+  "last_update": "2026-06-18"
+ },
+ "002613": {
+  "name": "北玻股份",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 38.4,
+  "peak_rise_from_low": 38.4,
+  "last_close": 4.76,
+  "last_update": "2026-06-18"
+ },
+ "002971": {
+  "name": "和远气体",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 131.6,
+  "peak_rise_from_low": 131.6,
+  "last_close": 64.38,
+  "last_update": "2026-06-18"
+ },
+ "301366": {
+  "name": "一博科技",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 86.4,
+  "peak_rise_from_low": 86.4,
+  "last_close": 55.95,
+  "last_update": "2026-06-18"
+ },
+ "002735": {
+  "name": "王子新材",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 52.2,
+  "peak_rise_from_low": 52.2,
+  "last_close": 19.92,
+  "last_update": "2026-06-18"
+ },
+ "603335": {
+  "name": "迪生力",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 52.6,
+  "peak_rise_from_low": 52.6,
+  "last_close": 8.01,
+  "last_update": "2026-06-18"
+ },
+ "600392": {
+  "name": "盛和资源",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 47.2,
+  "peak_rise_from_low": 47.2,
+  "last_close": 31.45,
+  "last_update": "2026-06-18"
+ },
+ "300566": {
+  "name": "激智科技",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 100.1,
+  "peak_rise_from_low": 100.1,
+  "last_close": 34.21,
+  "last_update": "2026-06-18"
+ },
+ "300397": {
+  "name": "天和防务",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 45.1,
+  "peak_rise_from_low": 45.1,
+  "last_close": 16.06,
+  "last_update": "2026-06-18"
+ },
+ "002972": {
+  "name": "科安达",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 60.5,
+  "peak_rise_from_low": 60.5,
+  "last_close": 16.88,
+  "last_update": "2026-06-18"
+ },
+ "300697": {
+  "name": "电工合金",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 39.3,
+  "peak_rise_from_low": 39.3,
+  "last_close": 18.9,
+  "last_update": "2026-06-18"
+ },
+ "603011": {
+  "name": "合锻智能",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 106.7,
+  "peak_rise_from_low": 106.7,
+  "last_close": 38.7,
+  "last_update": "2026-06-18"
+ },
+ "603488": {
+  "name": "展鹏科技",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 42.7,
+  "peak_rise_from_low": 42.7,
+  "last_close": 13.27,
+  "last_update": "2026-06-18"
+ },
+ "600226": {
+  "name": "亨通股份",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 116.9,
+  "peak_rise_from_low": 116.9,
+  "last_close": 9.76,
+  "last_update": "2026-06-18"
+ },
+ "002171": {
+  "name": "楚江新材",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 47.3,
+  "peak_rise_from_low": 47.3,
+  "last_close": 15.27,
+  "last_update": "2026-06-18"
+ },
+ "000691": {
+  "name": "亚太实业",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 72.8,
+  "peak_rise_from_low": 72.8,
+  "last_close": 12.37,
+  "last_update": "2026-06-18"
+ },
+ "002515": {
+  "name": "金字火腿",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 74.5,
+  "peak_rise_from_low": 74.5,
+  "last_close": 9.37,
+  "last_update": "2026-06-18"
+ },
+ "301150": {
+  "name": "中一科技",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 89.8,
+  "peak_rise_from_low": 89.8,
+  "last_close": 61.4,
+  "last_update": "2026-06-18"
+ },
+ "002125": {
+  "name": "湘潭电化",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 52.6,
+  "peak_rise_from_low": 52.6,
+  "last_close": 18.82,
+  "last_update": "2026-06-18"
+ },
+ "300737": {
+  "name": "科顺股份",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 38.6,
+  "peak_rise_from_low": 38.6,
+  "last_close": 7.72,
+  "last_update": "2026-06-18"
+ },
+ "002674": {
+  "name": "兴业科技",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 50.0,
+  "peak_rise_from_low": 50.0,
+  "last_close": 17.9,
+  "last_update": "2026-06-18"
+ },
+ "002700": {
+  "name": "万憬能源",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 39.4,
+  "peak_rise_from_low": 39.4,
+  "last_close": 8.91,
+  "last_update": "2026-06-18"
+ },
+ "002815": {
+  "name": "崇达技术",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 48.8,
+  "peak_rise_from_low": 48.8,
+  "last_close": 19.9,
+  "last_update": "2026-06-18"
+ },
+ "001696": {
+  "name": "宗申动力",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 69.6,
+  "peak_rise_from_low": 69.6,
+  "last_close": 23.85,
+  "last_update": "2026-06-18"
+ },
+ "600378": {
+  "name": "昊华科技",
+  "first_date": "2026-06-18",
+  "source": "market",
+  "flagged_date": null,
+  "first_rise_from_low": 115.0,
+  "peak_rise_from_low": 115.0,
+  "last_close": 63.37,
+  "last_update": "2026-06-18"
+ }
+}
