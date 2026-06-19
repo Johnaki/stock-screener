@@ -39,7 +39,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add watchlist.json archive.json state.json
+          git add -A
           git commit -m "update data $(date +%F-%H%M)" || echo "no changes"
           git pull --rebase --autostash origin main || true
           git push || echo "push skipped"
