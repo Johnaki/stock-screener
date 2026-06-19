@@ -2,16 +2,20 @@ name: star-volume-scan
 
 on:
   schedule:
-    - cron: '0 9 * * 1-5'   # 北京时间约17:00（收盘后）
+    # 北京时间 = UTC+8。收盘后一天试 4 个时间点，逮到通畅的 IP 就行。
+    - cron: '0 8 * * 1-5'    # 北京 16:00
+    - cron: '0 10 * * 1-5'   # 北京 18:00
+    - cron: '0 12 * * 1-5'   # 北京 20:00
+    - cron: '0 14 * * 1-5'   # 北京 22:00
   workflow_dispatch:
 
 permissions:
-  contents: write            # 允许把 watchlist.json 提交回仓库
+  contents: write
 
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,10 +35,11 @@ jobs:
           SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
         run: python star_volume_screener.py
 
-      - name: Commit watchlist
+      - name: Commit data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add watchlist.json archive.json
-          git commit -m "update data $(date +%F)" || echo "no changes"
+          git add watchlist.json archive.json state.json
+          git commit -m "update data $(date +%F-%H%M)" || echo "no changes"
+          git pull --rebase --autostash origin main || true
           git push || echo "push skipped"
