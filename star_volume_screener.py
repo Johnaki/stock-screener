@@ -1,19 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-星星量筛选器 v4.3 —— 盯盘清单 + 已暴涨累积档案
-===========================================
+地板股筛选器 v5.0 —— 长期地量横盘（地板形态）+ 突破命中 + 多时段重试
+=====================================================================
+形态定义（地板/地量横盘，俗称"星星量"——量小如星点）：
+  · 股价低位横盘，贴着地板走，不怎么动
+  · 成交量全程地量，没有放量大单根
+  · 换手率持续 < 4%
+  · 这种形态持续 ≥ 30 个交易日
+  · 蹲够了，往往随后放量突破/暴涨
+
 每天推送：
-  🌱 蓄势待发：巨量已现、价格还没动（重点）
-  ⭐ 今日新加盯盘：今天刚放巨量、记进清单的票（会列出是哪几只）
-  🎯 今日新命中：盯盘里的票启动了（我们提前蹲到的，打⭐）
-  ✅ 已暴涨档案：累积记录，命中的标⭐，方便长期观察战绩
+  🌱 蓄势待发：当前还蹲在地板里、没启动的票（重点，要找的就是这些）
+  🎯 今日突破：之前蹲到的地板股，现在放量突破了（命中）
+  ✅ 已兑现档案：地板→突破的累积战绩（命中⭐）
 
-两个记忆文件（提交回仓库）：
-  watchlist.json —— 蓄势盯盘清单
-  archive.json   —— 已暴涨累积档案（来源 hit=我们预判 / market=全市场扫到）
-
+记忆文件（提交回仓库）：watchlist.json（盯盘地板股）/ archive.json（已兑现）/ state.json
 数据源：东方财富。推送：Server酱(SERVERCHAN_SENDKEY)。
-说明：机械筛选，命中≠买入建议。"量在前价在后"不确定性高，请自行复核。
+工作流一天跑多个时间点：只在榜单连上、扫到数据那次推送；连不上静默；当天成功后跳过。
+说明：机械筛选，非投资建议。地量横盘后不一定突破，请自行复核。
 """
 
 import os
@@ -27,47 +31,37 @@ import akshare as ak
 
 
 CONFIG = {
-    # 候选池
-    "pool_turnover_min": 5.0,
-    "max_candidates": 800,
+    # 候选池：要"安静"的票（今日换手率低）
+    "pool_turnover_min": 0.3,    # 排除停牌/近乎零成交
+    "pool_turnover_max": 4.0,    # 只看今日换手率 < 4% 的（地量候选）
+    "max_candidates": 2000,      # 最多检查多少只（地量股很多，按今日最安静的往下取）
     "price_min": 2.0,
     "price_max": 200.0,
     "mktcap_min_yi": 20.0,
     "exclude_kechuang_beijing": True,
 
-    # 巨量/底部
-    "hist_days": 150,
-    "baseline_window": 50,      # 成交量基准窗口：今日量 vs 前50日均量
-    "vol_mult": 4.0,            # 星星量巨量倍数：今日量/前60日均量，要够夸张
-    "vol_recent_mult": 2.0,     # 今日量须 ≥ 放量前安静段最大量的此倍数（确保是突兀单根尖峰）
-    "recent_win": 10,           # "近期最大量"的窗口
-    "surge_vol_mult": 2.5,      # 已暴涨判定用的较松巨量倍数
-    "surge_window": 3,
-    "low_lookback": 60,
-    "low_recent_days": 25,
-    "flag_rise_max": 18.0,      # 加入盯盘时离底涨幅上限
-    "flag_up_min": -2.0,        # 巨量日涨幅下限(%)：跌超此值才剔除，挡放量大跌，但放量微涨/收平要保留
+    # 地板形态（地量横盘）
+    "hist_days": 240,            # 拉够历史：要看30天地板 + 半年底部位置
+    "floor_days": 30,            # 地板至少持续多少个交易日
+    "floor_turnover_max": 4.0,   # 地板期换手率上限（基本每天都要 < 此值）
+    "floor_turnover_exceed_allow": 2,  # 30天里容许几天超过上限（防个别噪声）
+    "floor_turnover_min_avg": 0.2,     # 平均换手率下限（排除停牌/僵尸）
+    "floor_range_max": 25.0,     # 地板期振幅上限(%)：(区间高-区间低)/区间低
+    "bottom_lookback": 120,      # 判断"是否在底部"的长周期
+    "bottom_tol": 35.0,          # 现价离半年最低点不超过此(%)，才算"地板/低位"
 
-    # 蓄势待发
-    "watch_min_age": 1,
-    "watch_max_age": 20,        # 盯盘最多盯多少个交易日（还没动就作废）
-    "today_calm_max": 4.0,
-    "flat_rise_max": 12.0,
-    "post_spike_band": 8.0,
-    "collapse_drop": 10.0,
-    "quiet_vol_mult": 2.0,
-
-    # 命中 / 已暴涨
-    "launched_rise": 20.0,     # 盯盘票离底涨到此=启动/命中
-    "surged_rise_min": 35.0,   # 全市场已暴涨门槛（离底涨幅）
+    # 突破 / 命中
+    "breakout_rise": 20.0,       # 突破地板上沿此幅度=启动/命中
+    "breakdown_drop": 15.0,      # 跌破地板下沿此幅度=失败，剔除
 
     # 运行
     "request_sleep": 0.2,
     "retries": 3,
-    "max_push_each": 30,
-    "max_archive_push": 40,
+    "max_push_each": 40,
+    "max_archive_push": 50,
     "watchlist_file": "watchlist.json",
     "archive_file": "archive.json",
+    "state_file": "state.json",
 }
 
 SENDKEY = os.environ.get("SERVERCHAN_SENDKEY", "").strip()
@@ -136,9 +130,10 @@ def save_json(path, obj):
 
 
 # ---------------- 取数 ----------------
-def fetch_clist_page(pn, pz=200, fid="f8"):
+def fetch_clist_page(pn, pz=200, fid="f8", po="0"):
+    # po=0 升序（最安静在前）；fid=f8 换手率
     params = {
-        "pn": pn, "pz": pz, "po": "1", "np": "1",
+        "pn": pn, "pz": pz, "po": po, "np": "1",
         "ut": "bd1d9ddb04089700cf9c27f6f7426281",
         "fltt": "2", "invt": "2", "fid": fid,
         "fs": "m:0 t:6,m:0 t:80,m:1 t:2,m:1 t:23",
@@ -158,11 +153,13 @@ def fetch_clist_page(pn, pz=200, fid="f8"):
 
 
 def get_candidate_pool():
+    """取今日最安静（换手率最低）的一批票，作为地板候选。升序翻页，
+    收集 0.3% < 换手率 < 4% 的票，直到达到上限或越过 4%。"""
     rows, pn = [], 1
     while len(rows) < CONFIG["max_candidates"]:
         diff = None
         for _ in range(CONFIG["retries"]):
-            diff = fetch_clist_page(pn)
+            diff = fetch_clist_page(pn, po="0")
             if diff:
                 break
             time.sleep(1.0)
@@ -175,9 +172,11 @@ def get_candidate_pool():
             turn = to_num(d.get("f8"))
             if turn is None:
                 continue
-            if turn < CONFIG["pool_turnover_min"]:
+            if turn >= CONFIG["pool_turnover_max"]:   # 升序，越过上限就停
                 stop = True
                 break
+            if turn < CONFIG["pool_turnover_min"]:     # 太低（停牌/僵尸）跳过
+                continue
             rows.append({"code": str(d.get("f12")), "name": d.get("f14"),
                          "price": to_num(d.get("f2")), "mktcap": to_num(d.get("f20"))})
         if stop:
@@ -202,147 +201,157 @@ def get_kline(code):
     start = (dt.date.today() - dt.timedelta(days=CONFIG["hist_days"])).strftime("%Y%m%d")
     k = safe_call(ak.stock_zh_a_hist, symbol=code, period="daily",
                   start_date=start, end_date=end, adjust="qfq", timeout=20)
-    if k is None or len(k) < CONFIG["baseline_window"] + 5:
+    need = CONFIG["floor_days"] + 10
+    if k is None or len(k) < need:
         return None
     k = k.rename(columns={"收盘": "close", "成交量": "vol", "最高": "high",
                           "最低": "low", "换手率": "turn", "涨跌幅": "pct", "日期": "date"})
-    for c in ["close", "vol", "high", "low", "pct"]:
+    for c in ["close", "vol", "high", "low", "turn", "pct"]:
         if c in k:
             k[c] = pd.to_numeric(k[c], errors="coerce")
-    k = k.dropna(subset=["close", "vol"]).reset_index(drop=True)
-    return k if len(k) >= CONFIG["baseline_window"] + 5 else None
+    k = k.dropna(subset=["close"]).reset_index(drop=True)
+    return k if len(k) >= need else None
 
 
-def baseline_before(vol, idx):
-    lo = max(0, idx - CONFIG["baseline_window"])
-    seg = vol.iloc[lo:idx]
-    return seg.mean() if len(seg) > 0 else None
+# ---------------- 地板形态判定 ----------------
+def detect_floor(k):
+    """判断该股当前是否处在'地量横盘地板'里。返回 (是否, info)。"""
+    n = len(k)
+    fd = CONFIG["floor_days"]
+    if n < fd + 5 or "turn" not in k:
+        return False, None
+    close, high, low, turn = k["close"], k["high"], k["low"], k["turn"]
+    seg_turn = turn.iloc[-fd:]
+    seg_high = high.iloc[-fd:]
+    seg_low = low.iloc[-fd:]
 
+    # 1) 换手率：地板期内基本都要 < 上限（容许极少数噪声天）
+    exceed = int(((seg_turn >= CONFIG["floor_turnover_max"]) | seg_turn.isna()).sum())
+    if exceed > CONFIG["floor_turnover_exceed_allow"]:
+        return False, None
+    avg_turn = float(seg_turn.mean())
+    if pd.isna(avg_turn) or avg_turn < CONFIG["floor_turnover_min_avg"]:
+        return False, None
 
-def near_bottom(close):
-    lb = CONFIG["low_lookback"]
-    seg = close.iloc[-lb:] if len(close) >= lb else close
-    low_pos = len(seg) - 1 - int(seg.values.argmin())
-    return low_pos <= CONFIG["low_recent_days"], seg.min()
+    # 2) 横盘：地板期振幅 ≤ 上限
+    p_hi = float(seg_high.max())
+    p_lo = float(seg_low.min())
+    if p_lo <= 0:
+        return False, None
+    rng = (p_hi / p_lo - 1) * 100
+    if rng > CONFIG["floor_range_max"]:
+        return False, None
+
+    # 3) 低位/地板：现价离半年最低点不超过 bottom_tol
+    bl = CONFIG["bottom_lookback"]
+    seg_b = low.iloc[-bl:] if n >= bl else low
+    bottom = float(seg_b.min())
+    today_close = float(close.iloc[-1])
+    if bottom <= 0:
+        return False, None
+    above_bottom = (today_close / bottom - 1) * 100
+    if above_bottom > CONFIG["bottom_tol"]:
+        return False, None
+
+    # 已蹲天数：从今天往回数，连续换手率 < 上限 的天数
+    floor_len = 0
+    for t in reversed(turn.tolist()):
+        if pd.notna(t) and t < CONFIG["floor_turnover_max"]:
+            floor_len += 1
+        else:
+            break
+
+    info = {
+        "today_close": round(today_close, 2),
+        "floor_len": floor_len,
+        "avg_turn": round(avg_turn, 2),
+        "max_turn": round(float(seg_turn.max()), 2),
+        "range": round(rng, 1),
+        "above_bottom": round(above_bottom, 1),
+        "ref_high": round(p_hi, 2),
+        "ref_low": round(p_lo, 2),
+    }
+    return True, info
 
 
 def upsert_archive(archive, code, name, rise, close, today, source, flagged_date=None):
     if code in archive:
         a = archive[code]
-        a["peak_rise_from_low"] = max(a.get("peak_rise_from_low", 0), round(rise, 1))
+        a["peak_rise"] = max(a.get("peak_rise", 0), round(rise, 1))
         a["last_close"] = round(close, 2)
         a["last_update"] = today
-        if source == "hit" and a.get("source") != "hit":
-            a["source"] = "hit"
-            a["flagged_date"] = flagged_date
     else:
         archive[code] = {"name": name, "first_date": today, "source": source,
                          "flagged_date": flagged_date,
-                         "first_rise_from_low": round(rise, 1),
-                         "peak_rise_from_low": round(rise, 1),
+                         "first_rise": round(rise, 1), "peak_rise": round(rise, 1),
                          "last_close": round(close, 2), "last_update": today}
 
 
-# ---------------- 复查盯盘清单 ----------------
-def recheck_watchlist(wl, archive, today):
-    sprout, hits, new_wl = [], [], {}
-    for code, info in wl.items():
-        k = get_kline(code)
-        time.sleep(CONFIG["request_sleep"])
-        if k is None:
-            new_wl[code] = info
-            continue
-        dates = k["date"].astype(str).tolist()
-        sd = info.get("spike_date")
-        if sd not in dates:
-            continue
-        idx = dates.index(sd)
-        age = (len(k) - 1) - idx
-        if age > CONFIG["watch_max_age"]:
-            continue
-        close = k["close"]
-        today_close = float(close.iloc[-1])
-        spike_close = float(close.iloc[idx])
-        _, stage_low = near_bottom(close)
-        rise_from_low = (today_close / stage_low - 1) * 100
-        today_pct = float(k["pct"].iloc[-1]) if "pct" in k else 0.0
-        post_spike = (today_close / spike_close - 1) * 100
-        base = baseline_before(k["vol"], idx) or 1
-        spike_ratio = float(k["vol"].iloc[idx]) / base
-        today_vol = float(k["vol"].iloc[-1])
-        row = {"code": code, "name": info.get("name", ""), "close": round(today_close, 2),
-               "pct": round(today_pct, 1), "rise_from_low": round(rise_from_low, 1),
-               "age": age, "ratio": round(spike_ratio, 2),
-               "flagged": info.get("spike_date")}
-
-        if rise_from_low >= CONFIG["launched_rise"]:
-            upsert_archive(archive, code, info.get("name", ""), rise_from_low,
-                           today_close, today, "hit", info.get("spike_date"))
-            hits.append(row)
-            continue
-        if post_spike <= -CONFIG["collapse_drop"]:
-            continue
-        new_wl[code] = info
-        if (age >= CONFIG["watch_min_age"]
-                and abs(today_pct) <= CONFIG["today_calm_max"]
-                and rise_from_low <= CONFIG["flat_rise_max"]
-                and abs(post_spike) <= CONFIG["post_spike_band"]
-                and today_vol <= base * CONFIG["quiet_vol_mult"]):
-            sprout.append(row)
-    return sprout, hits, new_wl
-
-
-# ---------------- 扫今日：新巨量 + 已暴涨 ----------------
-def scan_pool(wl, archive, today):
-    pool = get_candidate_pool()
-    print(f"今日候选池：{len(pool)} 只")
-    new_watch, surged = [], []
-    sw = CONFIG["surge_window"]
-    for _, r in pool.head(CONFIG["max_candidates"]).iterrows():
+# ---------------- 扫地板（蓄势）----------------
+def scan_floors(pool, wl, today):
+    floors, floor_codes = [], set()
+    n = len(pool)
+    for i, r in pool.iterrows():
         code = str(r["code"])
         k = get_kline(code)
         time.sleep(CONFIG["request_sleep"])
         if k is None:
             continue
-        close, vol = k["close"], k["vol"]
-        today_close = float(close.iloc[-1])
-        today_pct = float(k["pct"].iloc[-1]) if "pct" in k else 0.0
-        at_bottom, stage_low = near_bottom(close)
-        rise_from_low = (today_close / stage_low - 1) * 100
-
-        # 已暴涨：离底大 + 近期有巨量 + 站上MA20
-        base_em = baseline_before(vol, len(vol) - sw) or 1
-        ratio_em = vol.iloc[-sw:].max() / base_em
-        ma20 = close.rolling(20).mean().iloc[-1]
-        if (rise_from_low >= CONFIG["surged_rise_min"] and ratio_em >= CONFIG["surge_vol_mult"]
-                and not pd.isna(ma20) and today_close > ma20):
-            src = archive.get(code, {}).get("source", "market")
-            upsert_archive(archive, code, r.get("name", ""), rise_from_low,
-                           today_close, today, src)
-            surged.append({"code": code, "name": r.get("name", ""),
-                           "rise_from_low": round(rise_from_low, 1)})
-
-        # 新巨量加盯盘（今天放巨量、在底部、还没涨上去；且未在清单/档案）
-        if code in wl or code in archive:
+        ok, info = detect_floor(k)
+        if not ok:
             continue
-        base = baseline_before(vol, len(vol) - 1)
-        if not base or base <= 0:
+        floor_codes.add(code)
+        if code not in wl:
+            wl[code] = {"name": r.get("name", ""), "flagged_date": today,
+                        "ref_high": info["ref_high"], "ref_low": info["ref_low"]}
+        else:
+            wl[code]["last_seen"] = today
+        info["code"] = code
+        info["name"] = r.get("name", "")
+        info["flagged_date"] = wl[code].get("flagged_date", today)
+        floors.append(info)
+        if (i + 1) % 200 == 0:
+            print(f"  ...已扫 {i+1}/{n}，命中地板 {len(floors)}")
+    return floors, floor_codes
+
+
+# ---------------- 复查盯盘：突破=命中 / 跌破=剔除 ----------------
+def recheck_watchlist(wl, archive, floor_codes, today):
+    hits, extra_floors, drop = [], [], []
+    for code, info in list(wl.items()):
+        if code in floor_codes:
+            continue  # 今天还在地板里，已经在蓄势里了，跳过
+        k = get_kline(code)
+        time.sleep(CONFIG["request_sleep"])
+        if k is None:
+            continue  # 取不到，先留着
+        today_close = float(k["close"].iloc[-1])
+        ref_high = info.get("ref_high", today_close)
+        ref_low = info.get("ref_low", today_close)
+        rise = (today_close / ref_high - 1) * 100 if ref_high else 0.0
+
+        if rise >= CONFIG["breakout_rise"]:
+            upsert_archive(archive, code, info.get("name", ""), rise, today_close,
+                           today, "hit", info.get("flagged_date"))
+            hits.append({"code": code, "name": info.get("name", ""),
+                         "close": round(today_close, 2), "rise": round(rise, 1),
+                         "flagged": info.get("flagged_date", "")})
+            drop.append(code)
             continue
-        rw2 = CONFIG["recent_win"]
-        recent_max = vol.iloc[-(rw2 + 2):-2].max() if len(vol) > rw2 + 2 else base
-        if (vol.iloc[-1] / base >= CONFIG["vol_mult"] and at_bottom
-                and rise_from_low <= CONFIG["flag_rise_max"]
-                and today_pct >= CONFIG["flag_up_min"]
-                and recent_max > 0
-                and vol.iloc[-1] / recent_max >= CONFIG["vol_recent_mult"]):
-            wl[code] = {"name": r.get("name", ""), "added": today,
-                        "spike_date": str(k["date"].iloc[-1]),
-                        "spike_close": round(today_close, 2)}
-            new_watch.append({"code": code, "name": r.get("name", ""),
-                              "close": round(today_close, 2), "pct": round(today_pct, 1),
-                              "rise_from_low": round(rise_from_low, 1),
-                              "ratio": round(vol.iloc[-1] / base, 2)})
-    return new_watch, surged
+        if ref_low and today_close < ref_low * (1 - CONFIG["breakdown_drop"] / 100):
+            drop.append(code)  # 跌破地板，失败
+            continue
+        # 还没在池里被扫到，但可能仍在蹲：再判一次
+        ok, finfo = detect_floor(k)
+        if ok:
+            finfo["code"] = code
+            finfo["name"] = info.get("name", "")
+            finfo["flagged_date"] = info.get("flagged_date", today)
+            extra_floors.append(finfo)
+        # 既没突破也没跌破、也不算地板（突破途中）→ 留着继续看
+    for c in drop:
+        wl.pop(c, None)
+    return hits, extra_floors
 
 
 def make_table(items, head, cols):
@@ -356,91 +365,83 @@ def make_table(items, head, cols):
 # ---------------- 主流程 ----------------
 def main():
     today = dt.date.today().strftime("%Y-%m-%d")
-    print(f"=== 星星量 v4 {today} ===")
+    print(f"=== 地板股 v5.0 {today} ===")
+
+    state = load_json(CONFIG["state_file"])
+    if state.get("last_push_date") == today:
+        print("今天已成功推送过，跳过本次运行。")
+        return
+
+    try:
+        pool = get_candidate_pool()
+    except Exception as e:
+        print(f"榜单接口连不上（{e}），本次静默跳过，等下个时间点重试。")
+        return
+    if pool.empty:
+        print("候选池为空，静默跳过。")
+        return
 
     wl = load_json(CONFIG["watchlist_file"])
     archive = load_json(CONFIG["archive_file"])
-    print(f"载入：盯盘 {len(wl)} 只，档案 {len(archive)} 只")
+    print(f"载入：盯盘 {len(wl)} 只，档案 {len(archive)} 只；候选池 {len(pool)} 只（开始逐只扫地板，较慢）")
 
-    sprout, hits, wl = recheck_watchlist(wl, archive, today)
-
-    new_watch, surged, pool_err = [], [], None
-    try:
-        new_watch, surged = scan_pool(wl, archive, today)
-    except Exception as e:
-        pool_err = str(e)
+    floors, floor_codes = scan_floors(pool, wl, today)
+    hits, extra_floors = recheck_watchlist(wl, archive, floor_codes, today)
+    floors.extend(extra_floors)
 
     save_json(CONFIG["watchlist_file"], wl)
     save_json(CONFIG["archive_file"], archive)
 
     parts = []
 
-    # 🌱 蓄势待发
-    if sprout:
-        sprout.sort(key=lambda x: x["ratio"], reverse=True)
+    # 🌱 蓄势待发（还蹲在地板里）
+    if floors:
+        floors.sort(key=lambda x: x.get("floor_len", 0), reverse=True)
         parts.append(make_table(
-            sprout[: CONFIG["max_push_each"]],
-            f"#### 🌱 蓄势待发（巨量已现、还没动）— {len(sprout)}只\n",
+            floors[: CONFIG["max_push_each"]],
+            f"#### 🌱 蓄势待发（地量横盘、还在蹲）— {len(floors)}只\n",
             [("代码", lambda h: h["code"]), ("名称", lambda h: h["name"]),
-             ("现价", lambda h: h["close"]), ("今日", lambda h: f"{h['pct']}%"),
-             ("离底", lambda h: f"{h['rise_from_low']}%"),
-             ("巨量倍数", lambda h: f"{h['ratio']}x"),
-             ("巨量在", lambda h: f"{h['age']}天前")]))
+             ("现价", lambda h: h["today_close"]),
+             ("已蹲", lambda h: f"{h['floor_len']}天"),
+             ("振幅", lambda h: f"{h['range']}%"),
+             ("离底", lambda h: f"{h['above_bottom']}%"),
+             ("均换手", lambda h: f"{h['avg_turn']}%")]))
     else:
         parts.append("#### 🌱 蓄势待发 — 今日 0 只")
 
-    # ⭐ 今日新加盯盘（哪几只）
-    if new_watch:
-        new_watch.sort(key=lambda x: x["ratio"], reverse=True)
-        parts.append(make_table(
-            new_watch[: CONFIG["max_push_each"]],
-            f"\n#### ⭐ 今日新加盯盘（刚放巨量、记入清单）— {len(new_watch)}只\n",
-            [("代码", lambda h: h["code"]), ("名称", lambda h: h["name"]),
-             ("现价", lambda h: h["close"]), ("今日", lambda h: f"{h['pct']}%"),
-             ("离底", lambda h: f"{h['rise_from_low']}%"),
-             ("巨量倍数", lambda h: f"{h['ratio']}x")]))
-
-    # 🎯 今日新命中
+    # 🎯 今日突破（命中）
     if hits:
-        hits.sort(key=lambda x: x["rise_from_low"], reverse=True)
+        hits.sort(key=lambda x: x["rise"], reverse=True)
         parts.append(make_table(
             hits[: CONFIG["max_push_each"]],
-            f"\n#### 🎯 今日新命中（提前蹲到的票启动了）— {len(hits)}只\n",
+            f"\n#### 🎯 今日突破（蹲到的地板股启动了）— {len(hits)}只\n",
             [("代码", lambda h: h["code"]), ("名称", lambda h: h["name"]),
-             ("现价", lambda h: h["close"]), ("离底", lambda h: f"{h['rise_from_low']}%"),
-             ("巨量在", lambda h: f"{h['age']}天前发现")]))
+             ("现价", lambda h: h["close"]),
+             ("突破幅度", lambda h: f"+{h['rise']}%"),
+             ("蹲到日", lambda h: h["flagged"])]))
 
-    # ✅ 已暴涨档案（累积，命中标⭐）
-    hit_cnt = sum(1 for a in archive.values() if a.get("source") == "hit")
+    # ✅ 已兑现档案
     if archive:
-        items = sorted(archive.items(),
-                       key=lambda kv: (kv[1].get("source") != "hit",
-                                       -kv[1].get("peak_rise_from_low", 0)))
+        items = sorted(archive.items(), key=lambda kv: -kv[1].get("peak_rise", 0))
         rows = [{"code": c, "name": a.get("name", ""),
-                 "peak": a.get("peak_rise_from_low", 0),
-                 "mark": "⭐命中" if a.get("source") == "hit" else "普通",
-                 "first": a.get("first_date", "")}
+                 "peak": a.get("peak_rise", 0), "first": a.get("first_date", "")}
                 for c, a in items[: CONFIG["max_archive_push"]]]
         parts.append(make_table(
             rows,
-            f"\n#### ✅ 已暴涨档案 — 累计{len(archive)}只（其中⭐命中{hit_cnt}只，今日新进{len(surged)}）\n",
+            f"\n#### ✅ 已兑现档案（地板→突破⭐）— 累计{len(archive)}只（今日新进{len(hits)}）\n",
             [("代码", lambda h: h["code"]), ("名称", lambda h: h["name"]),
-             ("最高离底", lambda h: f"{h['peak']}%"),
-             ("来源", lambda h: h["mark"]), ("首记", lambda h: h["first"])]))
+             ("最高突破", lambda h: f"+{h['peak']}%"), ("首记", lambda h: h["first"])]))
     else:
-        parts.append("\n#### ✅ 已暴涨档案 — 暂无")
+        parts.append("\n#### ✅ 已兑现档案 — 暂无（等蹲到的地板股突破后自动累积）")
 
-    foot = f"\n> 盯盘池 {len(wl)} 只。"
-    if pool_err:
-        foot += f"（榜单接口异常：{pool_err}，今日未扫新增）"
-    foot += "\n> 机械筛选，非投资建议。量在前价在后不确定性高，请自行复核。"
+    foot = f"\n> 盯盘地板股 {len(wl)} 只。"
+    foot += "\n> 机械筛选，非投资建议。地量横盘后不一定突破，请自行复核。"
     parts.append(foot)
 
-    title = (f"🌱星星量 {today}：蓄势{len(sprout)}/命中{len(hits)}/"
-             f"已涨累计{len(archive)}")
+    title = f"🌱地板股 {today}：在蹲{len(floors)}/突破{len(hits)}/已兑现累计{len(archive)}"
     server_chan_push(title, "\n".join(parts))
-    print(f"完成。蓄势{len(sprout)} 命中{len(hits)} 新盯盘{len(new_watch)} "
-          f"已暴涨今日{len(surged)} 档案{len(archive)}")
+    save_json(CONFIG["state_file"], {"last_push_date": today})
+    print(f"完成。蓄势{len(floors)} 突破{len(hits)} 盯盘{len(wl)} 档案{len(archive)}")
 
 
 if __name__ == "__main__":
