@@ -153,6 +153,11 @@ def fetch_history(code):
     symbol = f"{prefix}{code}"
 
     errors = []
+    # 东方财富日线通常带“换手率”，所以优先用它；拿不到再用其他源。
+    try:
+        return ak.stock_zh_a_hist(symbol=code, period="daily", start_date=start, end_date=end, adjust="qfq", timeout=20)
+    except Exception as exc:
+        errors.append(f"东财:{exc}")
     try:
         return ak.stock_zh_a_daily(symbol=symbol, start_date=start, end_date=end, adjust="qfq")
     except Exception as exc:
@@ -161,10 +166,6 @@ def fetch_history(code):
         return ak.stock_zh_a_hist_tx(symbol=symbol, start_date=start, end_date=end, adjust="qfq", timeout=20)
     except Exception as exc:
         errors.append(f"腾讯:{exc}")
-    try:
-        return ak.stock_zh_a_hist(symbol=code, period="daily", start_date=start, end_date=end, adjust="qfq", timeout=20)
-    except Exception as exc:
-        errors.append(f"东财:{exc}")
     raise RuntimeError(" / ".join(errors))
 
 
@@ -177,6 +178,7 @@ def prepare(df):
         "最低": "low",
         "成交量": "volume",
         "成交额": "amount",
+        "换手率": "turnover",
         "date": "date",
         "open": "open",
         "close": "close",
@@ -184,6 +186,7 @@ def prepare(df):
         "low": "low",
         "volume": "volume",
         "amount": "amount",
+        "turnover": "turnover",
     }
     df = df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns})
     if "date" not in df.columns:
@@ -195,6 +198,10 @@ def prepare(df):
         df["amount"] = pd.to_numeric(df["amount"], errors="coerce")
     else:
         df["amount"] = df["volume"] * df["close"]
+    if "turnover" in df.columns:
+        df["turnover"] = pd.to_numeric(df["turnover"], errors="coerce")
+    else:
+        df["turnover"] = float("nan")
 
     # 有的接口成交额单位不同。这里不做绝对金额判断，只做同一只股票内部比例。
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
@@ -275,6 +282,15 @@ def feature_from_window(df, start, length):
     tight = safe_ratio(star_high - star_low, star_low)
     amount_ratio = safe_ratio(win_amount_mid, context_amount_mid)
     before_ratio = safe_ratio(win_amount_mid, before_amount_mid)
+    turnover_known = bool(win["turnover"].notna().mean() >= 0.80)
+    if turnover_known:
+        turnover_median = float(win["turnover"].median())
+        turnover_low_days = float((win["turnover"] <= 4.0).mean())
+        turnover_high_days = float((win["turnover"] > 4.0).mean())
+    else:
+        turnover_median = float("nan")
+        turnover_low_days = 0.0
+        turnover_high_days = 1.0
     gain_to_now = safe_ratio(df["close"].iloc[-1], star_low) - 1
     days_after = len(df) - 1 - end
 
@@ -305,6 +321,10 @@ def feature_from_window(df, start, length):
         "tight": tight,
         "amount_ratio": amount_ratio,
         "before_ratio": before_ratio,
+        "turnover_known": turnover_known,
+        "turnover_median": turnover_median,
+        "turnover_low_days": turnover_low_days,
+        "turnover_high_days": turnover_high_days,
         "low_line_days": low_line_days,
         "calm_days": calm_days,
         "red_spike_days": red_spike_days,
@@ -328,6 +348,9 @@ def base_star_filter(f):
         MIN_STAR_DAYS <= f["length"] <= MAX_STAR_DAYS
         and f["amount_ratio"] <= 0.62
         and f["before_ratio"] <= 0.72
+        and f["turnover_known"]
+        and f["turnover_median"] <= 4.0
+        and f["turnover_low_days"] >= 0.80
         and f["low_line_days"] >= 0.56
         and f["calm_days"] >= 0.72
         and f["red_spike_days"] <= 0.18
@@ -343,6 +366,8 @@ def score_long_star(f):
     score += min(f["length"], 70) * 0.45
     score += max(0, 0.62 - f["amount_ratio"]) * 55
     score += max(0, 0.72 - f["before_ratio"]) * 35
+    score += max(0, 4.0 - f["turnover_median"]) * 9
+    score += f["turnover_low_days"] * 30
     score += f["low_line_days"] * 35
     score += f["calm_days"] * 25
     score += max(0, 2.8 - f["amount_flatness"]) * 12
@@ -357,6 +382,8 @@ def sample_like_score(f, template):
         "length": 0.018,
         "amount_ratio": 1.5,
         "before_ratio": 1.1,
+        "turnover_median": 0.22,
+        "turnover_low_days": 0.8,
         "low_line_days": 1.0,
         "amount_flatness": 0.34,
         "amount_slope": 0.85,
@@ -366,7 +393,12 @@ def sample_like_score(f, template):
     }
     dist = 0.0
     for key, weight in keys.items():
-        dist += weight * abs(float(f[key]) - float(template[key]))
+        a = f.get(key)
+        b = template.get(key)
+        if pd.isna(a) or pd.isna(b):
+            dist += weight * 2.0
+        else:
+            dist += weight * abs(float(a) - float(b))
     return max(0.0, 100.0 - dist * 42.0)
 
 
@@ -463,7 +495,8 @@ def build_templates():
                 tag = "人工校准" if sample["zone"] else "程序参考"
                 lines.append(
                     f"- {name}({code})：{tag}，星星量长区 {f['start']} 至 {f['end']}，"
-                    f"{f['length']}个交易日，低量天数{f['low_line_days']:.0%}，成交额比{f['amount_ratio']:.2f}，后涨幅{f['gain_to_now']:.1%}"
+                    f"{f['length']}个交易日，换手中位{f['turnover_median']:.2f}%，低于4%天数{f['turnover_low_days']:.0%}，"
+                    f"成交额比{f['amount_ratio']:.2f}，后涨幅{f['gain_to_now']:.1%}"
                 )
             else:
                 lines.append(f"- {name}({code})：没有建立模板")
@@ -568,7 +601,8 @@ def format_item(x, idx):
     return (
         f"{idx}. {x['name']}({x['code']}) 收{x['close']:.2f}，评分{x['score']:.1f}，相似{x['sample_name']} {x['similarity']:.0f}%\n"
         f"   星星量长区：{x['start']} 至 {x['end']}，{x['length']}个交易日，之后{int(x['days_after'])}天\n"
-        f"   形态：成交额比{x['amount_ratio']:.2f}，低量天数{x['low_line_days']:.0%}，成交额平稳{x['amount_flatness']:.2f}，振幅{x['tight']:.1%}\n"
+        f"   形态：换手中位{x['turnover_median']:.2f}%，低于4%天数{x['turnover_low_days']:.0%}，成交额比{x['amount_ratio']:.2f}，低量天数{x['low_line_days']:.0%}\n"
+        f"   平稳：成交额平稳{x['amount_flatness']:.2f}，振幅{x['tight']:.1%}\n"
         f"   状态：后涨幅{x['gain_to_now']:.1%}，5日{x['pct5']:.1%}，20日{x['pct20']:.1%}，启动放量{x['launch_amount']:.1f}倍"
     )
 
