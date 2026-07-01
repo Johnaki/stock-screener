@@ -9,7 +9,8 @@
   "name": "宁波港",
   "flagged_date": "2026-06-29",
   "ref_high": 3.63,
-  "ref_low": 3.09
+  "ref_low": 3.09,
+  "last_seen": "2026-07-01"
  },
  "601811": {
   "name": "新华文轩",
@@ -21,19 +22,22 @@
   "name": "青岛港",
   "flagged_date": "2026-06-29",
   "ref_high": 9.63,
-  "ref_low": 7.92
+  "ref_low": 7.92,
+  "last_seen": "2026-07-01"
  },
  "601228": {
   "name": "广州港",
   "flagged_date": "2026-06-29",
   "ref_high": 3.18,
-  "ref_low": 2.8
+  "ref_low": 2.8,
+  "last_seen": "2026-07-01"
  },
  "600817": {
   "name": "宇通重工",
   "flagged_date": "2026-06-29",
   "ref_high": 10.42,
-  "ref_low": 8.66
+  "ref_low": 8.66,
+  "last_seen": "2026-07-01"
  },
  "601827": {
   "name": "三峰环境",
@@ -51,25 +55,29 @@
   "name": "中信特钢",
   "flagged_date": "2026-06-29",
   "ref_high": 14.67,
-  "ref_low": 12.69
+  "ref_low": 12.69,
+  "last_seen": "2026-07-01"
  },
  "001238": {
   "name": "浙江正特",
   "flagged_date": "2026-06-29",
   "ref_high": 32.99,
-  "ref_low": 26.6
+  "ref_low": 26.6,
+  "last_seen": "2026-07-01"
  },
  "000800": {
   "name": "一汽解放",
   "flagged_date": "2026-06-29",
   "ref_high": 6.41,
-  "ref_low": 5.62
+  "ref_low": 5.62,
+  "last_seen": "2026-07-01"
  },
  "603195": {
   "name": "公牛集团",
   "flagged_date": "2026-06-29",
   "ref_high": 42.68,
-  "ref_low": 37.0
+  "ref_low": 37.0,
+  "last_seen": "2026-07-01"
  },
  "601928": {
   "name": "凤凰传媒",
@@ -81,97 +89,113 @@
   "name": "桂林三金",
   "flagged_date": "2026-06-29",
   "ref_high": 13.82,
-  "ref_low": 11.91
+  "ref_low": 11.91,
+  "last_seen": "2026-07-01"
  },
  "000544": {
   "name": "中原环保",
   "flagged_date": "2026-06-29",
   "ref_high": 8.03,
-  "ref_low": 6.97
+  "ref_low": 6.97,
+  "last_seen": "2026-07-01"
  },
  "600012": {
   "name": "皖通高速",
   "flagged_date": "2026-06-29",
   "ref_high": 17.68,
-  "ref_low": 15.23
+  "ref_low": 15.23,
+  "last_seen": "2026-07-01"
  },
  "000301": {
   "name": "东方盛虹",
   "flagged_date": "2026-06-29",
   "ref_high": 12.94,
-  "ref_low": 11.0
+  "ref_low": 11.0,
+  "last_seen": "2026-07-01"
  },
  "601577": {
   "name": "长沙银行",
   "flagged_date": "2026-06-29",
   "ref_high": 9.81,
-  "ref_low": 8.62
+  "ref_low": 8.62,
+  "last_seen": "2026-07-01"
  },
  "600283": {
   "name": "钱江水利",
   "flagged_date": "2026-06-29",
   "ref_high": 9.33,
-  "ref_low": 7.77
+  "ref_low": 7.77,
+  "last_seen": "2026-07-01"
  },
  "605008": {
   "name": "长鸿高科",
   "flagged_date": "2026-06-29",
   "ref_high": 12.65,
-  "ref_low": 10.2
+  "ref_low": 10.2,
+  "last_seen": "2026-07-01"
  },
  "601098": {
   "name": "中南传媒",
   "flagged_date": "2026-06-29",
   "ref_high": 11.45,
-  "ref_low": 9.72
+  "ref_low": 9.72,
+  "last_seen": "2026-07-01"
  },
  "601186": {
   "name": "中国铁建",
   "flagged_date": "2026-06-29",
   "ref_high": 6.62,
-  "ref_low": 5.91
+  "ref_low": 5.91,
+  "last_seen": "2026-07-01"
  },
  "002945": {
   "name": "华林证券",
   "flagged_date": "2026-06-29",
   "ref_high": 15.98,
-  "ref_low": 13.17
+  "ref_low": 13.17,
+  "last_seen": "2026-07-01"
  },
  "600117": {
   "name": "西宁特钢",
   "flagged_date": "2026-06-29",
   "ref_high": 2.48,
-  "ref_low": 2.0
+  "ref_low": 2.0,
+  "last_seen": "2026-07-01"
  },
  "601019": {
   "name": "山东出版",
   "flagged_date": "2026-06-29",
   "ref_high": 7.16,
-  "ref_low": 6.31
+  "ref_low": 6.31,
+  "last_seen": "2026-07-01"
  },
  "000401": {
   "name": "金隅冀东",
   "flagged_date": "2026-06-29",
   "ref_high": 4.11,
-  "ref_low": 3.3
+  "ref_low": 3.3,
+  "last_seen": "2026-07-01"
  },
  "600639": {
   "name": "浦东金桥",
   "flagged_date": "2026-06-29",
   "ref_high": 10.23,
-  "ref_low": 9.21
+  "ref_low": 9.21,
+  "last_seen": "2026-07-01"
  },
  "002736": {
   "name": "国信证券",
   "flagged_date": "2026-06-29",
   "ref_high": 10.59,
-  "ref_low": 9.44
+  "ref_low": 9.44,
+  "last_seen": "2026-07-01"
  },
  "601236": {
   "name": "红塔证券",
   "flagged_date": "2026-06-29",
   "ref_high": 7.22,
-  "ref_low": 6.38
+  "ref_low": 6.38,
+  "last_seen": "2026-07-01"
  },
  "601229": {
   "name": "上海银行",
@@ -183,85 +207,99 @@
   "name": "豫园股份",
   "flagged_date": "2026-06-29",
   "ref_high": 4.78,
-  "ref_low": 4.02
+  "ref_low": 4.02,
+  "last_seen": "2026-07-01"
  },
  "600517": {
   "name": "XD国网英",
   "flagged_date": "2026-06-29",
   "ref_high": 5.7,
-  "ref_low": 4.6
+  "ref_low": 4.6,
+  "last_seen": "2026-07-01"
  },
  "601568": {
   "name": "北元化工",
   "flagged_date": "2026-06-29",
   "ref_high": 3.9,
-  "ref_low": 3.37
+  "ref_low": 3.37,
+  "last_seen": "2026-07-01"
  },
  "000498": {
   "name": "山东路桥",
   "flagged_date": "2026-06-29",
   "ref_high": 5.39,
-  "ref_low": 4.69
+  "ref_low": 4.69,
+  "last_seen": "2026-07-01"
  },
  "601136": {
   "name": "首创证券",
   "flagged_date": "2026-06-29",
   "ref_high": 16.17,
-  "ref_low": 13.24
+  "ref_low": 13.24,
+  "last_seen": "2026-07-01"
  },
  "603408": {
   "name": "建霖家居",
   "flagged_date": "2026-06-29",
   "ref_high": 11.04,
-  "ref_low": 9.36
+  "ref_low": 9.36,
+  "last_seen": "2026-07-01"
  },
  "601800": {
   "name": "中国交建",
   "flagged_date": "2026-06-29",
   "ref_high": 6.69,
-  "ref_low": 5.6
+  "ref_low": 5.6,
+  "last_seen": "2026-07-01"
  },
  "600905": {
   "name": "三峡能源",
   "flagged_date": "2026-06-29",
   "ref_high": 4.43,
-  "ref_low": 3.65
+  "ref_low": 3.65,
+  "last_seen": "2026-07-01"
  },
  "601838": {
   "name": "成都银行",
   "flagged_date": "2026-06-29",
   "ref_high": 20.14,
-  "ref_low": 17.5
+  "ref_low": 17.5,
+  "last_seen": "2026-07-01"
  },
  "603568": {
   "name": "伟明环保",
   "flagged_date": "2026-06-29",
   "ref_high": 17.41,
-  "ref_low": 14.18
+  "ref_low": 14.18,
+  "last_seen": "2026-07-01"
  },
  "000895": {
   "name": "双汇发展",
   "flagged_date": "2026-06-29",
   "ref_high": 26.82,
-  "ref_low": 22.13
+  "ref_low": 22.13,
+  "last_seen": "2026-07-01"
  },
  "601166": {
   "name": "兴业银行",
   "flagged_date": "2026-06-29",
   "ref_high": 18.67,
-  "ref_low": 16.44
+  "ref_low": 16.44,
+  "last_seen": "2026-07-01"
  },
  "601326": {
   "name": "秦港股份",
   "flagged_date": "2026-06-29",
   "ref_high": 3.52,
-  "ref_low": 3.09
+  "ref_low": 3.09,
+  "last_seen": "2026-07-01"
  },
  "603658": {
   "name": "安图生物",
   "flagged_date": "2026-06-29",
   "ref_high": 33.74,
-  "ref_low": 28.18
+  "ref_low": 28.18,
+  "last_seen": "2026-07-01"
  },
  "601816": {
   "name": "京沪高铁",
@@ -273,67 +311,78 @@
   "name": "盐 田 港",
   "flagged_date": "2026-06-29",
   "ref_high": 4.48,
-  "ref_low": 3.98
+  "ref_low": 3.98,
+  "last_seen": "2026-07-01"
  },
  "601949": {
   "name": "中国出版",
   "flagged_date": "2026-06-29",
   "ref_high": 5.69,
-  "ref_low": 4.56
+  "ref_low": 4.56,
+  "last_seen": "2026-07-01"
  },
  "002267": {
   "name": "陕天然气",
   "flagged_date": "2026-06-29",
   "ref_high": 7.71,
-  "ref_low": 6.42
+  "ref_low": 6.42,
+  "last_seen": "2026-07-01"
  },
  "600020": {
   "name": "中原高速",
   "flagged_date": "2026-06-29",
   "ref_high": 4.14,
-  "ref_low": 3.7
+  "ref_low": 3.7,
+  "last_seen": "2026-07-01"
  },
  "000958": {
   "name": "电投产融",
   "flagged_date": "2026-06-29",
   "ref_high": 6.64,
-  "ref_low": 5.53
+  "ref_low": 5.53,
+  "last_seen": "2026-07-01"
  },
  "000429": {
   "name": "粤高速Ａ",
   "flagged_date": "2026-06-29",
   "ref_high": 14.24,
-  "ref_low": 12.66
+  "ref_low": 12.66,
+  "last_seen": "2026-07-01"
  },
  "603639": {
   "name": "海利尔",
   "flagged_date": "2026-06-29",
   "ref_high": 11.64,
-  "ref_low": 9.84
+  "ref_low": 9.84,
+  "last_seen": "2026-07-01"
  },
  "600900": {
   "name": "长江电力",
   "flagged_date": "2026-06-29",
   "ref_high": 28.29,
-  "ref_low": 26.15
+  "ref_low": 26.15,
+  "last_seen": "2026-07-01"
  },
  "002423": {
   "name": "中粮资本",
   "flagged_date": "2026-06-29",
   "ref_high": 9.72,
-  "ref_low": 8.15
+  "ref_low": 8.15,
+  "last_seen": "2026-07-01"
  },
  "601163": {
   "name": "三角轮胎",
   "flagged_date": "2026-06-29",
   "ref_high": 14.89,
-  "ref_low": 12.35
+  "ref_low": 12.35,
+  "last_seen": "2026-07-01"
  },
  "000885": {
   "name": "城发环境",
   "flagged_date": "2026-06-29",
   "ref_high": 13.55,
-  "ref_low": 12.01
+  "ref_low": 12.01,
+  "last_seen": "2026-07-01"
  },
  "601963": {
   "name": "重庆银行",
@@ -345,253 +394,295 @@
   "name": "中文传媒",
   "flagged_date": "2026-06-29",
   "ref_high": 8.04,
-  "ref_low": 6.65
+  "ref_low": 6.65,
+  "last_seen": "2026-07-01"
  },
  "000028": {
   "name": "国药一致",
   "flagged_date": "2026-06-29",
   "ref_high": 21.46,
-  "ref_low": 18.7
+  "ref_low": 18.7,
+  "last_seen": "2026-07-01"
  },
  "601368": {
   "name": "绿城水务",
   "flagged_date": "2026-06-29",
   "ref_high": 4.96,
-  "ref_low": 4.04
+  "ref_low": 4.04,
+  "last_seen": "2026-07-01"
  },
  "601169": {
   "name": "北京银行",
   "flagged_date": "2026-06-29",
   "ref_high": 5.27,
-  "ref_low": 4.87
+  "ref_low": 4.87,
+  "last_seen": "2026-07-01"
  },
  "600036": {
   "name": "招商银行",
   "flagged_date": "2026-06-29",
   "ref_high": 39.37,
-  "ref_low": 35.4
+  "ref_low": 35.4,
+  "last_seen": "2026-07-01"
  },
  "600886": {
   "name": "国投电力",
   "flagged_date": "2026-06-29",
   "ref_high": 14.75,
-  "ref_low": 12.82
+  "ref_low": 12.82,
+  "last_seen": "2026-07-01"
  },
  "600528": {
   "name": "中铁工业",
   "flagged_date": "2026-06-29",
   "ref_high": 7.68,
-  "ref_low": 6.55
+  "ref_low": 6.55,
+  "last_seen": "2026-07-01"
  },
  "600019": {
   "name": "宝钢股份",
   "flagged_date": "2026-06-29",
   "ref_high": 6.04,
-  "ref_low": 5.3
+  "ref_low": 5.3,
+  "last_seen": "2026-07-01"
  },
  "002287": {
   "name": "奇正藏药",
   "flagged_date": "2026-06-29",
   "ref_high": 22.01,
-  "ref_low": 18.33
+  "ref_low": 18.33,
+  "last_seen": "2026-07-01"
  },
  "002142": {
   "name": "宁波银行",
   "flagged_date": "2026-06-29",
   "ref_high": 33.18,
-  "ref_low": 30.21
+  "ref_low": 30.21,
+  "last_seen": "2026-07-01"
  },
  "000825": {
   "name": "太钢不锈",
   "flagged_date": "2026-06-29",
   "ref_high": 4.09,
-  "ref_low": 3.36
+  "ref_low": 3.36,
+  "last_seen": "2026-07-01"
  },
  "601886": {
   "name": "江河集团",
   "flagged_date": "2026-06-29",
   "ref_high": 9.75,
-  "ref_low": 7.91
+  "ref_low": 7.91,
+  "last_seen": "2026-07-01"
  },
  "603609": {
   "name": "禾丰股份",
   "flagged_date": "2026-06-29",
   "ref_high": 6.72,
-  "ref_low": 5.56
+  "ref_low": 5.56,
+  "last_seen": "2026-07-01"
  },
  "600760": {
   "name": "中航沈飞",
   "flagged_date": "2026-06-29",
   "ref_high": 47.37,
-  "ref_low": 38.6
+  "ref_low": 38.6,
+  "last_seen": "2026-07-01"
  },
  "002399": {
   "name": "海普瑞",
   "flagged_date": "2026-06-29",
   "ref_high": 10.32,
-  "ref_low": 8.5
+  "ref_low": 8.5,
+  "last_seen": "2026-07-01"
  },
  "002333": {
   "name": "罗普斯金",
   "flagged_date": "2026-06-29",
   "ref_high": 5.36,
-  "ref_low": 4.54
+  "ref_low": 4.54,
+  "last_seen": "2026-07-01"
  },
  "000166": {
   "name": "申万宏源",
   "flagged_date": "2026-06-29",
   "ref_high": 4.72,
-  "ref_low": 4.23
+  "ref_low": 4.23,
+  "last_seen": "2026-07-01"
  },
  "601009": {
   "name": "南京银行",
   "flagged_date": "2026-06-29",
   "ref_high": 11.65,
-  "ref_low": 10.0
+  "ref_low": 10.0,
+  "last_seen": "2026-07-01"
  },
  "000156": {
   "name": "华数传媒",
   "flagged_date": "2026-06-29",
   "ref_high": 7.75,
-  "ref_low": 6.27
+  "ref_low": 6.27,
+  "last_seen": "2026-07-01"
  },
  "600269": {
   "name": "赣粤高速",
   "flagged_date": "2026-06-29",
   "ref_high": 4.46,
-  "ref_low": 3.91
+  "ref_low": 3.91,
+  "last_seen": "2026-07-01"
  },
  "601818": {
   "name": "光大银行",
   "flagged_date": "2026-06-29",
   "ref_high": 3.23,
-  "ref_low": 2.9
+  "ref_low": 2.9,
+  "last_seen": "2026-07-01"
  },
  "600874": {
   "name": "创业环保",
   "flagged_date": "2026-06-29",
   "ref_high": 6.06,
-  "ref_low": 5.24
+  "ref_low": 5.24,
+  "last_seen": "2026-07-01"
  },
  "601919": {
   "name": "中远海控",
   "flagged_date": "2026-06-29",
   "ref_high": 14.76,
-  "ref_low": 13.1
+  "ref_low": 13.1,
+  "last_seen": "2026-07-01"
  },
  "601668": {
   "name": "中国建筑",
   "flagged_date": "2026-06-29",
   "ref_high": 4.94,
-  "ref_low": 4.28
+  "ref_low": 4.28,
+  "last_seen": "2026-07-01"
  },
  "000001": {
   "name": "平安银行",
   "flagged_date": "2026-06-29",
   "ref_high": 11.25,
-  "ref_low": 10.02
+  "ref_low": 10.02,
+  "last_seen": "2026-07-01"
  },
  "603043": {
   "name": "广州酒家",
   "flagged_date": "2026-06-29",
   "ref_high": 14.83,
-  "ref_low": 12.25
+  "ref_low": 12.25,
+  "last_seen": "2026-07-01"
  },
  "600612": {
   "name": "老凤祥",
   "flagged_date": "2026-06-29",
   "ref_high": 37.6,
-  "ref_low": 31.51
+  "ref_low": 31.51,
+  "last_seen": "2026-07-01"
  },
  "000828": {
   "name": "东莞控股",
   "flagged_date": "2026-06-29",
   "ref_high": 10.5,
-  "ref_low": 9.15
+  "ref_low": 9.15,
+  "last_seen": "2026-07-01"
  },
  "603288": {
   "name": "海天味业",
   "flagged_date": "2026-06-29",
   "ref_high": 36.28,
-  "ref_low": 31.6
+  "ref_low": 31.6,
+  "last_seen": "2026-07-01"
  },
  "601008": {
   "name": "连云港",
   "flagged_date": "2026-06-29",
   "ref_high": 4.82,
-  "ref_low": 3.91
+  "ref_low": 3.91,
+  "last_seen": "2026-07-01"
  },
  "600894": {
   "name": "广日股份",
   "flagged_date": "2026-06-29",
   "ref_high": 8.64,
-  "ref_low": 7.36
+  "ref_low": 7.36,
+  "last_seen": "2026-07-01"
  },
  "600901": {
   "name": "江苏金租",
   "flagged_date": "2026-06-29",
   "ref_high": 6.64,
-  "ref_low": 5.72
+  "ref_low": 5.72,
+  "last_seen": "2026-07-01"
  },
  "002116": {
   "name": "中国海诚",
   "flagged_date": "2026-06-29",
   "ref_high": 7.71,
-  "ref_low": 6.6
+  "ref_low": 6.6,
+  "last_seen": "2026-07-01"
  },
  "601801": {
   "name": "皖新传媒",
   "flagged_date": "2026-06-29",
   "ref_high": 5.86,
-  "ref_low": 4.81
+  "ref_low": 4.81,
+  "last_seen": "2026-07-01"
  },
  "603128": {
   "name": "华贸物流",
   "flagged_date": "2026-06-29",
   "ref_high": 5.62,
-  "ref_low": 4.95
+  "ref_low": 4.95,
+  "last_seen": "2026-07-01"
  },
  "000789": {
   "name": "万年青",
   "flagged_date": "2026-06-29",
   "ref_high": 4.68,
-  "ref_low": 3.76
+  "ref_low": 3.76,
+  "last_seen": "2026-07-01"
  },
  "600035": {
   "name": "楚天高速",
   "flagged_date": "2026-06-29",
   "ref_high": 3.78,
-  "ref_low": 3.34
+  "ref_low": 3.34,
+  "last_seen": "2026-07-01"
  },
  "002304": {
   "name": "洋河股份",
   "flagged_date": "2026-06-29",
   "ref_high": 46.21,
-  "ref_low": 38.5
+  "ref_low": 38.5,
+  "last_seen": "2026-07-01"
  },
  "603298": {
   "name": "杭叉集团",
   "flagged_date": "2026-06-29",
   "ref_high": 27.98,
-  "ref_low": 23.02
+  "ref_low": 23.02,
+  "last_seen": "2026-07-01"
  },
  "600928": {
   "name": "西安银行",
   "flagged_date": "2026-06-29",
   "ref_high": 3.65,
-  "ref_low": 3.25
+  "ref_low": 3.25,
+  "last_seen": "2026-07-01"
  },
  "603357": {
   "name": "设计总院",
   "flagged_date": "2026-06-29",
   "ref_high": 7.34,
-  "ref_low": 5.99
+  "ref_low": 5.99,
+  "last_seen": "2026-07-01"
  },
  "601390": {
   "name": "中国中铁",
   "flagged_date": "2026-06-29",
   "ref_high": 5.0,
-  "ref_low": 4.13
+  "ref_low": 4.13,
+  "last_seen": "2026-07-01"
  },
  "603530": {
   "name": "神马电力",
@@ -603,25 +694,29 @@
   "name": "XD苏垦农",
   "flagged_date": "2026-06-29",
   "ref_high": 9.0,
-  "ref_low": 7.35
+  "ref_low": 7.35,
+  "last_seen": "2026-07-01"
  },
  "601006": {
   "name": "大秦铁路",
   "flagged_date": "2026-06-29",
   "ref_high": 5.55,
-  "ref_low": 4.52
+  "ref_low": 4.52,
+  "last_seen": "2026-07-01"
  },
  "000550": {
   "name": "江铃汽车",
   "flagged_date": "2026-06-29",
   "ref_high": 18.43,
-  "ref_low": 15.5
+  "ref_low": 15.5,
+  "last_seen": "2026-07-01"
  },
  "002061": {
   "name": "浙江交科",
   "flagged_date": "2026-06-29",
   "ref_high": 3.73,
-  "ref_low": 3.26
+  "ref_low": 3.26,
+  "last_seen": "2026-07-01"
  },
  "600925": {
   "name": "苏能股份",
@@ -633,193 +728,225 @@
   "name": "上海医药",
   "flagged_date": "2026-06-29",
   "ref_high": 16.79,
-  "ref_low": 15.01
+  "ref_low": 15.01,
+  "last_seen": "2026-07-01"
  },
  "601139": {
   "name": "深圳燃气",
   "flagged_date": "2026-06-29",
   "ref_high": 6.62,
-  "ref_low": 5.49
+  "ref_low": 5.49,
+  "last_seen": "2026-07-01"
  },
  "603855": {
   "name": "华荣股份",
   "flagged_date": "2026-06-29",
   "ref_high": 20.19,
-  "ref_low": 16.2
+  "ref_low": 16.2,
+  "last_seen": "2026-07-01"
  },
  "603230": {
   "name": "内蒙新华",
   "flagged_date": "2026-06-29",
   "ref_high": 10.42,
-  "ref_low": 8.55
+  "ref_low": 8.55,
+  "last_seen": "2026-07-01"
  },
  "600015": {
   "name": "华夏银行",
   "flagged_date": "2026-06-29",
   "ref_high": 7.01,
-  "ref_low": 6.34
+  "ref_low": 6.34,
+  "last_seen": "2026-07-01"
  },
  "601528": {
   "name": "瑞丰银行",
   "flagged_date": "2026-06-29",
   "ref_high": 4.93,
-  "ref_low": 4.4
+  "ref_low": 4.4,
+  "last_seen": "2026-07-01"
  },
  "000900": {
   "name": "现代投资",
   "flagged_date": "2026-06-29",
   "ref_high": 3.91,
-  "ref_low": 3.4
+  "ref_low": 3.4,
+  "last_seen": "2026-07-01"
  },
  "600757": {
   "name": "长江传媒",
   "flagged_date": "2026-06-29",
   "ref_high": 8.03,
-  "ref_low": 7.24
+  "ref_low": 7.24,
+  "last_seen": "2026-07-01"
  },
  "002352": {
   "name": "顺丰控股",
   "flagged_date": "2026-06-29",
   "ref_high": 36.0,
-  "ref_low": 30.13
+  "ref_low": 30.13,
+  "last_seen": "2026-07-01"
  },
  "601866": {
   "name": "中远海发",
   "flagged_date": "2026-06-29",
   "ref_high": 2.67,
-  "ref_low": 2.18
+  "ref_low": 2.18,
+  "last_seen": "2026-07-01"
  },
  "000089": {
   "name": "深圳机场",
   "flagged_date": "2026-06-29",
   "ref_high": 6.75,
-  "ref_low": 5.92
+  "ref_low": 5.92,
+  "last_seen": "2026-07-01"
  },
  "600282": {
   "name": "南钢股份",
   "flagged_date": "2026-06-29",
   "ref_high": 5.22,
-  "ref_low": 4.53
+  "ref_low": 4.53,
+  "last_seen": "2026-07-01"
  },
  "600820": {
   "name": "隧道股份",
   "flagged_date": "2026-06-29",
   "ref_high": 5.94,
-  "ref_low": 5.17
+  "ref_low": 5.17,
+  "last_seen": "2026-07-01"
  },
  "600064": {
   "name": "南京高科",
   "flagged_date": "2026-06-29",
   "ref_high": 7.82,
-  "ref_low": 7.1
+  "ref_low": 7.1,
+  "last_seen": "2026-07-01"
  },
  "603055": {
   "name": "台华新材",
   "flagged_date": "2026-06-29",
   "ref_high": 9.12,
-  "ref_low": 7.62
+  "ref_low": 7.62,
+  "last_seen": "2026-07-01"
  },
  "601077": {
   "name": "渝农商行",
   "flagged_date": "2026-06-29",
   "ref_high": 6.98,
-  "ref_low": 6.12
+  "ref_low": 6.12,
+  "last_seen": "2026-07-01"
  },
  "600755": {
   "name": "厦门国贸",
   "flagged_date": "2026-06-29",
   "ref_high": 6.07,
-  "ref_low": 5.35
+  "ref_low": 5.35,
+  "last_seen": "2026-07-01"
  },
  "600016": {
   "name": "民生银行",
   "flagged_date": "2026-06-29",
   "ref_high": 3.65,
-  "ref_low": 3.22
+  "ref_low": 3.22,
+  "last_seen": "2026-07-01"
  },
  "601003": {
   "name": "柳钢股份",
   "flagged_date": "2026-06-29",
   "ref_high": 4.02,
-  "ref_low": 3.28
+  "ref_low": 3.28,
+  "last_seen": "2026-07-01"
  },
  "603565": {
   "name": "中谷物流",
   "flagged_date": "2026-06-29",
   "ref_high": 10.92,
-  "ref_low": 9.11
+  "ref_low": 9.11,
+  "last_seen": "2026-07-01"
  },
  "603299": {
   "name": "苏盐井神",
   "flagged_date": "2026-06-29",
   "ref_high": 10.56,
-  "ref_low": 8.6
+  "ref_low": 8.6,
+  "last_seen": "2026-07-01"
  },
  "601200": {
   "name": "上海环境",
   "flagged_date": "2026-06-29",
   "ref_high": 8.01,
-  "ref_low": 6.52
+  "ref_low": 6.52,
+  "last_seen": "2026-07-01"
  },
  "600926": {
   "name": "杭州银行",
   "flagged_date": "2026-06-29",
   "ref_high": 16.52,
-  "ref_low": 14.53
+  "ref_low": 14.53,
+  "last_seen": "2026-07-01"
  },
  "600897": {
   "name": "厦门空港",
   "flagged_date": "2026-06-29",
   "ref_high": 16.33,
-  "ref_low": 14.06
+  "ref_low": 14.06,
+  "last_seen": "2026-07-01"
  },
  "002958": {
   "name": "青农商行",
   "flagged_date": "2026-06-29",
   "ref_high": 2.97,
-  "ref_low": 2.72
+  "ref_low": 2.72,
+  "last_seen": "2026-07-01"
  },
  "603708": {
   "name": "家家悦",
   "flagged_date": "2026-06-29",
   "ref_high": 10.22,
-  "ref_low": 8.39
+  "ref_low": 8.39,
+  "last_seen": "2026-07-01"
  },
  "601985": {
   "name": "中国核电",
   "flagged_date": "2026-06-29",
   "ref_high": 9.4,
-  "ref_low": 8.66
+  "ref_low": 8.66,
+  "last_seen": "2026-07-01"
  },
  "000563": {
   "name": "陕国投Ａ",
   "flagged_date": "2026-06-29",
   "ref_high": 3.12,
-  "ref_low": 2.73
+  "ref_low": 2.73,
+  "last_seen": "2026-07-01"
  },
  "603111": {
   "name": "康尼机电",
   "flagged_date": "2026-06-29",
   "ref_high": 6.49,
-  "ref_low": 5.52
+  "ref_low": 5.52,
+  "last_seen": "2026-07-01"
  },
  "600919": {
   "name": "江苏银行",
   "flagged_date": "2026-06-29",
   "ref_high": 12.02,
-  "ref_low": 10.79
+  "ref_low": 10.79,
+  "last_seen": "2026-07-01"
  },
  "600827": {
   "name": "百联股份",
   "flagged_date": "2026-06-29",
   "ref_high": 8.64,
-  "ref_low": 7.43
+  "ref_low": 7.43,
+  "last_seen": "2026-07-01"
  },
  "000011": {
   "name": "深物业A",
   "flagged_date": "2026-06-29",
   "ref_high": 7.97,
-  "ref_low": 6.47
+  "ref_low": 6.47,
+  "last_seen": "2026-07-01"
  },
  "603351": {
   "name": "威尔药业",
@@ -831,145 +958,169 @@
   "name": "西部证券",
   "flagged_date": "2026-06-29",
   "ref_high": 7.0,
-  "ref_low": 6.16
+  "ref_low": 6.16,
+  "last_seen": "2026-07-01"
  },
  "600998": {
   "name": "九州通",
   "flagged_date": "2026-06-29",
   "ref_high": 4.96,
-  "ref_low": 4.43
+  "ref_low": 4.43,
+  "last_seen": "2026-07-01"
  },
  "600368": {
   "name": "五洲交通",
   "flagged_date": "2026-06-29",
   "ref_high": 4.1,
-  "ref_low": 3.39
+  "ref_low": 3.39,
+  "last_seen": "2026-07-01"
  },
  "601065": {
   "name": "江盐集团",
   "flagged_date": "2026-06-29",
   "ref_high": 8.02,
-  "ref_low": 6.5
+  "ref_low": 6.5,
+  "last_seen": "2026-07-01"
  },
  "603049": {
   "name": "中策橡胶",
   "flagged_date": "2026-06-29",
   "ref_high": 47.99,
-  "ref_low": 42.7
+  "ref_low": 42.7,
+  "last_seen": "2026-07-01"
  },
  "601000": {
   "name": "唐山港",
   "flagged_date": "2026-06-29",
   "ref_high": 4.55,
-  "ref_low": 3.97
+  "ref_low": 3.97,
+  "last_seen": "2026-07-01"
  },
  "600908": {
   "name": "无锡银行",
   "flagged_date": "2026-06-29",
   "ref_high": 5.66,
-  "ref_low": 5.04
+  "ref_low": 5.04,
+  "last_seen": "2026-07-01"
  },
  "601187": {
   "name": "厦门银行",
   "flagged_date": "2026-06-29",
   "ref_high": 8.07,
-  "ref_low": 6.83
+  "ref_low": 6.83,
+  "last_seen": "2026-07-01"
  },
  "002867": {
   "name": "周大生",
   "flagged_date": "2026-06-29",
   "ref_high": 13.0,
-  "ref_low": 11.18
+  "ref_low": 11.18,
+  "last_seen": "2026-07-01"
  },
  "600177": {
   "name": "雅戈尔",
   "flagged_date": "2026-06-29",
   "ref_high": 7.69,
-  "ref_low": 7.09
+  "ref_low": 7.09,
+  "last_seen": "2026-07-01"
  },
  "600704": {
   "name": "物产中大",
   "flagged_date": "2026-06-29",
   "ref_high": 5.11,
-  "ref_low": 4.63
+  "ref_low": 4.63,
+  "last_seen": "2026-07-01"
  },
  "603569": {
   "name": "长久物流",
   "flagged_date": "2026-06-29",
   "ref_high": 6.21,
-  "ref_low": 5.1
+  "ref_low": 5.1,
+  "last_seen": "2026-07-01"
  },
  "600390": {
   "name": "五矿资本",
   "flagged_date": "2026-06-29",
   "ref_high": 5.07,
-  "ref_low": 4.44
+  "ref_low": 4.44,
+  "last_seen": "2026-07-01"
  },
  "601198": {
   "name": "东兴证券",
   "flagged_date": "2026-06-29",
   "ref_high": 13.88,
-  "ref_low": 12.18
+  "ref_low": 12.18,
+  "last_seen": "2026-07-01"
  },
  "600662": {
   "name": "外服控股",
   "flagged_date": "2026-06-29",
   "ref_high": 4.83,
-  "ref_low": 3.9
+  "ref_low": 3.9,
+  "last_seen": "2026-07-01"
  },
  "600741": {
   "name": "华域汽车",
   "flagged_date": "2026-06-29",
   "ref_high": 17.7,
-  "ref_low": 15.51
+  "ref_low": 15.51,
+  "last_seen": "2026-07-01"
  },
  "601900": {
   "name": "南方传媒",
   "flagged_date": "2026-06-29",
   "ref_high": 12.66,
-  "ref_low": 10.51
+  "ref_low": 10.51,
+  "last_seen": "2026-07-01"
  },
  "600009": {
   "name": "上海机场",
   "flagged_date": "2026-06-29",
   "ref_high": 26.18,
-  "ref_low": 22.46
+  "ref_low": 22.46,
+  "last_seen": "2026-07-01"
  },
  "601618": {
   "name": "中国中冶",
   "flagged_date": "2026-06-29",
   "ref_high": 2.88,
-  "ref_low": 2.41
+  "ref_low": 2.41,
+  "last_seen": "2026-07-01"
  },
  "600649": {
   "name": "城投控股",
   "flagged_date": "2026-06-29",
   "ref_high": 4.11,
-  "ref_low": 3.37
+  "ref_low": 3.37,
+  "last_seen": "2026-07-01"
  },
  "600398": {
   "name": "海澜之家",
   "flagged_date": "2026-06-29",
   "ref_high": 6.11,
-  "ref_low": 5.2
+  "ref_low": 5.2,
+  "last_seen": "2026-07-01"
  },
  "601456": {
   "name": "国联民生",
   "flagged_date": "2026-06-29",
   "ref_high": 9.71,
-  "ref_low": 8.55
+  "ref_low": 8.55,
+  "last_seen": "2026-07-01"
  },
  "600261": {
   "name": "阳光照明",
   "flagged_date": "2026-06-29",
   "ref_high": 3.42,
-  "ref_low": 3.07
+  "ref_low": 3.07,
+  "last_seen": "2026-07-01"
  },
  "002311": {
   "name": "海大集团",
   "flagged_date": "2026-06-29",
   "ref_high": 47.75,
-  "ref_low": 40.46
+  "ref_low": 40.46,
+  "last_seen": "2026-07-01"
  },
  "605298": {
   "name": "必得科技",
@@ -981,175 +1132,204 @@
   "name": "洪城环境",
   "flagged_date": "2026-06-29",
   "ref_high": 10.58,
-  "ref_low": 9.02
+  "ref_low": 9.02,
+  "last_seen": "2026-07-01"
  },
  "000538": {
   "name": "云南白药",
   "flagged_date": "2026-06-29",
   "ref_high": 51.28,
-  "ref_low": 46.29
+  "ref_low": 46.29,
+  "last_seen": "2026-07-01"
  },
  "002939": {
   "name": "长城证券",
   "flagged_date": "2026-06-29",
   "ref_high": 9.38,
-  "ref_low": 7.83
+  "ref_low": 7.83,
+  "last_seen": "2026-07-01"
  },
  "600369": {
   "name": "西南证券",
   "flagged_date": "2026-06-29",
   "ref_high": 4.33,
-  "ref_low": 3.79
+  "ref_low": 3.79,
+  "last_seen": "2026-07-01"
  },
  "002233": {
   "name": "塔牌集团",
   "flagged_date": "2026-06-29",
   "ref_high": 8.54,
-  "ref_low": 6.94
+  "ref_low": 6.94,
+  "last_seen": "2026-07-01"
  },
  "603173": {
   "name": "福斯达",
   "flagged_date": "2026-06-29",
   "ref_high": 38.68,
-  "ref_low": 31.8
+  "ref_low": 31.8,
+  "last_seen": "2026-07-01"
  },
  "600674": {
   "name": "川投能源",
   "flagged_date": "2026-06-29",
   "ref_high": 15.93,
-  "ref_low": 13.79
+  "ref_low": 13.79,
+  "last_seen": "2026-07-01"
  },
  "600750": {
   "name": "华润江中",
   "flagged_date": "2026-06-29",
   "ref_high": 25.62,
-  "ref_low": 21.3
+  "ref_low": 21.3,
+  "last_seen": "2026-07-01"
  },
  "603167": {
   "name": "渤海轮渡",
   "flagged_date": "2026-06-29",
   "ref_high": 9.26,
-  "ref_low": 8.48
+  "ref_low": 8.48,
+  "last_seen": "2026-07-01"
  },
  "600597": {
   "name": "光明乳业",
   "flagged_date": "2026-06-29",
   "ref_high": 7.23,
-  "ref_low": 6.0
+  "ref_low": 6.0,
+  "last_seen": "2026-07-01"
  },
  "000913": {
   "name": "钱江摩托",
   "flagged_date": "2026-06-29",
   "ref_high": 12.36,
-  "ref_low": 9.99
+  "ref_low": 9.99,
+  "last_seen": "2026-07-01"
  },
  "600004": {
   "name": "白云机场",
   "flagged_date": "2026-06-29",
   "ref_high": 8.42,
-  "ref_low": 7.18
+  "ref_low": 7.18,
+  "last_seen": "2026-07-01"
  },
  "000927": {
   "name": "中国铁物",
   "flagged_date": "2026-06-29",
   "ref_high": 2.77,
-  "ref_low": 2.25
+  "ref_low": 2.25,
+  "last_seen": "2026-07-01"
  },
  "601555": {
   "name": "东吴证券",
   "flagged_date": "2026-06-29",
   "ref_high": 8.4,
-  "ref_low": 7.25
+  "ref_low": 7.25,
+  "last_seen": "2026-07-01"
  },
  "600278": {
   "name": "东方创业",
   "flagged_date": "2026-06-29",
   "ref_high": 7.19,
-  "ref_low": 5.82
+  "ref_low": 5.82,
+  "last_seen": "2026-07-01"
  },
  "601990": {
   "name": "南京证券",
   "flagged_date": "2026-06-29",
   "ref_high": 7.25,
-  "ref_low": 6.32
+  "ref_low": 6.32,
+  "last_seen": "2026-07-01"
  },
  "600970": {
   "name": "中材国际",
   "flagged_date": "2026-06-29",
   "ref_high": 8.71,
-  "ref_low": 7.1
+  "ref_low": 7.1,
+  "last_seen": "2026-07-01"
  },
  "603899": {
   "name": "晨光股份",
   "flagged_date": "2026-06-29",
   "ref_high": 23.6,
-  "ref_low": 19.85
+  "ref_low": 19.85,
+  "last_seen": "2026-07-01"
  },
  "600794": {
   "name": "保税科技",
   "flagged_date": "2026-06-29",
   "ref_high": 3.47,
-  "ref_low": 2.82
+  "ref_low": 2.82,
+  "last_seen": "2026-07-01"
  },
  "603689": {
   "name": "皖天然气",
   "flagged_date": "2026-06-29",
   "ref_high": 8.42,
-  "ref_low": 6.82
+  "ref_low": 6.82,
+  "last_seen": "2026-07-01"
  },
  "600061": {
   "name": "国投资本",
   "flagged_date": "2026-06-29",
   "ref_high": 6.85,
-  "ref_low": 6.14
+  "ref_low": 6.14,
+  "last_seen": "2026-07-01"
  },
  "002059": {
   "name": "云南旅游",
   "flagged_date": "2026-06-29",
   "ref_high": 4.87,
-  "ref_low": 4.02
+  "ref_low": 4.02,
+  "last_seen": "2026-07-01"
  },
  "600861": {
   "name": "北京人力",
   "flagged_date": "2026-06-29",
   "ref_high": 14.22,
-  "ref_low": 11.72
+  "ref_low": 11.72,
+  "last_seen": "2026-07-01"
  },
  "600814": {
   "name": "杭州解百",
   "flagged_date": "2026-06-29",
   "ref_high": 7.44,
-  "ref_low": 6.0
+  "ref_low": 6.0,
+  "last_seen": "2026-07-01"
  },
  "603992": {
   "name": "松霖科技",
   "flagged_date": "2026-06-29",
   "ref_high": 34.31,
-  "ref_low": 27.76
+  "ref_low": 27.76,
+  "last_seen": "2026-07-01"
  },
  "000726": {
   "name": "鲁  泰Ａ",
   "flagged_date": "2026-06-29",
   "ref_high": 6.15,
-  "ref_low": 5.34
+  "ref_low": 5.34,
+  "last_seen": "2026-07-01"
  },
  "600057": {
   "name": "厦门象屿",
   "flagged_date": "2026-06-29",
   "ref_high": 6.52,
-  "ref_low": 5.34
+  "ref_low": 5.34,
+  "last_seen": "2026-07-01"
  },
  "601766": {
   "name": "中国中车",
   "flagged_date": "2026-06-29",
   "ref_high": 5.96,
-  "ref_low": 5.12
+  "ref_low": 5.12,
+  "last_seen": "2026-07-01"
  },
  "003012": {
   "name": "东鹏控股",
   "flagged_date": "2026-06-29",
   "ref_high": 5.29,
-  "ref_low": 4.24
+  "ref_low": 4.24,
+  "last_seen": "2026-07-01"
  },
  "603337": {
   "name": "杰克科技",
@@ -1161,79 +1341,92 @@
   "name": "中航机载",
   "flagged_date": "2026-06-29",
   "ref_high": 12.42,
-  "ref_low": 10.38
+  "ref_low": 10.38,
+  "last_seen": "2026-07-01"
  },
  "603858": {
   "name": "步长制药",
   "flagged_date": "2026-06-29",
   "ref_high": 15.85,
-  "ref_low": 14.01
+  "ref_low": 14.01,
+  "last_seen": "2026-07-01"
  },
  "002293": {
   "name": "罗莱生活",
   "flagged_date": "2026-06-29",
   "ref_high": 11.21,
-  "ref_low": 9.41
+  "ref_low": 9.41,
+  "last_seen": "2026-07-01"
  },
  "605599": {
   "name": "菜百股份",
   "flagged_date": "2026-06-29",
   "ref_high": 16.04,
-  "ref_low": 13.47
+  "ref_low": 13.47,
+  "last_seen": "2026-07-01"
  },
  "600742": {
   "name": "富维股份",
   "flagged_date": "2026-06-29",
   "ref_high": 8.8,
-  "ref_low": 7.08
+  "ref_low": 7.08,
+  "last_seen": "2026-07-01"
  },
  "000987": {
   "name": "越秀资本",
   "flagged_date": "2026-06-29",
   "ref_high": 8.68,
-  "ref_low": 7.17
+  "ref_low": 7.17,
+  "last_seen": "2026-07-01"
  },
  "002839": {
   "name": "张家港行",
   "flagged_date": "2026-06-29",
   "ref_high": 4.38,
-  "ref_low": 3.88
+  "ref_low": 3.88,
+  "last_seen": "2026-07-01"
  },
  "002884": {
   "name": "凌霄泵业",
   "flagged_date": "2026-06-29",
   "ref_high": 17.75,
-  "ref_low": 14.88
+  "ref_low": 14.88,
+  "last_seen": "2026-07-01"
  },
  "600987": {
   "name": "航民股份",
   "flagged_date": "2026-06-29",
   "ref_high": 6.74,
-  "ref_low": 5.97
+  "ref_low": 5.97,
+  "last_seen": "2026-07-01"
  },
  "300791": {
   "name": "仙乐健康",
   "flagged_date": "2026-06-29",
   "ref_high": 18.85,
-  "ref_low": 15.4
+  "ref_low": 15.4,
+  "last_seen": "2026-07-01"
  },
  "601100": {
   "name": "恒立液压",
   "flagged_date": "2026-06-29",
   "ref_high": 123.8,
-  "ref_low": 104.44
+  "ref_low": 104.44,
+  "last_seen": "2026-07-01"
  },
  "002573": {
   "name": "清新环境",
   "flagged_date": "2026-06-29",
   "ref_high": 3.54,
-  "ref_low": 2.87
+  "ref_low": 2.87,
+  "last_seen": "2026-07-01"
  },
  "002493": {
   "name": "荣盛石化",
   "flagged_date": "2026-06-29",
   "ref_high": 12.92,
-  "ref_low": 10.5
+  "ref_low": 10.5,
+  "last_seen": "2026-07-01"
  },
  "301267": {
   "name": "华厦眼科",
@@ -1245,157 +1438,183 @@
   "name": "国电电力",
   "flagged_date": "2026-06-29",
   "ref_high": 5.37,
-  "ref_low": 4.59
+  "ref_low": 4.59,
+  "last_seen": "2026-07-01"
  },
  "603566": {
   "name": "普莱柯",
   "flagged_date": "2026-06-29",
   "ref_high": 11.03,
-  "ref_low": 9.56
+  "ref_low": 9.56,
+  "last_seen": "2026-07-01"
  },
  "601111": {
   "name": "中国国航",
   "flagged_date": "2026-06-29",
   "ref_high": 7.04,
-  "ref_low": 5.88
+  "ref_low": 5.88,
+  "last_seen": "2026-07-01"
  },
  "002644": {
   "name": "佛慈制药",
   "flagged_date": "2026-06-29",
   "ref_high": 7.9,
-  "ref_low": 6.81
+  "ref_low": 6.81,
+  "last_seen": "2026-07-01"
  },
  "002926": {
   "name": "华西证券",
   "flagged_date": "2026-06-29",
   "ref_high": 8.66,
-  "ref_low": 7.62
+  "ref_low": 7.62,
+  "last_seen": "2026-07-01"
  },
  "600017": {
   "name": "日照港",
   "flagged_date": "2026-06-29",
   "ref_high": 2.82,
-  "ref_low": 2.47
+  "ref_low": 2.47,
+  "last_seen": "2026-07-01"
  },
  "600824": {
   "name": "益民集团",
   "flagged_date": "2026-06-29",
   "ref_high": 4.0,
-  "ref_low": 3.22
+  "ref_low": 3.22,
+  "last_seen": "2026-07-01"
  },
  "000529": {
   "name": "广弘控股",
   "flagged_date": "2026-06-29",
   "ref_high": 5.29,
-  "ref_low": 4.26
+  "ref_low": 4.26,
+  "last_seen": "2026-07-01"
  },
  "600511": {
   "name": "国药股份",
   "flagged_date": "2026-06-29",
   "ref_high": 27.68,
-  "ref_low": 25.11
+  "ref_low": 25.11,
+  "last_seen": "2026-07-01"
  },
  "601881": {
   "name": "中国银河",
   "flagged_date": "2026-06-29",
   "ref_high": 13.26,
-  "ref_low": 11.74
+  "ref_low": 11.74,
+  "last_seen": "2026-07-01"
  },
  "600195": {
   "name": "中牧股份",
   "flagged_date": "2026-06-29",
   "ref_high": 7.2,
-  "ref_low": 5.76
+  "ref_low": 5.76,
+  "last_seen": "2026-07-01"
  },
  "002500": {
   "name": "山西证券",
   "flagged_date": "2026-06-29",
   "ref_high": 5.43,
-  "ref_low": 4.81
+  "ref_low": 4.81,
+  "last_seen": "2026-07-01"
  },
  "600585": {
   "name": "海螺水泥",
   "flagged_date": "2026-06-29",
   "ref_high": 20.4,
-  "ref_low": 16.81
+  "ref_low": 16.81,
+  "last_seen": "2026-07-01"
  },
  "601339": {
   "name": "百隆东方",
   "flagged_date": "2026-06-29",
   "ref_high": 8.16,
-  "ref_low": 6.65
+  "ref_low": 6.65,
+  "last_seen": "2026-07-01"
  },
  "603213": {
   "name": "镇洋发展",
   "flagged_date": "2026-06-29",
   "ref_high": 15.04,
-  "ref_low": 13.1
+  "ref_low": 13.1,
+  "last_seen": "2026-07-01"
  },
  "002299": {
   "name": "圣农发展",
   "flagged_date": "2026-06-29",
   "ref_high": 17.93,
-  "ref_low": 14.82
+  "ref_low": 14.82,
+  "last_seen": "2026-07-01"
  },
  "600717": {
   "name": "天津港",
   "flagged_date": "2026-06-29",
   "ref_high": 4.68,
-  "ref_low": 3.87
+  "ref_low": 3.87,
+  "last_seen": "2026-07-01"
  },
  "601328": {
   "name": "交通银行",
   "flagged_date": "2026-06-29",
   "ref_high": 7.17,
-  "ref_low": 6.4
+  "ref_low": 6.4,
+  "last_seen": "2026-07-01"
  },
  "002481": {
   "name": "双塔食品",
   "flagged_date": "2026-06-29",
   "ref_high": 4.35,
-  "ref_low": 3.7
+  "ref_low": 3.7,
+  "last_seen": "2026-07-01"
  },
  "002641": {
   "name": "公元股份",
   "flagged_date": "2026-06-29",
   "ref_high": 4.49,
-  "ref_low": 3.76
+  "ref_low": 3.76,
+  "last_seen": "2026-07-01"
  },
  "300070": {
   "name": "碧水源",
   "flagged_date": "2026-06-29",
   "ref_high": 3.78,
-  "ref_low": 3.14
+  "ref_low": 3.14,
+  "last_seen": "2026-07-01"
  },
  "600305": {
   "name": "恒顺醋业",
   "flagged_date": "2026-06-29",
   "ref_high": 7.34,
-  "ref_low": 6.36
+  "ref_low": 6.36,
+  "last_seen": "2026-07-01"
  },
  "600120": {
   "name": "浙江东方",
   "flagged_date": "2026-06-29",
   "ref_high": 5.17,
-  "ref_low": 4.24
+  "ref_low": 4.24,
+  "last_seen": "2026-07-01"
  },
  "002140": {
   "name": "东华科技",
   "flagged_date": "2026-06-29",
   "ref_high": 10.72,
-  "ref_low": 9.0
+  "ref_low": 9.0,
+  "last_seen": "2026-07-01"
  },
  "605259": {
   "name": "绿田机械",
   "flagged_date": "2026-06-29",
   "ref_high": 19.89,
-  "ref_low": 17.26
+  "ref_low": 17.26,
+  "last_seen": "2026-07-01"
  },
  "600958": {
   "name": "东方证券",
   "flagged_date": "2026-06-29",
   "ref_high": 10.05,
-  "ref_low": 8.76
+  "ref_low": 8.76,
+  "last_seen": "2026-07-01"
  },
  "600153": {
   "name": "建发股份",
@@ -1407,127 +1626,148 @@
   "name": "古越龙山",
   "flagged_date": "2026-06-29",
   "ref_high": 8.49,
-  "ref_low": 7.21
+  "ref_low": 7.21,
+  "last_seen": "2026-07-01"
  },
  "301206": {
   "name": "三元生物",
   "flagged_date": "2026-06-29",
   "ref_high": 27.2,
-  "ref_low": 21.81
+  "ref_low": 21.81,
+  "last_seen": "2026-07-01"
  },
  "300962": {
   "name": "中金辐照",
   "flagged_date": "2026-06-29",
   "ref_high": 14.28,
-  "ref_low": 11.78
+  "ref_low": 11.78,
+  "last_seen": "2026-07-01"
  },
  "002563": {
   "name": "森马服饰",
   "flagged_date": "2026-06-29",
   "ref_high": 5.83,
-  "ref_low": 4.92
+  "ref_low": 4.92,
+  "last_seen": "2026-07-01"
  },
  "600315": {
   "name": "上海家化",
   "flagged_date": "2026-06-29",
   "ref_high": 19.06,
-  "ref_low": 16.12
+  "ref_low": 16.12,
+  "last_seen": "2026-07-01"
  },
  "601518": {
   "name": "吉林高速",
   "flagged_date": "2026-06-29",
   "ref_high": 3.23,
-  "ref_low": 2.75
+  "ref_low": 2.75,
+  "last_seen": "2026-07-01"
  },
  "300770": {
   "name": "新媒股份",
   "flagged_date": "2026-06-29",
   "ref_high": 37.82,
-  "ref_low": 31.02
+  "ref_low": 31.02,
+  "last_seen": "2026-07-01"
  },
  "600033": {
   "name": "福建高速",
   "flagged_date": "2026-06-29",
   "ref_high": 3.68,
-  "ref_low": 3.22
+  "ref_low": 3.22,
+  "last_seen": "2026-07-01"
  },
  "002003": {
   "name": "伟星股份",
   "flagged_date": "2026-06-29",
   "ref_high": 9.65,
-  "ref_low": 8.04
+  "ref_low": 8.04,
+  "last_seen": "2026-07-01"
  },
  "600323": {
   "name": "瀚蓝环境",
   "flagged_date": "2026-06-29",
   "ref_high": 31.89,
-  "ref_low": 26.76
+  "ref_low": 26.76,
+  "last_seen": "2026-07-01"
  },
  "002282": {
   "name": "博深股份",
   "flagged_date": "2026-06-29",
   "ref_high": 6.62,
-  "ref_low": 5.52
+  "ref_low": 5.52,
+  "last_seen": "2026-07-01"
  },
  "301223": {
   "name": "中荣股份",
   "flagged_date": "2026-06-29",
   "ref_high": 18.55,
-  "ref_low": 15.23
+  "ref_low": 15.23,
+  "last_seen": "2026-07-01"
  },
  "601997": {
   "name": "贵阳银行",
   "flagged_date": "2026-06-29",
   "ref_high": 5.86,
-  "ref_low": 5.11
+  "ref_low": 5.11,
+  "last_seen": "2026-07-01"
  },
  "603170": {
   "name": "宝立食品",
   "flagged_date": "2026-06-29",
   "ref_high": 12.88,
-  "ref_low": 10.78
+  "ref_low": 10.78,
+  "last_seen": "2026-07-01"
  },
  "601916": {
   "name": "浙商银行",
   "flagged_date": "2026-06-29",
   "ref_high": 2.98,
-  "ref_low": 2.71
+  "ref_low": 2.71,
+  "last_seen": "2026-07-01"
  },
  "600029": {
   "name": "南方航空",
   "flagged_date": "2026-06-29",
   "ref_high": 5.68,
-  "ref_low": 4.98
+  "ref_low": 4.98,
+  "last_seen": "2026-07-01"
  },
  "601860": {
   "name": "紫金银行",
   "flagged_date": "2026-06-29",
   "ref_high": 2.69,
-  "ref_low": 2.41
+  "ref_low": 2.41,
+  "last_seen": "2026-07-01"
  },
  "000750": {
   "name": "国海证券",
   "flagged_date": "2026-06-29",
   "ref_high": 4.0,
-  "ref_low": 3.42
+  "ref_low": 3.42,
+  "last_seen": "2026-07-01"
  },
  "600420": {
   "name": "国药现代",
   "flagged_date": "2026-06-29",
   "ref_high": 9.19,
-  "ref_low": 7.67
+  "ref_low": 7.67,
+  "last_seen": "2026-07-01"
  },
  "601665": {
   "name": "齐鲁银行",
   "flagged_date": "2026-06-29",
   "ref_high": 6.52,
-  "ref_low": 5.68
+  "ref_low": 5.68,
+  "last_seen": "2026-07-01"
  },
  "000768": {
   "name": "中航西飞",
   "flagged_date": "2026-06-29",
   "ref_high": 23.63,
-  "ref_low": 19.49
+  "ref_low": 19.49,
+  "last_seen": "2026-07-01"
  },
  "600801": {
   "name": "华新建材",
@@ -1539,19 +1779,22 @@
   "name": "光大证券",
   "flagged_date": "2026-06-29",
   "ref_high": 15.47,
-  "ref_low": 13.45
+  "ref_low": 13.45,
+  "last_seen": "2026-07-01"
  },
  "000713": {
   "name": "国投丰乐",
   "flagged_date": "2026-06-29",
   "ref_high": 6.21,
-  "ref_low": 5.2
+  "ref_low": 5.2,
+  "last_seen": "2026-07-01"
  },
  "605089": {
   "name": "味知香",
   "flagged_date": "2026-06-29",
   "ref_high": 24.0,
-  "ref_low": 20.2
+  "ref_low": 20.2,
+  "last_seen": "2026-07-01"
  },
  "601156": {
   "name": "东航物流",
@@ -1569,199 +1812,232 @@
   "name": "大商股份",
   "flagged_date": "2026-06-29",
   "ref_high": 15.66,
-  "ref_low": 12.97
+  "ref_low": 12.97,
+  "last_seen": "2026-07-01"
  },
  "600690": {
   "name": "海尔智家",
   "flagged_date": "2026-06-29",
   "ref_high": 21.4,
-  "ref_low": 19.25
+  "ref_low": 19.25,
+  "last_seen": "2026-07-01"
  },
  "600332": {
   "name": "白云山",
   "flagged_date": "2026-06-29",
   "ref_high": 21.83,
-  "ref_low": 19.3
+  "ref_low": 19.3,
+  "last_seen": "2026-07-01"
  },
  "001227": {
   "name": "兰州银行",
   "flagged_date": "2026-06-29",
   "ref_high": 2.15,
-  "ref_low": 2.0
+  "ref_low": 2.0,
+  "last_seen": "2026-07-01"
  },
  "603368": {
   "name": "柳药集团",
   "flagged_date": "2026-06-29",
   "ref_high": 16.11,
-  "ref_low": 14.34
+  "ref_low": 14.34,
+  "last_seen": "2026-07-01"
  },
  "002508": {
   "name": "老板电器",
   "flagged_date": "2026-06-29",
   "ref_high": 17.41,
-  "ref_low": 14.05
+  "ref_low": 14.05,
+  "last_seen": "2026-07-01"
  },
  "600038": {
   "name": "中直股份",
   "flagged_date": "2026-06-29",
   "ref_high": 30.03,
-  "ref_low": 24.36
+  "ref_low": 24.36,
+  "last_seen": "2026-07-01"
  },
  "300797": {
   "name": "钢研纳克",
   "flagged_date": "2026-06-29",
   "ref_high": 15.95,
-  "ref_low": 12.95
+  "ref_low": 12.95,
+  "last_seen": "2026-07-01"
  },
  "600535": {
   "name": "天士力",
   "flagged_date": "2026-06-29",
   "ref_high": 14.6,
-  "ref_low": 12.9
+  "ref_low": 12.9,
+  "last_seen": "2026-07-01"
  },
  "002807": {
   "name": "江阴银行",
   "flagged_date": "2026-06-29",
   "ref_high": 4.15,
-  "ref_low": 3.65
+  "ref_low": 3.65,
+  "last_seen": "2026-07-01"
  },
  "601333": {
   "name": "广深铁路",
   "flagged_date": "2026-06-29",
   "ref_high": 3.1,
-  "ref_low": 2.73
+  "ref_low": 2.73,
+  "last_seen": "2026-07-01"
  },
  "002332": {
   "name": "仙琚制药",
   "flagged_date": "2026-06-29",
   "ref_high": 8.66,
-  "ref_low": 7.92
+  "ref_low": 7.92,
+  "last_seen": "2026-07-01"
  },
  "603018": {
   "name": "DR华设集",
   "flagged_date": "2026-06-29",
   "ref_high": 6.3,
-  "ref_low": 5.12
+  "ref_low": 5.12,
+  "last_seen": "2026-07-01"
  },
  "601318": {
   "name": "中国平安",
   "flagged_date": "2026-06-29",
   "ref_high": 55.96,
-  "ref_low": 46.9
+  "ref_low": 46.9,
+  "last_seen": "2026-07-01"
  },
  "600406": {
   "name": "国电南瑞",
   "flagged_date": "2026-06-29",
   "ref_high": 27.24,
-  "ref_low": 22.55
+  "ref_low": 22.55,
+  "last_seen": "2026-07-01"
  },
  "603529": {
   "name": "爱玛科技",
   "flagged_date": "2026-06-29",
   "ref_high": 22.52,
-  "ref_low": 18.49
+  "ref_low": 18.49,
+  "last_seen": "2026-07-01"
  },
  "600787": {
   "name": "中储股份",
   "flagged_date": "2026-06-29",
   "ref_high": 4.85,
-  "ref_low": 4.05
+  "ref_low": 4.05,
+  "last_seen": "2026-07-01"
  },
  "603558": {
   "name": "健盛集团",
   "flagged_date": "2026-06-29",
   "ref_high": 13.29,
-  "ref_low": 10.76
+  "ref_low": 10.76,
+  "last_seen": "2026-07-01"
  },
  "600125": {
   "name": "铁龙物流",
   "flagged_date": "2026-06-29",
   "ref_high": 5.91,
-  "ref_low": 5.02
+  "ref_low": 5.02,
+  "last_seen": "2026-07-01"
  },
  "002978": {
   "name": "安宁股份",
   "flagged_date": "2026-06-29",
   "ref_high": 29.57,
-  "ref_low": 24.76
+  "ref_low": 24.76,
+  "last_seen": "2026-07-01"
  },
  "600109": {
   "name": "国金证券",
   "flagged_date": "2026-06-29",
   "ref_high": 9.21,
-  "ref_low": 7.61
+  "ref_low": 7.61,
+  "last_seen": "2026-07-01"
  },
  "601939": {
   "name": "建设银行",
   "flagged_date": "2026-06-29",
   "ref_high": 10.72,
-  "ref_low": 9.59
+  "ref_low": 9.59,
+  "last_seen": "2026-07-01"
  },
  "002758": {
   "name": "浙农股份",
   "flagged_date": "2026-06-29",
   "ref_high": 8.92,
-  "ref_low": 7.61
+  "ref_low": 7.61,
+  "last_seen": "2026-07-01"
  },
  "600621": {
   "name": "华鑫股份",
   "flagged_date": "2026-06-29",
   "ref_high": 14.43,
-  "ref_low": 11.91
+  "ref_low": 11.91,
+  "last_seen": "2026-07-01"
  },
  "601878": {
   "name": "浙商证券",
   "flagged_date": "2026-06-29",
   "ref_high": 9.96,
-  "ref_low": 8.89
+  "ref_low": 8.89,
+  "last_seen": "2026-07-01"
  },
  "600628": {
   "name": "新世界",
   "flagged_date": "2026-06-29",
   "ref_high": 6.71,
-  "ref_low": 5.59
+  "ref_low": 5.59,
+  "last_seen": "2026-07-01"
  },
  "603885": {
   "name": "吉祥航空",
   "flagged_date": "2026-06-29",
   "ref_high": 12.0,
-  "ref_low": 9.92
+  "ref_low": 9.92,
+  "last_seen": "2026-07-01"
  },
  "600887": {
   "name": "伊利股份",
   "flagged_date": "2026-06-29",
   "ref_high": 26.75,
-  "ref_low": 23.82
+  "ref_low": 23.82,
+  "last_seen": "2026-07-01"
  },
  "600073": {
   "name": "光明肉业",
   "flagged_date": "2026-06-29",
   "ref_high": 5.6,
-  "ref_low": 4.54
+  "ref_low": 4.54,
+  "last_seen": "2026-07-01"
  },
  "000581": {
   "name": "威孚高科",
   "flagged_date": "2026-06-29",
   "ref_high": 20.41,
-  "ref_low": 16.33
+  "ref_low": 16.33,
+  "last_seen": "2026-07-01"
  },
  "000655": {
   "name": "金岭矿业",
   "flagged_date": "2026-06-29",
   "ref_high": 7.63,
-  "ref_low": 6.26
+  "ref_low": 6.26,
+  "last_seen": "2026-07-01"
  },
  "000999": {
   "name": "华润三九",
   "flagged_date": "2026-06-29",
   "ref_high": 24.98,
-  "ref_low": 21.6
+  "ref_low": 21.6,
+  "last_seen": "2026-07-01"
  },
  "605507": {
   "name": "国邦医药",
   "flagged_date": "2026-06-29",
   "ref_high": 16.52,
-  "ref_low": 14.34
+  "ref_low": 14.34,
+  "last_seen": "2026-07-01"
  },
  "603871": {
   "name": "嘉友国际",
@@ -1773,13 +2049,15 @@
   "name": "兴通股份",
   "flagged_date": "2026-06-29",
   "ref_high": 14.43,
-  "ref_low": 12.25
+  "ref_low": 12.25,
+  "last_seen": "2026-07-01"
  },
  "002948": {
   "name": "青岛银行",
   "flagged_date": "2026-06-29",
   "ref_high": 5.82,
-  "ref_low": 5.11
+  "ref_low": 5.11,
+  "last_seen": "2026-07-01"
  },
  "002120": {
   "name": "韵达股份",
@@ -1791,271 +2069,316 @@
   "name": "美的集团",
   "flagged_date": "2026-06-29",
   "ref_high": 82.18,
-  "ref_low": 72.28
+  "ref_low": 72.28,
+  "last_seen": "2026-07-01"
  },
  "600182": {
   "name": "S佳通",
   "flagged_date": "2026-06-29",
   "ref_high": 14.42,
-  "ref_low": 12.41
+  "ref_low": 12.41,
+  "last_seen": "2026-07-01"
  },
  "002966": {
   "name": "苏州银行",
   "flagged_date": "2026-06-29",
   "ref_high": 8.45,
-  "ref_low": 6.92
+  "ref_low": 6.92,
+  "last_seen": "2026-07-01"
  },
  "600210": {
   "name": "紫江企业",
   "flagged_date": "2026-06-29",
   "ref_high": 6.88,
-  "ref_low": 6.05
+  "ref_low": 6.05,
+  "last_seen": "2026-07-01"
  },
  "603611": {
   "name": "诺力股份",
   "flagged_date": "2026-06-29",
   "ref_high": 19.14,
-  "ref_low": 15.5
+  "ref_low": 15.5,
+  "last_seen": "2026-07-01"
  },
  "002511": {
   "name": "中顺洁柔",
   "flagged_date": "2026-06-29",
   "ref_high": 7.91,
-  "ref_low": 6.48
+  "ref_low": 6.48,
+  "last_seen": "2026-07-01"
  },
  "000516": {
   "name": "国际医学",
   "flagged_date": "2026-06-29",
   "ref_high": 4.65,
-  "ref_low": 3.82
+  "ref_low": 3.82,
+  "last_seen": "2026-07-01"
  },
  "000858": {
   "name": "五 粮 液",
   "flagged_date": "2026-06-29",
   "ref_high": 87.25,
-  "ref_low": 71.75
+  "ref_low": 71.75,
+  "last_seen": "2026-07-01"
  },
  "601128": {
   "name": "常熟银行",
   "flagged_date": "2026-06-29",
   "ref_high": 6.52,
-  "ref_low": 5.76
+  "ref_low": 5.76,
+  "last_seen": "2026-07-01"
  },
  "002088": {
   "name": "鲁阳节能",
   "flagged_date": "2026-06-29",
   "ref_high": 9.39,
-  "ref_low": 7.74
+  "ref_low": 7.74,
+  "last_seen": "2026-07-01"
  },
  "601601": {
   "name": "中国太保",
   "flagged_date": "2026-06-29",
   "ref_high": 34.48,
-  "ref_low": 28.33
+  "ref_low": 28.33,
+  "last_seen": "2026-07-01"
  },
  "002737": {
   "name": "葵花药业",
   "flagged_date": "2026-06-29",
   "ref_high": 13.49,
-  "ref_low": 11.09
+  "ref_low": 11.09,
+  "last_seen": "2026-07-01"
  },
  "603987": {
   "name": "康德莱",
   "flagged_date": "2026-06-29",
   "ref_high": 7.81,
-  "ref_low": 6.72
+  "ref_low": 6.72,
+  "last_seen": "2026-07-01"
  },
  "600739": {
   "name": "辽宁成大",
   "flagged_date": "2026-06-29",
   "ref_high": 11.61,
-  "ref_low": 9.84
+  "ref_low": 9.84,
+  "last_seen": "2026-07-01"
  },
  "000598": {
   "name": "兴蓉环境",
   "flagged_date": "2026-06-29",
   "ref_high": 7.19,
-  "ref_low": 6.2
+  "ref_low": 6.2,
+  "last_seen": "2026-07-01"
  },
  "300470": {
   "name": "中密控股",
   "flagged_date": "2026-06-29",
   "ref_high": 33.47,
-  "ref_low": 27.4
+  "ref_low": 27.4,
+  "last_seen": "2026-07-01"
  },
  "002415": {
   "name": "海康威视",
   "flagged_date": "2026-06-29",
   "ref_high": 35.54,
-  "ref_low": 29.76
+  "ref_low": 29.76,
+  "last_seen": "2026-07-01"
  },
  "002206": {
   "name": "海 利 得",
   "flagged_date": "2026-06-29",
   "ref_high": 5.74,
-  "ref_low": 5.08
+  "ref_low": 5.08,
+  "last_seen": "2026-07-01"
  },
  "600380": {
   "name": "健康元",
   "flagged_date": "2026-06-29",
   "ref_high": 10.26,
-  "ref_low": 9.08
+  "ref_low": 9.08,
+  "last_seen": "2026-07-01"
  },
  "000567": {
   "name": "海德股份",
   "flagged_date": "2026-06-29",
   "ref_high": 6.52,
-  "ref_low": 5.44
+  "ref_low": 5.44,
+  "last_seen": "2026-07-01"
  },
  "600155": {
   "name": "华创云信",
   "flagged_date": "2026-06-29",
   "ref_high": 6.19,
-  "ref_low": 5.18
+  "ref_low": 5.18,
+  "last_seen": "2026-07-01"
  },
  "000717": {
   "name": "中南股份",
   "flagged_date": "2026-06-29",
   "ref_high": 2.37,
-  "ref_low": 1.92
+  "ref_low": 1.92,
+  "last_seen": "2026-07-01"
  },
  "002204": {
   "name": "大连重工",
   "flagged_date": "2026-06-29",
   "ref_high": 6.25,
-  "ref_low": 5.16
+  "ref_low": 5.16,
+  "last_seen": "2026-07-01"
  },
  "002701": {
   "name": "奥瑞金",
   "flagged_date": "2026-06-29",
   "ref_high": 5.08,
-  "ref_low": 4.14
+  "ref_low": 4.14,
+  "last_seen": "2026-07-01"
  },
  "000423": {
   "name": "东阿阿胶",
   "flagged_date": "2026-06-29",
   "ref_high": 51.13,
-  "ref_low": 42.88
+  "ref_low": 42.88,
+  "last_seen": "2026-07-01"
  },
  "302132": {
   "name": "中航成飞",
   "flagged_date": "2026-06-29",
   "ref_high": 67.91,
-  "ref_low": 55.05
+  "ref_low": 55.05,
+  "last_seen": "2026-07-01"
  },
  "605183": {
   "name": "确成股份",
   "flagged_date": "2026-06-29",
   "ref_high": 16.73,
-  "ref_low": 14.15
+  "ref_low": 14.15,
+  "last_seen": "2026-07-01"
  },
  "002901": {
   "name": "大博医疗",
   "flagged_date": "2026-06-29",
   "ref_high": 43.25,
-  "ref_low": 39.58
+  "ref_low": 39.58,
+  "last_seen": "2026-07-01"
  },
  "600862": {
   "name": "中航高科",
   "flagged_date": "2026-06-29",
   "ref_high": 20.12,
-  "ref_low": 16.52
+  "ref_low": 16.52,
+  "last_seen": "2026-07-01"
  },
  "600941": {
   "name": "中国移动",
   "flagged_date": "2026-06-29",
   "ref_high": 101.16,
-  "ref_low": 85.38
+  "ref_low": 85.38,
+  "last_seen": "2026-07-01"
  },
  "002507": {
   "name": "涪陵榨菜",
   "flagged_date": "2026-06-29",
   "ref_high": 11.97,
-  "ref_low": 10.61
+  "ref_low": 10.61,
+  "last_seen": "2026-07-01"
  },
  "603888": {
   "name": "新华网",
   "flagged_date": "2026-06-29",
   "ref_high": 20.94,
-  "ref_low": 16.83
+  "ref_low": 16.83,
+  "last_seen": "2026-07-01"
  },
  "600955": {
   "name": "维远股份",
   "flagged_date": "2026-06-29",
   "ref_high": 18.34,
-  "ref_low": 14.7
+  "ref_low": 14.7,
+  "last_seen": "2026-07-01"
  },
  "000597": {
   "name": "东北制药",
   "flagged_date": "2026-06-29",
   "ref_high": 4.88,
-  "ref_low": 4.09
+  "ref_low": 4.09,
+  "last_seen": "2026-07-01"
  },
  "600425": {
   "name": "青松建化",
   "flagged_date": "2026-06-29",
   "ref_high": 3.84,
-  "ref_low": 3.14
+  "ref_low": 3.14,
+  "last_seen": "2026-07-01"
  },
  "300888": {
   "name": "稳健医疗",
   "flagged_date": "2026-06-29",
   "ref_high": 30.68,
-  "ref_low": 26.09
+  "ref_low": 26.09,
+  "last_seen": "2026-07-01"
  },
  "600150": {
   "name": "中国船舶",
   "flagged_date": "2026-06-29",
   "ref_high": 40.55,
-  "ref_low": 32.87
+  "ref_low": 32.87,
+  "last_seen": "2026-07-01"
  },
  "600483": {
   "name": "福能股份",
   "flagged_date": "2026-06-29",
   "ref_high": 12.5,
-  "ref_low": 10.03
+  "ref_low": 10.03,
+  "last_seen": "2026-07-01"
  },
  "002064": {
   "name": "华峰化学",
   "flagged_date": "2026-06-29",
   "ref_high": 11.39,
-  "ref_low": 9.16
+  "ref_low": 9.16,
+  "last_seen": "2026-07-01"
  },
  "002004": {
   "name": "华邦健康",
   "flagged_date": "2026-06-29",
   "ref_high": 4.56,
-  "ref_low": 3.88
+  "ref_low": 3.88,
+  "last_seen": "2026-07-01"
  },
  "002419": {
   "name": "天虹股份",
   "flagged_date": "2026-06-29",
   "ref_high": 5.12,
-  "ref_low": 4.11
+  "ref_low": 4.11,
+  "last_seen": "2026-07-01"
  },
  "600761": {
   "name": "安徽合力",
   "flagged_date": "2026-06-29",
   "ref_high": 19.69,
-  "ref_low": 15.9
+  "ref_low": 15.9,
+  "last_seen": "2026-07-01"
  },
  "000965": {
   "name": "天保基建",
   "flagged_date": "2026-06-29",
   "ref_high": 3.6,
-  "ref_low": 2.89
+  "ref_low": 2.89,
+  "last_seen": "2026-07-01"
  },
  "002110": {
   "name": "三钢闽光",
   "flagged_date": "2026-06-29",
   "ref_high": 3.3,
-  "ref_low": 2.77
+  "ref_low": 2.77,
+  "last_seen": "2026-07-01"
  },
  "600918": {
   "name": "中泰证券",
   "flagged_date": "2026-06-29",
   "ref_high": 5.88,
-  "ref_low": 4.94
+  "ref_low": 4.94,
+  "last_seen": "2026-07-01"
  },
  "600864": {
   "name": "哈投股份",
@@ -2073,49 +2396,57 @@
   "name": "江南水务",
   "flagged_date": "2026-06-29",
   "ref_high": 6.33,
-  "ref_low": 5.26
+  "ref_low": 5.26,
+  "last_seen": "2026-07-01"
  },
  "600309": {
   "name": "万华化学",
   "flagged_date": "2026-06-29",
   "ref_high": 80.08,
-  "ref_low": 65.9
+  "ref_low": 65.9,
+  "last_seen": "2026-07-01"
  },
  "600008": {
   "name": "首创环保",
   "flagged_date": "2026-06-29",
   "ref_high": 3.21,
-  "ref_low": 2.7
+  "ref_low": 2.7,
+  "last_seen": "2026-07-01"
  },
  "600273": {
   "name": "嘉化能源",
   "flagged_date": "2026-06-29",
   "ref_high": 7.79,
-  "ref_low": 6.57
+  "ref_low": 6.57,
+  "last_seen": "2026-07-01"
  },
  "002001": {
   "name": "新 和 成",
   "flagged_date": "2026-06-29",
   "ref_high": 32.79,
-  "ref_low": 27.21
+  "ref_low": 27.21,
+  "last_seen": "2026-07-01"
  },
  "600115": {
   "name": "中国东航",
   "flagged_date": "2026-06-29",
   "ref_high": 4.54,
-  "ref_low": 3.66
+  "ref_low": 3.66,
+  "last_seen": "2026-07-01"
  },
  "600600": {
   "name": "青岛啤酒",
   "flagged_date": "2026-06-29",
   "ref_high": 62.36,
-  "ref_low": 50.47
+  "ref_low": 50.47,
+  "last_seen": "2026-07-01"
  },
  "601021": {
   "name": "春秋航空",
   "flagged_date": "2026-06-29",
   "ref_high": 49.91,
-  "ref_low": 43.63
+  "ref_low": 43.63,
+  "last_seen": "2026-07-01"
  },
  "600566": {
   "name": "济川药业",
@@ -2127,31 +2458,36 @@
   "name": "格力电器",
   "flagged_date": "2026-06-29",
   "ref_high": 40.6,
-  "ref_low": 36.27
+  "ref_low": 36.27,
+  "last_seen": "2026-07-01"
  },
  "002216": {
   "name": "三全食品",
   "flagged_date": "2026-06-29",
   "ref_high": 13.41,
-  "ref_low": 11.21
+  "ref_low": 11.21,
+  "last_seen": "2026-07-01"
  },
  "001308": {
   "name": "康冠科技",
   "flagged_date": "2026-06-29",
   "ref_high": 23.17,
-  "ref_low": 19.33
+  "ref_low": 19.33,
+  "last_seen": "2026-07-01"
  },
  "000848": {
   "name": "承德露露",
   "flagged_date": "2026-06-29",
   "ref_high": 8.48,
-  "ref_low": 7.14
+  "ref_low": 7.14,
+  "last_seen": "2026-07-01"
  },
  "600085": {
   "name": "同仁堂",
   "flagged_date": "2026-06-29",
   "ref_high": 27.2,
-  "ref_low": 21.87
+  "ref_low": 21.87,
+  "last_seen": "2026-07-01"
  },
  "601336": {
   "name": "新华保险",
@@ -2169,37 +2505,43 @@
   "name": "金陵饭店",
   "flagged_date": "2026-06-29",
   "ref_high": 7.36,
-  "ref_low": 5.95
+  "ref_low": 5.95,
+  "last_seen": "2026-07-01"
  },
  "300193": {
   "name": "佳士科技",
   "flagged_date": "2026-06-29",
   "ref_high": 8.85,
-  "ref_low": 7.4
+  "ref_low": 7.4,
+  "last_seen": "2026-07-01"
  },
  "002852": {
   "name": "道道全",
   "flagged_date": "2026-06-29",
   "ref_high": 8.76,
-  "ref_low": 7.01
+  "ref_low": 7.01,
+  "last_seen": "2026-07-01"
  },
  "000415": {
   "name": "渤海租赁",
   "flagged_date": "2026-06-29",
   "ref_high": 4.5,
-  "ref_low": 3.62
+  "ref_low": 3.62,
+  "last_seen": "2026-07-01"
  },
  "605116": {
   "name": "奥锐特",
   "flagged_date": "2026-06-29",
   "ref_high": 22.16,
-  "ref_low": 17.75
+  "ref_low": 17.75,
+  "last_seen": "2026-07-01"
  },
  "600916": {
   "name": "中国黄金",
   "flagged_date": "2026-06-29",
   "ref_high": 8.27,
-  "ref_low": 6.76
+  "ref_low": 6.76,
+  "last_seen": "2026-07-01"
  },
  "601901": {
   "name": "方正证券",
@@ -2211,49 +2553,57 @@
   "name": "大华股份",
   "flagged_date": "2026-06-29",
   "ref_high": 18.3,
-  "ref_low": 15.78
+  "ref_low": 15.78,
+  "last_seen": "2026-07-01"
  },
  "002078": {
   "name": "太阳纸业",
   "flagged_date": "2026-06-29",
   "ref_high": 14.14,
-  "ref_low": 11.81
+  "ref_low": 11.81,
+  "last_seen": "2026-07-01"
  },
  "600031": {
   "name": "三一重工",
   "flagged_date": "2026-06-29",
   "ref_high": 20.4,
-  "ref_low": 17.14
+  "ref_low": 17.14,
+  "last_seen": "2026-07-01"
  },
  "600660": {
   "name": "福耀玻璃",
   "flagged_date": "2026-06-29",
   "ref_high": 56.12,
-  "ref_low": 47.53
+  "ref_low": 47.53,
+  "last_seen": "2026-07-01"
  },
  "601058": {
   "name": "赛轮轮胎",
   "flagged_date": "2026-06-29",
   "ref_high": 13.17,
-  "ref_low": 11.22
+  "ref_low": 11.22,
+  "last_seen": "2026-07-01"
  },
  "002007": {
   "name": "华兰生物",
   "flagged_date": "2026-06-29",
   "ref_high": 13.74,
-  "ref_low": 11.72
+  "ref_low": 11.72,
+  "last_seen": "2026-07-01"
  },
  "002014": {
   "name": "永新股份",
   "flagged_date": "2026-06-29",
   "ref_high": 11.46,
-  "ref_low": 9.84
+  "ref_low": 9.84,
+  "last_seen": "2026-07-01"
  },
  "000501": {
   "name": "武商集团",
   "flagged_date": "2026-06-29",
   "ref_high": 7.95,
-  "ref_low": 6.4
+  "ref_low": 6.4,
+  "last_seen": "2026-07-01"
  },
  "601211": {
   "name": "国泰海通",
@@ -2265,13 +2615,15 @@
   "name": "永利股份",
   "flagged_date": "2026-06-29",
   "ref_high": 5.19,
-  "ref_low": 4.25
+  "ref_low": 4.25,
+  "last_seen": "2026-07-01"
  },
  "000157": {
   "name": "中联重科",
   "flagged_date": "2026-06-29",
   "ref_high": 7.86,
-  "ref_low": 6.93
+  "ref_low": 6.93,
+  "last_seen": "2026-07-01"
  },
  "002984": {
   "name": "森麒麟",
@@ -2283,7 +2635,8 @@
   "name": "九强生物",
   "flagged_date": "2026-06-29",
   "ref_high": 12.41,
-  "ref_low": 10.52
+  "ref_low": 10.52,
+  "last_seen": "2026-07-01"
  },
  "603848": {
   "name": "好太太",
@@ -2295,85 +2648,99 @@
   "name": "红旗连锁",
   "flagged_date": "2026-06-29",
   "ref_high": 5.04,
-  "ref_low": 4.05
+  "ref_low": 4.05,
+  "last_seen": "2026-07-01"
  },
  "600054": {
   "name": "黄山旅游",
   "flagged_date": "2026-06-29",
   "ref_high": 11.4,
-  "ref_low": 10.55
+  "ref_low": 10.55,
+  "last_seen": "2026-07-01"
  },
  "002393": {
   "name": "力生制药",
   "flagged_date": "2026-06-29",
   "ref_high": 15.93,
-  "ref_low": 13.37
+  "ref_low": 13.37,
+  "last_seen": "2026-07-01"
  },
  "600502": {
   "name": "安徽建工",
   "flagged_date": "2026-06-29",
   "ref_high": 5.19,
-  "ref_low": 4.2
+  "ref_low": 4.2,
+  "last_seen": "2026-07-01"
  },
  "600829": {
   "name": "人民同泰",
   "flagged_date": "2026-06-29",
   "ref_high": 9.33,
-  "ref_low": 7.54
+  "ref_low": 7.54,
+  "last_seen": "2026-07-01"
  },
  "002724": {
   "name": "海洋王",
   "flagged_date": "2026-06-29",
   "ref_high": 5.77,
-  "ref_low": 4.66
+  "ref_low": 4.66,
+  "last_seen": "2026-07-01"
  },
  "600062": {
   "name": "华润双鹤",
   "flagged_date": "2026-06-29",
   "ref_high": 17.56,
-  "ref_low": 15.29
+  "ref_low": 15.29,
+  "last_seen": "2026-07-01"
  },
  "000507": {
   "name": "珠海港",
   "flagged_date": "2026-06-29",
   "ref_high": 5.45,
-  "ref_low": 4.55
+  "ref_low": 4.55,
+  "last_seen": "2026-07-01"
  },
  "600529": {
   "name": "山东药玻",
   "flagged_date": "2026-06-29",
   "ref_high": 20.3,
-  "ref_low": 17.19
+  "ref_low": 17.19,
+  "last_seen": "2026-07-01"
  },
  "000589": {
   "name": "贵州轮胎",
   "flagged_date": "2026-06-29",
   "ref_high": 4.73,
-  "ref_low": 4.0
+  "ref_low": 4.0,
+  "last_seen": "2026-07-01"
  },
  "002390": {
   "name": "信邦制药",
   "flagged_date": "2026-06-29",
   "ref_high": 3.17,
-  "ref_low": 2.54
+  "ref_low": 2.54,
+  "last_seen": "2026-07-01"
  },
  "002690": {
   "name": "美亚光电",
   "flagged_date": "2026-06-29",
   "ref_high": 16.25,
-  "ref_low": 13.52
+  "ref_low": 13.52,
+  "last_seen": "2026-07-01"
  },
  "600993": {
   "name": "马应龙",
   "flagged_date": "2026-06-29",
   "ref_high": 25.5,
-  "ref_low": 21.22
+  "ref_low": 21.22,
+  "last_seen": "2026-07-01"
  },
  "601033": {
   "name": "永兴股份",
   "flagged_date": "2026-06-29",
   "ref_high": 15.25,
-  "ref_low": 13.43
+  "ref_low": 13.43,
+  "last_seen": "2026-07-01"
  },
  "002895": {
   "name": "川恒股份",
@@ -2385,85 +2752,99 @@
   "name": "中金公司",
   "flagged_date": "2026-06-29",
   "ref_high": 37.08,
-  "ref_low": 31.35
+  "ref_low": 31.35,
+  "last_seen": "2026-07-01"
  },
  "605007": {
   "name": "五洲特纸",
   "flagged_date": "2026-06-29",
   "ref_high": 15.01,
-  "ref_low": 12.26
+  "ref_low": 12.26,
+  "last_seen": "2026-07-01"
  },
  "300441": {
   "name": "鲍斯股份",
   "flagged_date": "2026-06-29",
   "ref_high": 6.81,
-  "ref_low": 5.85
+  "ref_low": 5.85,
+  "last_seen": "2026-07-01"
  },
  "002675": {
   "name": "东诚药业",
   "flagged_date": "2026-06-29",
   "ref_high": 13.03,
-  "ref_low": 12.05
+  "ref_low": 12.05,
+  "last_seen": "2026-07-01"
  },
  "002444": {
   "name": "巨星科技",
   "flagged_date": "2026-06-29",
   "ref_high": 34.35,
-  "ref_low": 28.6
+  "ref_low": 28.6,
+  "last_seen": "2026-07-01"
  },
  "300026": {
   "name": "红日药业",
   "flagged_date": "2026-06-29",
   "ref_high": 3.34,
-  "ref_low": 2.82
+  "ref_low": 2.82,
+  "last_seen": "2026-07-01"
  },
  "603883": {
   "name": "老百姓",
   "flagged_date": "2026-06-29",
   "ref_high": 13.1,
-  "ref_low": 10.67
+  "ref_low": 10.67,
+  "last_seen": "2026-07-01"
  },
  "603323": {
   "name": "苏农银行",
   "flagged_date": "2026-06-29",
   "ref_high": 4.36,
-  "ref_low": 3.81
+  "ref_low": 3.81,
+  "last_seen": "2026-07-01"
  },
  "603648": {
   "name": "畅联股份",
   "flagged_date": "2026-06-29",
   "ref_high": 10.05,
-  "ref_low": 8.26
+  "ref_low": 8.26,
+  "last_seen": "2026-07-01"
  },
  "600935": {
   "name": "华塑股份",
   "flagged_date": "2026-06-29",
   "ref_high": 2.69,
-  "ref_low": 2.16
+  "ref_low": 2.16,
+  "last_seen": "2026-07-01"
  },
  "600559": {
   "name": "老白干酒",
   "flagged_date": "2026-06-29",
   "ref_high": 13.31,
-  "ref_low": 11.04
+  "ref_low": 11.04,
+  "last_seen": "2026-07-01"
  },
  "002818": {
   "name": "富森美",
   "flagged_date": "2026-06-29",
   "ref_high": 11.65,
-  "ref_low": 10.36
+  "ref_low": 10.36,
+  "last_seen": "2026-07-01"
  },
  "600812": {
   "name": "华北制药",
   "flagged_date": "2026-06-29",
   "ref_high": 5.01,
-  "ref_low": 4.11
+  "ref_low": 4.11,
+  "last_seen": "2026-07-01"
  },
  "600558": {
   "name": "大西洋",
   "flagged_date": "2026-06-29",
   "ref_high": 5.83,
-  "ref_low": 4.85
+  "ref_low": 4.85,
+  "last_seen": "2026-07-01"
  },
  "601375": {
   "name": "中原证券",
@@ -2475,67 +2856,78 @@
   "name": "维维股份",
   "flagged_date": "2026-06-29",
   "ref_high": 3.4,
-  "ref_low": 2.74
+  "ref_low": 2.74,
+  "last_seen": "2026-07-01"
  },
  "603889": {
   "name": "新澳股份",
   "flagged_date": "2026-06-29",
   "ref_high": 6.19,
-  "ref_low": 5.14
+  "ref_low": 5.14,
+  "last_seen": "2026-07-01"
  },
  "000513": {
   "name": "丽珠集团",
   "flagged_date": "2026-06-29",
   "ref_high": 30.52,
-  "ref_low": 27.67
+  "ref_low": 27.67,
+  "last_seen": "2026-07-01"
  },
  "000792": {
   "name": "盐湖股份",
   "flagged_date": "2026-06-29",
   "ref_high": 34.2,
-  "ref_low": 27.72
+  "ref_low": 27.72,
+  "last_seen": "2026-07-01"
  },
  "301185": {
   "name": "鸥玛软件",
   "flagged_date": "2026-06-29",
   "ref_high": 17.91,
-  "ref_low": 14.38
+  "ref_low": 14.38,
+  "last_seen": "2026-07-01"
  },
  "603136": {
   "name": "天目湖",
   "flagged_date": "2026-06-29",
   "ref_high": 9.99,
-  "ref_low": 8.11
+  "ref_low": 8.11,
+  "last_seen": "2026-07-01"
  },
  "000998": {
   "name": "隆平高科",
   "flagged_date": "2026-06-29",
   "ref_high": 8.92,
-  "ref_low": 7.35
+  "ref_low": 7.35,
+  "last_seen": "2026-07-01"
  },
  "300119": {
   "name": "瑞普生物",
   "flagged_date": "2026-06-29",
   "ref_high": 17.37,
-  "ref_low": 13.91
+  "ref_low": 13.91,
+  "last_seen": "2026-07-01"
  },
  "600056": {
   "name": "中国医药",
   "flagged_date": "2026-06-29",
   "ref_high": 10.0,
-  "ref_low": 8.3
+  "ref_low": 8.3,
+  "last_seen": "2026-07-01"
  },
  "301015": {
   "name": "百洋医药",
   "flagged_date": "2026-06-29",
   "ref_high": 22.91,
-  "ref_low": 18.4
+  "ref_low": 18.4,
+  "last_seen": "2026-07-01"
  },
  "000650": {
   "name": "仁和药业",
   "flagged_date": "2026-06-29",
   "ref_high": 5.57,
-  "ref_low": 4.85
+  "ref_low": 4.85,
+  "last_seen": "2026-07-01"
  },
  "603325": {
   "name": "博隆技术",
@@ -2547,19 +2939,22 @@
   "name": "南京医药",
   "flagged_date": "2026-06-29",
   "ref_high": 5.25,
-  "ref_low": 4.81
+  "ref_low": 4.81,
+  "last_seen": "2026-07-01"
  },
  "605016": {
   "name": "百龙创园",
   "flagged_date": "2026-06-29",
   "ref_high": 27.83,
-  "ref_low": 23.1
+  "ref_low": 23.1,
+  "last_seen": "2026-07-01"
  },
  "000951": {
   "name": "中国重汽",
   "flagged_date": "2026-06-29",
   "ref_high": 22.97,
-  "ref_low": 18.41
+  "ref_low": 18.41,
+  "last_seen": "2026-07-01"
  },
  "601377": {
   "name": "兴业证券",
@@ -2571,31 +2966,36 @@
   "name": "九华旅游",
   "flagged_date": "2026-06-29",
   "ref_high": 35.59,
-  "ref_low": 30.0
+  "ref_low": 30.0,
+  "last_seen": "2026-07-01"
  },
  "600729": {
   "name": "重百集团",
   "flagged_date": "2026-06-29",
   "ref_high": 21.05,
-  "ref_low": 18.29
+  "ref_low": 18.29,
+  "last_seen": "2026-07-01"
  },
  "002767": {
   "name": "先锋电子",
   "flagged_date": "2026-06-29",
   "ref_high": 20.18,
-  "ref_low": 16.22
+  "ref_low": 16.22,
+  "last_seen": "2026-07-01"
  },
  "000931": {
   "name": "中 关 村",
   "flagged_date": "2026-06-29",
   "ref_high": 4.57,
-  "ref_low": 3.91
+  "ref_low": 3.91,
+  "last_seen": "2026-07-01"
  },
  "002609": {
   "name": "捷顺科技",
   "flagged_date": "2026-06-29",
   "ref_high": 8.65,
-  "ref_low": 7.08
+  "ref_low": 7.08,
+  "last_seen": "2026-07-01"
  },
  "603077": {
   "name": "和邦生物",
@@ -2607,7 +3007,8 @@
   "name": "西麦食品",
   "flagged_date": "2026-06-29",
   "ref_high": 22.58,
-  "ref_low": 19.98
+  "ref_low": 19.98,
+  "last_seen": "2026-07-01"
  },
  "603811": {
   "name": "诚意药业",
@@ -2619,7 +3020,8 @@
   "name": "新兴装备",
   "flagged_date": "2026-06-29",
   "ref_high": 30.9,
-  "ref_low": 24.98
+  "ref_low": 24.98,
+  "last_seen": "2026-07-01"
  },
  "002588": {
   "name": "史丹利",
@@ -2631,19 +3033,22 @@
   "name": "千金药业",
   "flagged_date": "2026-06-29",
   "ref_high": 10.4,
-  "ref_low": 9.26
+  "ref_low": 9.26,
+  "last_seen": "2026-07-01"
  },
  "600170": {
   "name": "上海建工",
   "flagged_date": "2026-06-29",
   "ref_high": 2.66,
-  "ref_low": 2.16
+  "ref_low": 2.16,
+  "last_seen": "2026-07-01"
  },
  "002414": {
   "name": "高德红外",
   "flagged_date": "2026-06-29",
   "ref_high": 14.43,
-  "ref_low": 11.64
+  "ref_low": 11.64,
+  "last_seen": "2026-07-01"
  },
  "000099": {
   "name": "中信海直",
@@ -2661,19 +3066,22 @@
   "name": "汤臣倍健",
   "flagged_date": "2026-06-29",
   "ref_high": 10.6,
-  "ref_low": 8.87
+  "ref_low": 8.87,
+  "last_seen": "2026-07-01"
  },
  "600782": {
   "name": "新钢股份",
   "flagged_date": "2026-06-29",
   "ref_high": 2.87,
-  "ref_low": 2.41
+  "ref_low": 2.41,
+  "last_seen": "2026-07-01"
  },
  "600298": {
   "name": "安琪酵母",
   "flagged_date": "2026-06-29",
   "ref_high": 37.18,
-  "ref_low": 33.11
+  "ref_low": 33.11,
+  "last_seen": "2026-07-01"
  },
  "301289": {
   "name": "国缆检测",
@@ -2685,25 +3093,29 @@
   "name": "千禾味业",
   "flagged_date": "2026-06-29",
   "ref_high": 8.41,
-  "ref_low": 6.86
+  "ref_low": 6.86,
+  "last_seen": "2026-07-01"
  },
  "002223": {
   "name": "鱼跃医疗",
   "flagged_date": "2026-06-29",
   "ref_high": 28.47,
-  "ref_low": 23.9
+  "ref_low": 23.9,
+  "last_seen": "2026-07-01"
  },
  "002349": {
   "name": "精华制药",
   "flagged_date": "2026-06-29",
   "ref_high": 7.18,
-  "ref_low": 5.99
+  "ref_low": 5.99,
+  "last_seen": "2026-07-01"
  },
  "301047": {
   "name": "义翘神州",
   "flagged_date": "2026-06-29",
   "ref_high": 69.51,
-  "ref_low": 58.05
+  "ref_low": 58.05,
+  "last_seen": "2026-07-01"
  },
  "601688": {
   "name": "华泰证券",
@@ -2715,25 +3127,29 @@
   "name": "锦江酒店",
   "flagged_date": "2026-06-29",
   "ref_high": 21.93,
-  "ref_low": 17.56
+  "ref_low": 17.56,
+  "last_seen": "2026-07-01"
  },
  "600285": {
   "name": "羚锐制药",
   "flagged_date": "2026-06-29",
   "ref_high": 21.12,
-  "ref_low": 19.0
+  "ref_low": 19.0,
+  "last_seen": "2026-07-01"
  },
  "600010": {
   "name": "包钢股份",
   "flagged_date": "2026-06-29",
   "ref_high": 2.64,
-  "ref_low": 2.15
+  "ref_low": 2.15,
+  "last_seen": "2026-07-01"
  },
  "300011": {
   "name": "鼎汉技术",
   "flagged_date": "2026-06-29",
   "ref_high": 7.2,
-  "ref_low": 5.79
+  "ref_low": 5.79,
+  "last_seen": "2026-07-01"
  },
  "603983": {
   "name": "丸美生物",
@@ -2751,7 +3167,8 @@
   "name": "永安行",
   "flagged_date": "2026-06-29",
   "ref_high": 22.99,
-  "ref_low": 18.68
+  "ref_low": 18.68,
+  "last_seen": "2026-07-01"
  },
  "601099": {
   "name": "太平洋",
@@ -2763,13 +3180,15 @@
   "name": "普洛药业",
   "flagged_date": "2026-06-29",
   "ref_high": 17.53,
-  "ref_low": 15.19
+  "ref_low": 15.19,
+  "last_seen": "2026-07-01"
  },
  "300832": {
   "name": "新产业",
   "flagged_date": "2026-06-29",
   "ref_high": 49.76,
-  "ref_low": 40.5
+  "ref_low": 40.5,
+  "last_seen": "2026-07-01"
  },
  "600288": {
   "name": "大恒科技",
@@ -2781,7 +3200,8 @@
   "name": "康恩贝",
   "flagged_date": "2026-06-29",
   "ref_high": 4.16,
-  "ref_low": 3.77
+  "ref_low": 3.77,
+  "last_seen": "2026-07-01"
  },
  "605228": {
   "name": "神通科技",
@@ -2793,7 +3213,8 @@
   "name": "福田汽车",
   "flagged_date": "2026-06-29",
   "ref_high": 3.37,
-  "ref_low": 2.82
+  "ref_low": 2.82,
+  "last_seen": "2026-07-01"
  },
  "600179": {
   "name": "安通控股",
@@ -2805,13 +3226,15 @@
   "name": "神州高铁",
   "flagged_date": "2026-06-29",
   "ref_high": 2.71,
-  "ref_low": 2.17
+  "ref_low": 2.17,
+  "last_seen": "2026-07-01"
  },
  "301665": {
   "name": "泰禾股份",
   "flagged_date": "2026-06-29",
   "ref_high": 25.81,
-  "ref_low": 20.74
+  "ref_low": 20.74,
+  "last_seen": "2026-07-01"
  },
  "601117": {
   "name": "中国化学",
@@ -2835,37 +3258,43 @@
   "name": "国元证券",
   "flagged_date": "2026-06-29",
   "ref_high": 8.02,
-  "ref_low": 6.56
+  "ref_low": 6.56,
+  "last_seen": "2026-07-01"
  },
  "003000": {
   "name": "劲仔食品",
   "flagged_date": "2026-06-29",
   "ref_high": 11.08,
-  "ref_low": 9.45
+  "ref_low": 9.45,
+  "last_seen": "2026-07-01"
  },
  "600587": {
   "name": "新华医疗",
   "flagged_date": "2026-06-29",
   "ref_high": 13.64,
-  "ref_low": 11.4
+  "ref_low": 11.4,
+  "last_seen": "2026-07-01"
  },
  "002262": {
   "name": "恩华药业",
   "flagged_date": "2026-06-29",
   "ref_high": 20.75,
-  "ref_low": 17.96
+  "ref_low": 17.96,
+  "last_seen": "2026-07-01"
  },
  "600060": {
   "name": "海信视像",
   "flagged_date": "2026-06-29",
   "ref_high": 28.38,
-  "ref_low": 23.97
+  "ref_low": 23.97,
+  "last_seen": "2026-07-01"
  },
  "600605": {
   "name": "汇通能源",
   "flagged_date": "2026-06-29",
   "ref_high": 34.5,
-  "ref_low": 27.81
+  "ref_low": 27.81,
+  "last_seen": "2026-07-01"
  },
  "002748": {
   "name": "世龙实业",
@@ -2877,37 +3306,43 @@
   "name": "华测导航",
   "flagged_date": "2026-06-29",
   "ref_high": 31.66,
-  "ref_low": 26.62
+  "ref_low": 26.62,
+  "last_seen": "2026-07-01"
  },
  "000541": {
   "name": "佛山照明",
   "flagged_date": "2026-06-29",
   "ref_high": 5.37,
-  "ref_low": 4.67
+  "ref_low": 4.67,
+  "last_seen": "2026-07-01"
  },
  "600351": {
   "name": "亚宝药业",
   "flagged_date": "2026-06-29",
   "ref_high": 6.47,
-  "ref_low": 5.6
+  "ref_low": 5.6,
+  "last_seen": "2026-07-01"
  },
  "603998": {
   "name": "方盛制药",
   "flagged_date": "2026-06-29",
   "ref_high": 10.61,
-  "ref_low": 8.64
+  "ref_low": 8.64,
+  "last_seen": "2026-07-01"
  },
  "002603": {
   "name": "以岭药业",
   "flagged_date": "2026-06-29",
   "ref_high": 16.16,
-  "ref_low": 14.22
+  "ref_low": 14.22,
+  "last_seen": "2026-07-01"
  },
  "600211": {
   "name": "西藏药业",
   "flagged_date": "2026-06-29",
   "ref_high": 41.37,
-  "ref_low": 34.8
+  "ref_low": 34.8,
+  "last_seen": "2026-07-01"
  },
  "002145": {
   "name": "钛能化学",
@@ -2919,13 +3354,15 @@
   "name": "广东鸿图",
   "flagged_date": "2026-06-29",
   "ref_high": 9.7,
-  "ref_low": 8.03
+  "ref_low": 8.03,
+  "last_seen": "2026-07-01"
  },
  "002019": {
   "name": "亿帆医药",
   "flagged_date": "2026-06-29",
   "ref_high": 10.77,
-  "ref_low": 9.07
+  "ref_low": 9.07,
+  "last_seen": "2026-07-01"
  },
  "002577": {
   "name": "雷柏科技",
@@ -2937,19 +3374,22 @@
   "name": "德赛电池",
   "flagged_date": "2026-06-29",
   "ref_high": 27.57,
-  "ref_low": 22.3
+  "ref_low": 22.3,
+  "last_seen": "2026-07-01"
  },
  "300869": {
   "name": "康泰医学",
   "flagged_date": "2026-06-29",
   "ref_high": 12.46,
-  "ref_low": 9.98
+  "ref_low": 9.98,
+  "last_seen": "2026-07-01"
  },
  "002554": {
   "name": "惠博普",
   "flagged_date": "2026-06-29",
   "ref_high": 3.46,
-  "ref_low": 3.0
+  "ref_low": 3.0,
+  "last_seen": "2026-07-01"
  },
  "300171": {
   "name": "东富龙",
@@ -2967,6 +3407,391 @@
   "name": "安科生物",
   "flagged_date": "2026-06-29",
   "ref_high": 8.5,
-  "ref_low": 7.35
+  "ref_low": 7.35,
+  "last_seen": "2026-07-01"
+ },
+ "601825": {
+  "name": "沪农商行",
+  "flagged_date": "2026-07-01",
+  "ref_high": 8.79,
+  "ref_low": 7.36
+ },
+ "603511": {
+  "name": "爱慕股份",
+  "flagged_date": "2026-07-01",
+  "ref_high": 14.0,
+  "ref_low": 11.33
+ },
+ "600983": {
+  "name": "惠而浦",
+  "flagged_date": "2026-07-01",
+  "ref_high": 8.38,
+  "ref_low": 6.74
+ },
+ "601628": {
+  "name": "中国人寿",
+  "flagged_date": "2026-07-01",
+  "ref_high": 38.88,
+  "ref_low": 32.32
+ },
+ "600050": {
+  "name": "中国联通",
+  "flagged_date": "2026-07-01",
+  "ref_high": 4.85,
+  "ref_low": 3.93
+ },
+ "601059": {
+  "name": "信达证券",
+  "flagged_date": "2026-07-01",
+  "ref_high": 17.51,
+  "ref_low": 14.56
+ },
+ "603132": {
+  "name": "金徽股份",
+  "flagged_date": "2026-07-01",
+  "ref_high": 18.92,
+  "ref_low": 15.18
+ },
+ "601319": {
+  "name": "中国人保",
+  "flagged_date": "2026-07-01",
+  "ref_high": 7.43,
+  "ref_low": 6.48
+ },
+ "000652": {
+  "name": "泰达股份",
+  "flagged_date": "2026-07-01",
+  "ref_high": 3.98,
+  "ref_low": 3.31
+ },
+ "600346": {
+  "name": "恒力石化",
+  "flagged_date": "2026-07-01",
+  "ref_high": 19.76,
+  "ref_low": 15.98
+ },
+ "301058": {
+  "name": "中粮科工",
+  "flagged_date": "2026-07-01",
+  "ref_high": 9.38,
+  "ref_low": 7.54
+ },
+ "002091": {
+  "name": "江苏国泰",
+  "flagged_date": "2026-07-01",
+  "ref_high": 8.79,
+  "ref_low": 7.06
+ },
+ "002318": {
+  "name": "久立特材",
+  "flagged_date": "2026-07-01",
+  "ref_high": 26.77,
+  "ref_low": 21.5
+ },
+ "000959": {
+  "name": "首钢股份",
+  "flagged_date": "2026-07-01",
+  "ref_high": 3.87,
+  "ref_low": 3.11
+ },
+ "002027": {
+  "name": "分众传媒",
+  "flagged_date": "2026-07-01",
+  "ref_high": 5.77,
+  "ref_low": 4.64
+ },
+ "603788": {
+  "name": "宁波高发",
+  "flagged_date": "2026-07-01",
+  "ref_high": 16.67,
+  "ref_low": 13.41
+ },
+ "002327": {
+  "name": "富安娜",
+  "flagged_date": "2026-07-01",
+  "ref_high": 6.98,
+  "ref_low": 5.9
+ },
+ "600436": {
+  "name": "片仔癀",
+  "flagged_date": "2026-07-01",
+  "ref_high": 129.71,
+  "ref_low": 105.98
+ },
+ "300144": {
+  "name": "宋城演艺",
+  "flagged_date": "2026-07-01",
+  "ref_high": 6.95,
+  "ref_low": 5.59
+ },
+ "603233": {
+  "name": "大参林",
+  "flagged_date": "2026-07-01",
+  "ref_high": 17.86,
+  "ref_low": 14.39
+ },
+ "605009": {
+  "name": "豪悦护理",
+  "flagged_date": "2026-07-01",
+  "ref_high": 26.64,
+  "ref_low": 21.37
+ },
+ "600320": {
+  "name": "振华重工",
+  "flagged_date": "2026-07-01",
+  "ref_high": 5.01,
+  "ref_low": 4.05
+ },
+ "601188": {
+  "name": "龙江交通",
+  "flagged_date": "2026-07-01",
+  "ref_high": 3.37,
+  "ref_low": 2.72
+ },
+ "601089": {
+  "name": "福元医药",
+  "flagged_date": "2026-07-01",
+  "ref_high": 19.05,
+  "ref_low": 15.28
+ },
+ "601868": {
+  "name": "中国能建",
+  "flagged_date": "2026-07-01",
+  "ref_high": 3.16,
+  "ref_low": 2.59
+ },
+ "001219": {
+  "name": "青岛食品",
+  "flagged_date": "2026-07-01",
+  "ref_high": 14.02,
+  "ref_low": 11.23
+ },
+ "600731": {
+  "name": "湖南海利",
+  "flagged_date": "2026-07-01",
+  "ref_high": 6.24,
+  "ref_low": 5.03
+ },
+ "605296": {
+  "name": "神农集团",
+  "flagged_date": "2026-07-01",
+  "ref_high": 30.1,
+  "ref_low": 24.19
+ },
+ "301370": {
+  "name": "国科恒泰",
+  "flagged_date": "2026-07-01",
+  "ref_high": 9.82,
+  "ref_low": 7.89
+ },
+ "002065": {
+  "name": "东华软件",
+  "flagged_date": "2026-07-01",
+  "ref_high": 8.48,
+  "ref_low": 6.82
+ },
+ "003013": {
+  "name": "地铁设计",
+  "flagged_date": "2026-07-01",
+  "ref_high": 17.11,
+  "ref_low": 13.75
+ },
+ "603365": {
+  "name": "水星家纺",
+  "flagged_date": "2026-07-01",
+  "ref_high": 19.06,
+  "ref_low": 15.5
+ },
+ "603187": {
+  "name": "海容冷链",
+  "flagged_date": "2026-07-01",
+  "ref_high": 13.48,
+  "ref_low": 10.98
+ },
+ "603939": {
+  "name": "益丰药房",
+  "flagged_date": "2026-07-01",
+  "ref_high": 22.01,
+  "ref_low": 17.68
+ },
+ "002041": {
+  "name": "登海种业",
+  "flagged_date": "2026-07-01",
+  "ref_high": 9.47,
+  "ref_low": 7.75
+ },
+ "600765": {
+  "name": "中航重机",
+  "flagged_date": "2026-07-01",
+  "ref_high": 15.57,
+  "ref_low": 12.5
+ },
+ "601399": {
+  "name": "国机重装",
+  "flagged_date": "2026-07-01",
+  "ref_high": 4.05,
+  "ref_low": 3.33
+ },
+ "603617": {
+  "name": "君禾股份",
+  "flagged_date": "2026-07-01",
+  "ref_high": 7.83,
+  "ref_low": 6.8
+ },
+ "300498": {
+  "name": "温氏股份",
+  "flagged_date": "2026-07-01",
+  "ref_high": 14.4,
+  "ref_low": 11.54
+ },
+ "000715": {
+  "name": "中兴商业",
+  "flagged_date": "2026-07-01",
+  "ref_high": 5.48,
+  "ref_low": 4.56
+ },
+ "002073": {
+  "name": "软控股份",
+  "flagged_date": "2026-07-01",
+  "ref_high": 6.15,
+  "ref_low": 4.93
+ },
+ "605098": {
+  "name": "行动教育",
+  "flagged_date": "2026-07-01",
+  "ref_high": 62.5,
+  "ref_low": 50.06
+ },
+ "300453": {
+  "name": "三鑫医疗",
+  "flagged_date": "2026-07-01",
+  "ref_high": 9.96,
+  "ref_low": 8.64
+ },
+ "300636": {
+  "name": "同和药业",
+  "flagged_date": "2026-07-01",
+  "ref_high": 7.36,
+  "ref_low": 6.11
+ },
+ "002597": {
+  "name": "金禾实业",
+  "flagged_date": "2026-07-01",
+  "ref_high": 22.7,
+  "ref_low": 18.5
+ },
+ "002250": {
+  "name": "联化科技",
+  "flagged_date": "2026-07-01",
+  "ref_high": 15.37,
+  "ref_low": 12.79
+ },
+ "000528": {
+  "name": "柳    工",
+  "flagged_date": "2026-07-01",
+  "ref_high": 9.04,
+  "ref_low": 7.33
+ },
+ "300109": {
+  "name": "新开源",
+  "flagged_date": "2026-07-01",
+  "ref_high": 16.45,
+  "ref_low": 13.32
+ },
+ "301087": {
+  "name": "可孚医疗",
+  "flagged_date": "2026-07-01",
+  "ref_high": 49.6,
+  "ref_low": 42.98
+ },
+ "300194": {
+  "name": "福安药业",
+  "flagged_date": "2026-07-01",
+  "ref_high": 3.95,
+  "ref_low": 3.24
+ },
+ "000963": {
+  "name": "华东医药",
+  "flagged_date": "2026-07-01",
+  "ref_high": 29.74,
+  "ref_low": 25.63
+ },
+ "603948": {
+  "name": "建业股份",
+  "flagged_date": "2026-07-01",
+  "ref_high": 28.24,
+  "ref_low": 22.81
+ },
+ "603087": {
+  "name": "甘李药业",
+  "flagged_date": "2026-07-01",
+  "ref_high": 58.84,
+  "ref_low": 51.0
+ },
+ "300908": {
+  "name": "仲景食品",
+  "flagged_date": "2026-07-01",
+  "ref_high": 26.89,
+  "ref_low": 21.58
+ },
+ "603700": {
+  "name": "宁水集团",
+  "flagged_date": "2026-07-01",
+  "ref_high": 12.09,
+  "ref_low": 10.2
+ },
+ "600419": {
+  "name": "天润乳业",
+  "flagged_date": "2026-07-01",
+  "ref_high": 9.17,
+  "ref_low": 7.36
+ },
+ "600196": {
+  "name": "复星医药",
+  "flagged_date": "2026-07-01",
+  "ref_high": 24.38,
+  "ref_low": 20.85
+ },
+ "600071": {
+  "name": "凤凰光学",
+  "flagged_date": "2026-07-01",
+  "ref_high": 20.09,
+  "ref_low": 16.15
+ },
+ "000779": {
+  "name": "甘咨询",
+  "flagged_date": "2026-07-01",
+  "ref_high": 8.03,
+  "ref_low": 6.99
+ },
+ "000919": {
+  "name": "金陵药业",
+  "flagged_date": "2026-07-01",
+  "ref_high": 6.68,
+  "ref_low": 5.67
+ },
+ "300021": {
+  "name": "大禹节水",
+  "flagged_date": "2026-07-01",
+  "ref_high": 4.42,
+  "ref_low": 3.58
+ },
+ "000153": {
+  "name": "丰原药业",
+  "flagged_date": "2026-07-01",
+  "ref_high": 6.08,
+  "ref_low": 4.95
+ },
+ "600664": {
+  "name": "哈药股份",
+  "flagged_date": "2026-07-01",
+  "ref_high": 3.53,
+  "ref_low": 2.84
+ },
+ "002191": {
+  "name": "劲嘉股份",
+  "flagged_date": "2026-07-01",
+  "ref_high": 4.27,
+  "ref_low": 3.56
  }
 }
