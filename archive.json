@@ -288,5 +288,25 @@
   "peak_rise_from_low": 115.0,
   "last_close": 63.37,
   "last_update": "2026-06-18"
+ },
+ "600428": {
+  "name": "中远海特",
+  "first_date": "2026-07-22",
+  "source": "hit",
+  "flagged_date": "2026-06-29",
+  "first_rise": 28.7,
+  "peak_rise": 28.7,
+  "last_close": 11.12,
+  "last_update": "2026-07-22"
+ },
+ "600664": {
+  "name": "哈药股份",
+  "first_date": "2026-07-22",
+  "source": "hit",
+  "flagged_date": "2026-07-01",
+  "first_rise": 69.4,
+  "peak_rise": 69.4,
+  "last_close": 5.98,
+  "last_update": "2026-07-22"
  }
 }
